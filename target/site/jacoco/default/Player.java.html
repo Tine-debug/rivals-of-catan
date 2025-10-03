@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Player.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">principia-tests</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Player.java</span></div><h1>Player.java</h1><pre class="source lang-java linenums">// Player.java
+// Public fields kept for “quick &amp; dirty”; helpers centralized to reduce clutter.
+
+import java.util.*;
+
+public class Player {
+    // --- “Public on purpose” for the exam ---
+<span class="fc" id="L8">    public int victoryPoints = 0;</span>
+<span class="fc" id="L9">    public int progressPoints = 0;</span>
+<span class="fc" id="L10">    public int skillPoints = 0;</span>
+<span class="fc" id="L11">    public int commercePoints = 0;</span>
+<span class="fc" id="L12">    public int strengthPoints = 0;</span>
+
+<span class="fc" id="L14">    public int tradeRate = 3; // default 3:1 with bank</span>
+<span class="fc" id="L15">    public boolean isBot = false;</span>
+
+    // “Flags” for quick state (MARKETPLACE, PARISH, TOLLB, LTS@r,c, 2FOR1_WOOL,
+    // STOREHOUSE@r,c, BRIGITTA, SCOUT_NEXT_SETTLEMENT)
+<span class="fc" id="L19">    public Set&lt;String&gt; flags = new HashSet&lt;&gt;();</span>
+
+    // Resource pools (coarse, not per region)
+<span class="fc" id="L22">    public Map&lt;String, Integer&gt; resources = new HashMap&lt;&gt;();</span>
+
+    // Hand (now real cards)
+<span class="fc" id="L25">    public List&lt;Card&gt; hand = new ArrayList&lt;&gt;();</span>
+
+    // Principality: dynamic 2D grid of cards (null = empty)
+<span class="fc" id="L28">    public List&lt;List&lt;Card&gt;&gt; principality = new ArrayList&lt;&gt;();</span>
+
+    // Last settlement (for Scout)
+<span class="fc" id="L31">    public int lastSettlementRow = -1, lastSettlementCol = -1;</span>
+
+<span class="fc" id="L33">    private final Scanner in = new Scanner(System.in);</span>
+
+<span class="fc" id="L35">    public Player() {</span>
+<span class="fc" id="L36">        String[] all = { &quot;Brick&quot;, &quot;Grain&quot;, &quot;Lumber&quot;, &quot;Wool&quot;, &quot;Ore&quot;, &quot;Gold&quot;, &quot;Any&quot; };</span>
+<span class="fc" id="L37">        principality = new java.util.ArrayList&lt;&gt;();</span>
+        // Start with a 5×5 empty grid (grows as needed)
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (int r = 0; r &lt; 5; r++) {</span>
+<span class="fc" id="L40">            java.util.List&lt;Card&gt; row = new java.util.ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            for (int c = 0; c &lt; 5; c++)</span>
+<span class="fc" id="L42">                row.add(null);</span>
+<span class="fc" id="L43">            principality.add(row);</span>
+        }
+        // (init other maps as new HashMap each; no static/shared refs)
+<span class="fc" id="L46">        resources = new java.util.HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        for (String r : all)</span>
+<span class="fc" id="L48">            resources.put(r, 0);</span>
+<span class="fc" id="L49">    }</span>
+
+    // ------------- I/O (console) -------------
+    public void sendMessage(Object m) {
+<span class="fc" id="L53">        System.out.println(m);</span>
+<span class="fc" id="L54">    }</span>
+
+    public String receiveMessage() {
+<span class="nc" id="L57">        System.out.print(&quot;&gt; &quot;);</span>
+<span class="nc" id="L58">        return in.nextLine();</span>
+    }
+
+    // ------------- Grid helpers -------------
+    public Card getCard(int r, int c) {
+<span class="pc bpc" id="L63" title="2 of 4 branches missed.">        if (r &lt; 0 || c &lt; 0)</span>
+<span class="nc" id="L64">            return null;</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (r &gt;= principality.size())</span>
+<span class="nc" id="L66">            return null;</span>
+<span class="fc" id="L67">        List&lt;Card&gt; row = principality.get(r);</span>
+<span class="pc bpc" id="L68" title="2 of 4 branches missed.">        if (row == null || c &gt;= row.size())</span>
+<span class="nc" id="L69">            return null;</span>
+<span class="fc" id="L70">        return row.get(c);</span>
+    }
+
+    public void placeCard(int r, int c, Card card) {
+<span class="fc" id="L74">        ensureSize(r, c);</span>
+<span class="fc" id="L75">        principality.get(r).set(c, card);</span>
+<span class="fc" id="L76">    }</span>
+
+    // Returns the (possibly updated) column where the just-built center card now
+    // sits
+    public int expandAfterEdgeBuild(int col) {
+<span class="nc" id="L81">        int cols = principality.get(0).size();</span>
+        // if placed in first column, insert a new column at the far left
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (col == 0) {</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">            for (java.util.List&lt;Card&gt; row : principality) {</span>
+<span class="nc" id="L85">                row.add(0, null);</span>
+<span class="nc" id="L86">            }</span>
+            // all existing cards (including the one we just placed) shifted +1
+<span class="nc" id="L88">            col += 1;</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            if (lastSettlementCol &gt;= 0)</span>
+<span class="nc" id="L90">                lastSettlementCol += 1;</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        } else if (col == cols - 1) {</span>
+            // placed in last column, so append a new rightmost column
+<span class="nc bnc" id="L93" title="All 2 branches missed.">            for (java.util.List&lt;Card&gt; row : principality) {</span>
+<span class="nc" id="L94">                row.add(null);</span>
+<span class="nc" id="L95">            }</span>
+            // col stays the same
+        }
+<span class="nc" id="L98">        return col;</span>
+    }
+
+    private void ensureSize(int r, int c) {
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        while (principality.size() &lt;= r) {</span>
+<span class="nc" id="L103">            ArrayList&lt;Card&gt; row = new ArrayList&lt;&gt;();</span>
+            // match width
+<span class="nc bnc" id="L105" title="All 2 branches missed.">            int cols = principality.isEmpty() ? 5 : principality.get(0).size();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            for (int i = 0; i &lt; cols; i++)</span>
+<span class="nc" id="L107">                row.add(null);</span>
+<span class="nc" id="L108">            principality.add(row);</span>
+<span class="nc" id="L109">        }</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (List&lt;Card&gt; row : principality) {</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">            while (row.size() &lt;= c)</span>
+<span class="nc" id="L112">                row.add(null);</span>
+<span class="fc" id="L113">        }</span>
+<span class="fc" id="L114">    }</span>
+
+    public boolean hasInPrincipality(String name) {
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        for (List&lt;Card&gt; row : principality)</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            for (Card c : row)</span>
+<span class="nc bnc" id="L119" title="All 6 branches missed.">                if (c != null &amp;&amp; c.name != null &amp;&amp; c.name.equalsIgnoreCase(name))</span>
+<span class="nc" id="L120">                    return true;</span>
+<span class="nc" id="L121">        return false;</span>
+    }
+
+    // Nicely prints the principality with coordinates, plus hand &amp; point summary.
+    public String printPrincipality() {
+<span class="nc" id="L126">        StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L127">        int rows = principality.size();</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        int cols = principality.isEmpty() ? 0 : principality.get(0).size();</span>
+
+        // Compute column widths based on both title and info lines
+<span class="nc" id="L131">        int[] w = new int[cols];</span>
+<span class="nc" id="L132">        int minW = 10; // a reasonable minimum so headers fit</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        for (int c = 0; c &lt; cols; c++) {</span>
+<span class="nc" id="L134">            int m = minW;</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            for (int r = 0; r &lt; rows; r++) {</span>
+<span class="nc" id="L136">                Card card = getCard(r, c);</span>
+<span class="nc" id="L137">                String title = cellTitle(card);</span>
+<span class="nc" id="L138">                String info = cellInfo(card);</span>
+<span class="nc" id="L139">                m = Math.max(m, title.length());</span>
+<span class="nc" id="L140">                m = Math.max(m, info.length());</span>
+            }
+<span class="nc" id="L142">            w[c] = m;</span>
+        }
+
+        // Top header for columns (outside the grid for clarity)
+<span class="nc" id="L146">        sb.append(&quot;      &quot;); // space for row index column</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        for (int c = 0; c &lt; cols; c++) {</span>
+<span class="nc" id="L148">            String hdr = &quot;Col &quot; + c;</span>
+<span class="nc" id="L149">            sb.append(padRight(hdr, w[c] + 3)); // +3 because inside grid we put spaces and | around content</span>
+        }
+<span class="nc" id="L151">        sb.append(&quot;\n&quot;);</span>
+
+        // Top border
+<span class="nc" id="L154">        sb.append(&quot;    &quot;).append(buildSep(w)).append(&quot;\n&quot;);</span>
+
+        // Each board row =&gt; 2 text lines inside the grid
+<span class="nc bnc" id="L157" title="All 2 branches missed.">        for (int r = 0; r &lt; rows; r++) {</span>
+            // Title line
+<span class="nc" id="L159">            sb.append(String.format(&quot;%2d  &quot;, r)); // row index + two spaces</span>
+<span class="nc" id="L160">            sb.append(&quot;|&quot;);</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">            for (int c = 0; c &lt; cols; c++) {</span>
+<span class="nc" id="L162">                String title = cellTitle(getCard(r, c));</span>
+<span class="nc" id="L163">                sb.append(&quot; &quot;).append(padRight(title, w[c])).append(&quot; &quot;).append(&quot;|&quot;);</span>
+            }
+<span class="nc" id="L165">            sb.append(&quot;\n&quot;);</span>
+
+            // Info line
+<span class="nc" id="L168">            sb.append(&quot;    &quot;); // aligns with the top border (no row index on the 2nd line)</span>
+<span class="nc" id="L169">            sb.append(&quot;|&quot;);</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">            for (int c = 0; c &lt; cols; c++) {</span>
+<span class="nc" id="L171">                String info = cellInfo(getCard(r, c));</span>
+<span class="nc" id="L172">                sb.append(&quot; &quot;).append(padRight(info, w[c])).append(&quot; &quot;).append(&quot;|&quot;);</span>
+            }
+<span class="nc" id="L174">            sb.append(&quot;\n&quot;);</span>
+
+            // Row separator
+<span class="nc" id="L177">            sb.append(&quot;    &quot;).append(buildSep(w)).append(&quot;\n&quot;);</span>
+        }
+
+        // Points line
+<span class="nc" id="L181">        sb.append(&quot;\nPoints: &quot;)</span>
+<span class="nc" id="L182">                .append(&quot;VP=&quot;).append(victoryPoints)</span>
+<span class="nc" id="L183">                .append(&quot;  CP=&quot;).append(commercePoints)</span>
+<span class="nc" id="L184">                .append(&quot;  SP=&quot;).append(skillPoints)</span>
+<span class="nc" id="L185">                .append(&quot;  FP=&quot;).append(strengthPoints)</span>
+<span class="nc" id="L186">                .append(&quot;  PP=&quot;).append(progressPoints)</span>
+<span class="nc" id="L187">                .append(&quot;\n&quot;);</span>
+
+<span class="nc" id="L189">        return sb.toString();</span>
+    }
+
+    /**
+     * Pretty-print this player's hand with index, cost, and any point values.
+     */
+    public String printHand() {
+<span class="nc" id="L196">        StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L197">        sb.append(&quot;Hand (&quot;).append(hand.size()).append(&quot;):\n&quot;);</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">        for (int i = 0; i &lt; hand.size(); i++) {</span>
+<span class="nc" id="L199">            Card c = hand.get(i);</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">            if (c == null)</span>
+<span class="nc" id="L201">                continue;</span>
+<span class="nc bnc" id="L202" title="All 4 branches missed.">            String cost = (c.cost == null || c.cost.isBlank()) ? &quot;-&quot; : c.cost;</span>
+<span class="nc" id="L203">            String pts = summarizePoints(c); // same helper you already use in printPrincipality</span>
+<span class="nc" id="L204">            sb.append(&quot;  [&quot;).append(i).append(&quot;] &quot;)</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">                    .append(c.name == null ? &quot;Unknown&quot; : c.name)</span>
+<span class="nc" id="L206">                    .append(&quot;   {cost: &quot;).append(cost).append(&quot;} &quot;)</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">                    .append(pts.isEmpty() ? &quot;&quot; : pts)</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">                    .append(&quot;\n&quot;).append(c.cardText == null ? &quot;&quot; : &quot;\t&quot; + c.cardText + &quot;\n&quot;);</span>
+        }
+<span class="nc" id="L210">        return sb.toString();</span>
+    }
+
+    // Build a separator like: +-----------+--------------+---+
+    private String buildSep(int[] w) {
+<span class="nc" id="L215">        StringBuilder sep = new StringBuilder();</span>
+<span class="nc" id="L216">        sep.append(&quot;+&quot;);</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">        for (int c = 0; c &lt; w.length; c++) {</span>
+<span class="nc" id="L218">            sep.append(&quot;-&quot;.repeat(w[c] + 2)); // +2 for side spaces inside cells</span>
+<span class="nc" id="L219">            sep.append(&quot;+&quot;);</span>
+        }
+<span class="nc" id="L221">        return sep.toString();</span>
+    }
+
+    // Left-pad to fixed width (for stable '|' alignment)
+    private String padRight(String s, int w) {
+<span class="nc bnc" id="L226" title="All 2 branches missed.">        if (s == null)</span>
+<span class="nc" id="L227">            s = &quot;&quot;;</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">        if (s.length() &gt;= w)</span>
+<span class="nc" id="L229">            return s;</span>
+<span class="nc" id="L230">        return s + &quot; &quot;.repeat(w - s.length());</span>
+    }
+
+    // ---------- helpers used by printPrincipality ----------
+
+    private String cellTitle(Card c) {
+<span class="nc bnc" id="L236" title="All 2 branches missed.">        if (c == null)</span>
+<span class="nc" id="L237">            return &quot;&quot;;</span>
+<span class="nc" id="L238">        String title = c.name;</span>
+<span class="nc bnc" id="L239" title="All 2 branches missed.">        if (title.equals(&quot;Forest&quot;))</span>
+<span class="nc" id="L240">            title += &quot; (L):Lumber&quot;;</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">        else if (title.equals(&quot;Hill&quot;))</span>
+<span class="nc" id="L242">            title += &quot; (B):Brick&quot;;</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">        else if (title.equals(&quot;Field&quot;))</span>
+<span class="nc" id="L244">            title += &quot; (G):Grain&quot;;</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">        else if (title.equals(&quot;Pasture&quot;))</span>
+<span class="nc" id="L246">            title += &quot; (W):Wool&quot;;</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">        else if (title.equals(&quot;Mountain&quot;))</span>
+<span class="nc" id="L248">            title += &quot; (O):Ore&quot;;</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">        else if (title.equals(&quot;Gold Field&quot;))</span>
+<span class="nc" id="L250">            title += &quot; (A):Gold&quot;;</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        return title == null ? &quot;Unknown&quot; : title;</span>
+    }
+
+    private String cellInfo(Card c) {
+<span class="nc bnc" id="L255" title="All 2 branches missed.">        if (c == null)</span>
+<span class="nc" id="L256">            return &quot;&quot;; // EMPTY</span>
+        // Regions: show dice + stored (0..3)
+<span class="nc bnc" id="L258" title="All 2 branches missed.">        if (&quot;Region&quot;.equalsIgnoreCase(c.type)) {</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">            String die = (c.diceRoll &lt;= 0 ? &quot;-&quot; : String.valueOf(c.diceRoll));</span>
+<span class="nc" id="L260">            int stored = Math.max(0, Math.min(3, c.regionProduction));</span>
+<span class="nc" id="L261">            return &quot;d&quot; + die + &quot;  &quot; + stored + &quot;/3&quot;;</span>
+        }
+
+        // Common trade ships: &quot;2:1 &lt;Res&gt;&quot;
+<span class="nc bnc" id="L265" title="All 2 branches missed.">        String nm = c.name == null ? &quot;&quot; : c.name;</span>
+<span class="nc bnc" id="L266" title="All 4 branches missed.">        if (c.type != null &amp;&amp; c.type.toLowerCase().contains(&quot;trade ship&quot;)) {</span>
+<span class="nc bnc" id="L267" title="All 4 branches missed.">            if (!nm.equalsIgnoreCase(&quot;Large Trade Ship&quot;) &amp;&amp; nm.endsWith(&quot;Ship&quot;)) {</span>
+<span class="nc" id="L268">                String res = firstWord(nm); // Brick / Grain / etc.</span>
+<span class="nc" id="L269">                return &quot;2:1 &quot; + res;</span>
+<span class="nc bnc" id="L270" title="All 2 branches missed.">            } else if (nm.equalsIgnoreCase(&quot;Large Trade Ship&quot;)) {</span>
+<span class="nc" id="L271">                return &quot;LTS (left/right swap 2→1)&quot;;</span>
+            }
+        }
+
+        // Boosters: Foundry/Mill/Camp/Factory/Shop (hint text)
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        if (&quot;Building&quot;.equalsIgnoreCase(c.type) &amp;&amp;</span>
+<span class="nc bnc" id="L277" title="All 2 branches missed.">                &quot;Settlement/City Expansions&quot;.equalsIgnoreCase(c.placement)) {</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">            if (nm.endsWith(&quot;Foundry&quot;))</span>
+<span class="nc" id="L279">                return &quot;Boosts Ore x2 on match&quot;;</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">            if (nm.endsWith(&quot;Mill&quot;))</span>
+<span class="nc" id="L281">                return &quot;Boosts Grain x2 on match&quot;;</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">            if (nm.endsWith(&quot;Camp&quot;))</span>
+<span class="nc" id="L283">                return &quot;Boosts Lumber x2 on match&quot;;</span>
+<span class="nc bnc" id="L284" title="All 2 branches missed.">            if (nm.endsWith(&quot;Factory&quot;))</span>
+<span class="nc" id="L285">                return &quot;Boosts Brick x2 on match&quot;;</span>
+<span class="nc bnc" id="L286" title="All 2 branches missed.">            if (nm.endsWith(&quot;Shop&quot;))</span>
+<span class="nc" id="L287">                return &quot;Boosts Wool x2 on match&quot;;</span>
+        }
+
+        // Center cards quick hints
+<span class="nc bnc" id="L291" title="All 2 branches missed.">        if (&quot;Road&quot;.equalsIgnoreCase(nm))</span>
+<span class="nc" id="L292">            return &quot;Center&quot;;</span>
+<span class="nc bnc" id="L293" title="All 2 branches missed.">        if (&quot;Settlement&quot;.equalsIgnoreCase(nm))</span>
+<span class="nc" id="L294">            return &quot;Center&quot;;</span>
+<span class="nc bnc" id="L295" title="All 2 branches missed.">        if (&quot;City&quot;.equalsIgnoreCase(nm))</span>
+<span class="nc" id="L296">            return &quot;Center&quot;;</span>
+
+        // Heroes / others: summarize points if any
+<span class="nc" id="L299">        String pts = summarizePoints(c);</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">        if (!pts.isEmpty())</span>
+<span class="nc" id="L301">            return pts;</span>
+
+        // Default: show placement/type short
+<span class="nc bnc" id="L304" title="All 2 branches missed.">        String pl = c.placement == null ? &quot;&quot; : c.placement;</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">        String tp = c.type == null ? &quot;&quot; : c.type;</span>
+<span class="nc bnc" id="L306" title="All 4 branches missed.">        if (!pl.isEmpty() || !tp.isEmpty())</span>
+<span class="nc" id="L307">            return (pl + &quot; &quot; + tp).trim();</span>
+<span class="nc" id="L308">        return &quot;&quot;;</span>
+    }
+
+    // SCORING helper: summarize points on a card like &quot;[VP1 CP2 SP1 FP0 PP0]&quot;
+    private String summarizePoints(Card c) {
+        // Build a compact points summary like: &quot;[VP1 CP2 SP1 FP0 PP0]&quot;
+<span class="nc" id="L314">        int vp = parseIntSafe(c.victoryPoints);</span>
+<span class="nc" id="L315">        int cp = parseIntSafe(c.CP);</span>
+<span class="nc" id="L316">        int sp = parseIntSafe(c.SP);</span>
+<span class="nc" id="L317">        int fp = parseIntSafe(c.FP);</span>
+<span class="nc" id="L318">        int pp = parseIntSafe(c.PP);</span>
+
+<span class="nc" id="L320">        StringBuilder t = new StringBuilder();</span>
+<span class="nc bnc" id="L321" title="All 10 branches missed.">        if (vp &gt; 0 || cp &gt; 0 || sp &gt; 0 || fp &gt; 0 || pp &gt; 0) {</span>
+<span class="nc" id="L322">            t.append(&quot;[&quot;);</span>
+<span class="nc bnc" id="L323" title="All 2 branches missed.">            if (vp &gt; 0)</span>
+<span class="nc" id="L324">                t.append(&quot;VP&quot;).append(vp).append(&quot; &quot;);</span>
+<span class="nc bnc" id="L325" title="All 2 branches missed.">            if (cp &gt; 0)</span>
+<span class="nc" id="L326">                t.append(&quot;CP&quot;).append(cp).append(&quot; &quot;);</span>
+<span class="nc bnc" id="L327" title="All 2 branches missed.">            if (sp &gt; 0)</span>
+<span class="nc" id="L328">                t.append(&quot;SP&quot;).append(sp).append(&quot; &quot;);</span>
+<span class="nc bnc" id="L329" title="All 2 branches missed.">            if (fp &gt; 0)</span>
+<span class="nc" id="L330">                t.append(&quot;FP&quot;).append(fp).append(&quot; &quot;);</span>
+<span class="nc bnc" id="L331" title="All 2 branches missed.">            if (pp &gt; 0)</span>
+<span class="nc" id="L332">                t.append(&quot;PP&quot;).append(pp).append(&quot; &quot;);</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">            if (t.charAt(t.length() - 1) == ' ')</span>
+<span class="nc" id="L334">                t.deleteCharAt(t.length() - 1);</span>
+<span class="nc" id="L335">            t.append(&quot;]&quot;);</span>
+        }
+<span class="nc" id="L337">        return t.toString();</span>
+    }
+
+    // Advantage tokens depend on being &gt;= 3 ahead of the opponent.
+    public boolean hasTradeTokenAgainst(Player opp) {
+<span class="nc bnc" id="L342" title="All 4 branches missed.">        return (this.commercePoints - (opp == null ? 0 : opp.commercePoints)) &gt;= 3;</span>
+    }
+
+    public boolean hasStrengthTokenAgainst(Player opp) {
+<span class="nc bnc" id="L346" title="All 4 branches missed.">        return (this.strengthPoints - (opp == null ? 0 : opp.strengthPoints)) &gt;= 3;</span>
+    }
+
+    // Final score used for win check: base VP + 1 per advantage token against
+    // opponent
+    public int currentScoreAgainst(Player opp) {
+<span class="nc" id="L352">        int score = this.victoryPoints;</span>
+<span class="nc bnc" id="L353" title="All 2 branches missed.">        if (hasTradeTokenAgainst(opp))</span>
+<span class="nc" id="L354">            score += 1;</span>
+<span class="nc bnc" id="L355" title="All 2 branches missed.">        if (hasStrengthTokenAgainst(opp))</span>
+<span class="nc" id="L356">            score += 1;</span>
+<span class="nc" id="L357">        return score;</span>
+    }
+
+    private String firstWord(String s) {
+<span class="nc bnc" id="L361" title="All 2 branches missed.">        if (s == null)</span>
+<span class="nc" id="L362">            return &quot;&quot;;</span>
+<span class="nc" id="L363">        String[] toks = s.trim().split(&quot;\\s+&quot;);</span>
+<span class="nc bnc" id="L364" title="All 2 branches missed.">        return toks.length == 0 ? &quot;&quot; : toks[0];</span>
+    }
+
+    private int parseIntSafe(String s) {
+<span class="nc bnc" id="L368" title="All 4 branches missed.">        if (s == null || s.isBlank())</span>
+<span class="nc" id="L369">            return 0;</span>
+        try {
+<span class="nc" id="L371">            return Integer.parseInt(s.trim());</span>
+<span class="nc" id="L372">        } catch (Exception e) {</span>
+<span class="nc" id="L373">            return 0;</span>
+        }
+    }
+
+    // ------------- Resources (per-region, not pooled) -------------
+
+    // Map a resource name to its Region card name
+    private String resourceToRegion(String type) {
+<span class="pc bpc" id="L381" title="1 of 2 branches missed.">        if (type == null)</span>
+<span class="nc" id="L382">            return null;</span>
+<span class="fc" id="L383">        String t = type.trim().toLowerCase();</span>
+<span class="pc bpc" id="L384" title="4 of 8 branches missed.">        switch (t) {</span>
+            case &quot;brick&quot;:
+<span class="nc" id="L386">                return &quot;Hill&quot;;</span>
+            case &quot;grain&quot;:
+<span class="fc" id="L388">                return &quot;Field&quot;;</span>
+            case &quot;lumber&quot;:
+<span class="nc" id="L390">                return &quot;Forest&quot;;</span>
+            case &quot;wool&quot;:
+<span class="fc" id="L392">                return &quot;Pasture&quot;;</span>
+            case &quot;ore&quot;:
+<span class="fc" id="L394">                return &quot;Mountain&quot;;</span>
+            case &quot;gold&quot;:
+<span class="fc" id="L396">                return &quot;Gold Field&quot;;</span>
+            case &quot;any&quot;:
+<span class="nc" id="L398">                return &quot;Any&quot;;</span>
+            default:
+<span class="nc" id="L400">                return null;</span>
+        }
+    }
+
+    // Collect all Region cards of a given region-name (e.g., &quot;Forest&quot;)
+    private java.util.List&lt;Card&gt; findRegions(String regionName) {
+<span class="fc" id="L406">        java.util.List&lt;Card&gt; list = new java.util.ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L407" title="1 of 2 branches missed.">        if (regionName == null)</span>
+<span class="nc" id="L408">            return list;</span>
+<span class="fc bfc" id="L409" title="All 2 branches covered.">        for (int r = 0; r &lt; principality.size(); r++) {</span>
+<span class="fc" id="L410">            java.util.List&lt;Card&gt; row = principality.get(r);</span>
+<span class="pc bpc" id="L411" title="1 of 2 branches missed.">            if (row == null)</span>
+<span class="nc" id="L412">                continue;</span>
+<span class="fc bfc" id="L413" title="All 2 branches covered.">            for (int c = 0; c &lt; row.size(); c++) {</span>
+<span class="fc" id="L414">                Card x = row.get(c);</span>
+<span class="fc bfc" id="L415" title="All 2 branches covered.">                if (x != null &amp;&amp;</span>
+<span class="pc bpc" id="L416" title="1 of 4 branches missed.">                        &quot;Region&quot;.equalsIgnoreCase(x.type) &amp;&amp;</span>
+                        x.name != null &amp;&amp;
+<span class="fc bfc" id="L418" title="All 2 branches covered.">                        x.name.equalsIgnoreCase(regionName)) {</span>
+<span class="fc" id="L419">                    list.add(x);</span>
+                }
+            }
+        }
+<span class="fc" id="L423">        return list;</span>
+    }
+
+    // Sum stored resources on all regions (of ANY type)
+    public int totalAllResources() {
+<span class="nc" id="L428">        int sum = 0;</span>
+<span class="nc bnc" id="L429" title="All 2 branches missed.">        for (int r = 0; r &lt; principality.size(); r++) {</span>
+<span class="nc" id="L430">            java.util.List&lt;Card&gt; row = principality.get(r);</span>
+<span class="nc bnc" id="L431" title="All 2 branches missed.">            if (row == null)</span>
+<span class="nc" id="L432">                continue;</span>
+<span class="nc bnc" id="L433" title="All 2 branches missed.">            for (int c = 0; c &lt; row.size(); c++) {</span>
+<span class="nc" id="L434">                Card x = row.get(c);</span>
+<span class="nc bnc" id="L435" title="All 4 branches missed.">                if (x != null &amp;&amp; &quot;Region&quot;.equalsIgnoreCase(x.type)) {</span>
+<span class="nc" id="L436">                    sum += Math.max(0, Math.min(3, x.regionProduction));</span>
+                }
+            }
+        }
+<span class="nc" id="L440">        return sum;</span>
+    }
+
+    // Count stored resources of a specific resource type across the board
+    public int getResourceCount(String type) {
+<span class="fc" id="L445">        String regionName = resourceToRegion(type);</span>
+<span class="pc bpc" id="L446" title="1 of 2 branches missed.">        if (regionName == null)</span>
+<span class="nc" id="L447">            return 0;</span>
+<span class="pc bpc" id="L448" title="1 of 2 branches missed.">        if (&quot;Any&quot;.equals(regionName))</span>
+<span class="nc" id="L449">            return totalAllResources();</span>
+<span class="fc" id="L450">        int sum = 0;</span>
+<span class="fc bfc" id="L451" title="All 2 branches covered.">        for (Card r : findRegions(regionName)) {</span>
+<span class="fc" id="L452">            sum += Math.max(0, Math.min(3, r.regionProduction));</span>
+<span class="fc" id="L453">        }</span>
+<span class="fc" id="L454">        return sum;</span>
+    }
+
+    // Gain 1 resource of a type: add to the matching region with the LOWEST stock
+    // (&lt;3)
+    // If &quot;Any&quot;, ask the player which resource to take.
+    public void gainResource(String type) {
+<span class="fc" id="L461">        String t = type;</span>
+<span class="pc bpc" id="L462" title="2 of 4 branches missed.">        if (t == null || t.equalsIgnoreCase(&quot;Any&quot;)) {</span>
+<span class="nc" id="L463">            sendMessage(&quot;PROMPT: Choose resource to gain (Brick/Grain/Lumber/Wool/Ore/Gold):&quot;);</span>
+<span class="nc" id="L464">            t = receiveMessage();</span>
+        }
+<span class="fc" id="L466">        String regionName = resourceToRegion(t);</span>
+<span class="pc bpc" id="L467" title="2 of 4 branches missed.">        if (regionName == null || &quot;Any&quot;.equals(regionName)) {</span>
+<span class="nc" id="L468">            sendMessage(&quot;Unknown resource '&quot; + t + &quot;'. Ignored.&quot;);</span>
+<span class="nc" id="L469">            return;</span>
+        }
+
+<span class="fc" id="L472">        java.util.List&lt;Card&gt; regs = findRegions(regionName);</span>
+<span class="pc bpc" id="L473" title="1 of 2 branches missed.">        if (regs.isEmpty()) {</span>
+<span class="nc" id="L474">            sendMessage(&quot;No region for resource &quot; + t + &quot; is present.&quot;);</span>
+<span class="nc" id="L475">            return;</span>
+        }
+
+        // pick lowest stored (&lt;3); tie -&gt; first in board order
+<span class="fc" id="L479">        Card best = null;</span>
+<span class="fc" id="L480">        int bestVal = Integer.MAX_VALUE;</span>
+<span class="fc bfc" id="L481" title="All 2 branches covered.">        for (Card r : regs) {</span>
+<span class="fc" id="L482">            int v = Math.max(0, Math.min(3, r.regionProduction));</span>
+<span class="fc bfc" id="L483" title="All 2 branches covered.">            if (v &lt; bestVal) {</span>
+<span class="fc" id="L484">                bestVal = v;</span>
+<span class="fc" id="L485">                best = r;</span>
+            }
+<span class="fc" id="L487">        }</span>
+<span class="pc bpc" id="L488" title="2 of 4 branches missed.">        if (best != null &amp;&amp; best.regionProduction &lt; 3) {</span>
+<span class="fc" id="L489">            best.regionProduction += 1;</span>
+            // Optional: feedback
+            // sendMessage(&quot;Gained 1 &quot; + t + &quot; on &quot; + regionName + &quot; (&quot; +
+            // (best.regionProduction) + &quot;/3)&quot;);
+        } else {
+<span class="nc" id="L494">            sendMessage(&quot;No storage space on any &quot; + regionName + &quot; (already 3/3).&quot;);</span>
+        }
+<span class="fc" id="L496">    }</span>
+
+    // Remove N resources of a type: repeatedly remove from the region with the
+    // HIGHEST stock (&gt;0)
+    // Returns true if all could be removed, false otherwise (removes as many as
+    // possible).
+    public boolean removeResource(String type, int n) {
+<span class="nc bnc" id="L503" title="All 2 branches missed.">        if (n &lt;= 0)</span>
+<span class="nc" id="L504">            return true;</span>
+<span class="nc" id="L505">        String regionName = resourceToRegion(type);</span>
+<span class="nc bnc" id="L506" title="All 4 branches missed.">        if (regionName == null || &quot;Any&quot;.equals(regionName))</span>
+<span class="nc" id="L507">            return false;</span>
+
+<span class="nc" id="L509">        java.util.List&lt;Card&gt; regs = findRegions(regionName);</span>
+<span class="nc bnc" id="L510" title="All 2 branches missed.">        if (regs.isEmpty())</span>
+<span class="nc" id="L511">            return false;</span>
+
+<span class="nc" id="L513">        int removed = 0;</span>
+<span class="nc bnc" id="L514" title="All 2 branches missed.">        while (removed &lt; n) {</span>
+            // find highest stocked region (&gt;0)
+<span class="nc" id="L516">            Card best = null;</span>
+<span class="nc" id="L517">            int bestVal = -1;</span>
+<span class="nc bnc" id="L518" title="All 2 branches missed.">            for (Card r : regs) {</span>
+<span class="nc" id="L519">                int v = Math.max(0, Math.min(3, r.regionProduction));</span>
+<span class="nc bnc" id="L520" title="All 2 branches missed.">                if (v &gt; bestVal) {</span>
+<span class="nc" id="L521">                    bestVal = v;</span>
+<span class="nc" id="L522">                    best = r;</span>
+                }
+<span class="nc" id="L524">            }</span>
+<span class="nc bnc" id="L525" title="All 4 branches missed.">            if (best == null || bestVal &lt;= 0)</span>
+<span class="nc" id="L526">                break; // no more to remove</span>
+<span class="nc" id="L527">            best.regionProduction -= 1;</span>
+<span class="nc" id="L528">            removed++;</span>
+<span class="nc" id="L529">        }</span>
+<span class="nc bnc" id="L530" title="All 2 branches missed.">        return removed == n;</span>
+    }
+
+    // Set total stored resources for a type by redistributing across its regions.
+    // If n &lt;= 0, zero all matching regions.
+    // If increasing, fill lowest first; if decreasing, remove from highest first.
+    public void setResourceCount(String type, int n) {
+<span class="nc" id="L537">        String regionName = resourceToRegion(type);</span>
+<span class="nc bnc" id="L538" title="All 4 branches missed.">        if (regionName == null || &quot;Any&quot;.equals(regionName))</span>
+<span class="nc" id="L539">            return;</span>
+
+<span class="nc" id="L541">        java.util.List&lt;Card&gt; regs = findRegions(regionName);</span>
+<span class="nc bnc" id="L542" title="All 2 branches missed.">        if (regs.isEmpty())</span>
+<span class="nc" id="L543">            return;</span>
+
+        // clamp desired total between 0 and regions*3
+<span class="nc" id="L546">        int maxTotal = regs.size() * 3;</span>
+<span class="nc" id="L547">        int want = Math.max(0, Math.min(maxTotal, n));</span>
+
+        // current total
+<span class="nc" id="L550">        int cur = 0;</span>
+<span class="nc bnc" id="L551" title="All 2 branches missed.">        for (Card r : regs) {</span>
+<span class="nc" id="L552">            r.regionProduction = Math.max(0, Math.min(3, r.regionProduction)); // sanitize</span>
+<span class="nc" id="L553">            cur += r.regionProduction;</span>
+<span class="nc" id="L554">        }</span>
+<span class="nc bnc" id="L555" title="All 2 branches missed.">        if (cur == want)</span>
+<span class="nc" id="L556">            return;</span>
+
+<span class="nc bnc" id="L558" title="All 2 branches missed.">        if (cur &lt; want) {</span>
+            // add (want - cur) by filling lowest first
+<span class="nc" id="L560">            int need = want - cur;</span>
+<span class="nc bnc" id="L561" title="All 2 branches missed.">            while (need &gt; 0) {</span>
+<span class="nc" id="L562">                Card best = null;</span>
+<span class="nc" id="L563">                int bestVal = Integer.MAX_VALUE;</span>
+<span class="nc bnc" id="L564" title="All 2 branches missed.">                for (Card r : regs) {</span>
+<span class="nc" id="L565">                    int v = r.regionProduction;</span>
+<span class="nc bnc" id="L566" title="All 4 branches missed.">                    if (v &lt; 3 &amp;&amp; v &lt; bestVal) {</span>
+<span class="nc" id="L567">                        bestVal = v;</span>
+<span class="nc" id="L568">                        best = r;</span>
+                    }
+<span class="nc" id="L570">                }</span>
+<span class="nc bnc" id="L571" title="All 4 branches missed.">                if (best == null || best.regionProduction &gt;= 3)</span>
+<span class="nc" id="L572">                    break;</span>
+<span class="nc" id="L573">                best.regionProduction += 1;</span>
+<span class="nc" id="L574">                need--;</span>
+<span class="nc" id="L575">            }</span>
+<span class="nc" id="L576">        } else {</span>
+            // remove (cur - want) by draining highest first
+<span class="nc" id="L578">            int drop = cur - want;</span>
+<span class="nc bnc" id="L579" title="All 2 branches missed.">            while (drop &gt; 0) {</span>
+<span class="nc" id="L580">                Card best = null;</span>
+<span class="nc" id="L581">                int bestVal = -1;</span>
+<span class="nc bnc" id="L582" title="All 2 branches missed.">                for (Card r : regs) {</span>
+<span class="nc" id="L583">                    int v = r.regionProduction;</span>
+<span class="nc bnc" id="L584" title="All 2 branches missed.">                    if (v &gt; bestVal) {</span>
+<span class="nc" id="L585">                        bestVal = v;</span>
+<span class="nc" id="L586">                        best = r;</span>
+                    }
+<span class="nc" id="L588">                }</span>
+<span class="nc bnc" id="L589" title="All 4 branches missed.">                if (best == null || best.regionProduction &lt;= 0)</span>
+<span class="nc" id="L590">                    break;</span>
+<span class="nc" id="L591">                best.regionProduction -= 1;</span>
+<span class="nc" id="L592">                drop--;</span>
+<span class="nc" id="L593">            }</span>
+        }
+<span class="nc" id="L595">    }</span>
+
+    // ------------- Hand -------------
+    public int handSize() {
+<span class="nc" id="L599">        return hand.size();</span>
+    }
+
+    public void addToHand(Card c) {
+<span class="nc" id="L603">        hand.add(c);</span>
+<span class="nc" id="L604">    }</span>
+
+    public Card removeFromHandByName(String nm) {
+<span class="nc bnc" id="L607" title="All 2 branches missed.">        for (int i = 0; i &lt; hand.size(); i++) {</span>
+<span class="nc" id="L608">            Card c = hand.get(i);</span>
+<span class="nc bnc" id="L609" title="All 6 branches missed.">            if (c != null &amp;&amp; c.name != null &amp;&amp; c.name.equalsIgnoreCase(nm)) {</span>
+<span class="nc" id="L610">                return hand.remove(i);</span>
+            }
+        }
+<span class="nc" id="L613">        return null;</span>
+    }
+
+    // ------------- Cheap prompts used by Server -------------
+    public String chooseResource() {
+<span class="nc" id="L618">        sendMessage(&quot;PROMPT: Choose resource:&quot;);</span>
+<span class="nc" id="L619">        return receiveMessage();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

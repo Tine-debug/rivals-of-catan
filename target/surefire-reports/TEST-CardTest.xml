@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="CardTest" time="0.061" tests="20" errors="0" skipped="9" failures="0">
+  <properties>
+    <property name="java.specification.version" value="17"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/home/tine/Documents/Uni_ohne_git(t)/5. semester/Software engeneering/home exam/vibe code (copy)/target/test-classes:/home/tine/Documents/Uni_ohne_git(t)/5. semester/Software engeneering/home exam/vibe code (copy)/target/classes:/home/tine/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/home/tine/.m2/repository/org/junit/jupiter/junit-jupiter/5.9.3/junit-jupiter-5.9.3.jar:/home/tine/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.3/junit-jupiter-api-5.9.3.jar:/home/tine/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/tine/.m2/repository/org/junit/platform/junit-platform-commons/1.9.3/junit-platform-commons-1.9.3.jar:/home/tine/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/tine/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.9.3/junit-jupiter-params-5.9.3.jar:/home/tine/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.3/junit-jupiter-engine-5.9.3.jar:/home/tine/.m2/repository/org/junit/platform/junit-platform-engine/1.9.3/junit-platform-engine-1.9.3.jar:"/>
+    <property name="java.vm.vendor" value="Ubuntu"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://ubuntu.com/"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="user.country" value="US"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-17-openjdk-amd64/lib"/>
+    <property name="sun.java.command" value="/home/tine/Documents/Uni_ohne_git(t)/5. semester/Software engeneering/home exam/vibe code (copy)/target/surefire/surefirebooter-20251003180027773_3.jar /home/tine/Documents/Uni_ohne_git(t)/5. semester/Software engeneering/home exam/vibe code (copy)/target/surefire 2025-10-03T18-00-27_527-jvmRun1 surefire-20251003180027773_1tmp surefire_0-20251003180027773_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/home/tine/Documents/Uni_ohne_git(t)/5. semester/Software engeneering/home exam/vibe code (copy)/target/test-classes:/home/tine/Documents/Uni_ohne_git(t)/5. semester/Software engeneering/home exam/vibe code (copy)/target/classes:/home/tine/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/home/tine/.m2/repository/org/junit/jupiter/junit-jupiter/5.9.3/junit-jupiter-5.9.3.jar:/home/tine/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.9.3/junit-jupiter-api-5.9.3.jar:/home/tine/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/tine/.m2/repository/org/junit/platform/junit-platform-commons/1.9.3/junit-platform-commons-1.9.3.jar:/home/tine/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/tine/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.9.3/junit-jupiter-params-5.9.3.jar:/home/tine/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.9.3/junit-jupiter-engine-5.9.3.jar:/home/tine/.m2/repository/org/junit/platform/junit-platform-engine/1.9.3/junit-platform-engine-1.9.3.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/tine"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2025-07-15"/>
+    <property name="java.home" value="/usr/lib/jvm/java-17-openjdk-amd64"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/home/tine/Documents/Uni_ohne_git(t)/5. semester/Software engeneering/home exam/vibe code (copy)"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="surefire.real.class.path" value="/home/tine/Documents/Uni_ohne_git(t)/5. semester/Software engeneering/home exam/vibe code (copy)/target/surefire/surefirebooter-20251003180027773_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="17.0.16+8-Ubuntu-0ubuntu122.04.1"/>
+    <property name="user.name" value="tine"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="5.15.0-153-generic"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="localRepository" value="/home/tine/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://bugs.launchpad.net/ubuntu/+source/openjdk-17"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="17.0.16"/>
+    <property name="user.dir" value="/home/tine/Documents/Uni_ohne_git(t)/5. semester/Software engeneering/home exam/vibe code (copy)"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.vendor" value="Ubuntu"/>
+    <property name="java.vm.version" value="17.0.16+8-Ubuntu-0ubuntu122.04.1"/>
+    <property name="java.specification.maintenance.version" value="1"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="61.0"/>
+  </properties>
+  <testcase name="testRelocationExpansionSwapFail" classname="CardTest" time="0.007">
+    <system-out><![CDATA[ApplyEffect: Relocation at (0,0)
+PROMPT: Relocation - Type 'REGION' to swap two regions or 'EXP' to swap two expansions:
+PROMPT: Enter first coordinate (row col):
+PROMPT: Enter second coordinate (row col):
+Relocation: both positions must contain cards.
+]]></system-out>
+  </testcase>
+  <testcase name="testRelocationRegionSwap" classname="CardTest" time="0">
+    <skipped message="void CardTest.testRelocationRegionSwap() is @Disabled"/>
+  </testcase>
+  <testcase name="testApplyEffectRoad" classname="CardTest" time="0">
+    <skipped message="void CardTest.testApplyEffectRoad() is @Disabled"/>
+  </testcase>
+  <testcase name="testLoadBasicCards" classname="CardTest" time="0.018"/>
+  <testcase name="testAsInt" classname="CardTest" time="0.001"/>
+  <testcase name="testPopCardByName" classname="CardTest" time="0.001"/>
+  <testcase name="testMerchantCaravan" classname="CardTest" time="0">
+    <skipped message="void CardTest.testMerchantCaravan() is @Disabled"/>
+  </testcase>
+  <testcase name="testToStringAndCompareTo" classname="CardTest" time="0.001"/>
+  <testcase name="testApplyEffectDefault" classname="CardTest" time="0.001">
+    <system-out><![CDATA[ApplyEffect: Weird at (1,1)
+]]></system-out>
+  </testcase>
+  <testcase name="testApplyEffectSettlementWithoutRoad" classname="CardTest" time="0">
+    <skipped message="void CardTest.testApplyEffectSettlementWithoutRoad() is @Disabled"/>
+  </testcase>
+  <testcase name="testDefaultActionCard" classname="CardTest" time="0">
+    <skipped message="void CardTest.testDefaultActionCard() is @Disabled"/>
+  </testcase>
+  <testcase name="testScoutFlagSet" classname="CardTest" time="0.001">
+    <system-out><![CDATA[ApplyEffect: Scout at (0,0)
+]]></system-out>
+  </testcase>
+  <testcase name="testGoldsmithNotEnoughGold" classname="CardTest" time="0">
+    <skipped message="void CardTest.testGoldsmithNotEnoughGold() is @Disabled"/>
+  </testcase>
+  <testcase name="testExtractCardsByAttribute" classname="CardTest" time="0.001"/>
+  <testcase name="testScoutSettlementUsesPickRegion" classname="CardTest" time="0">
+    <skipped message="void CardTest.testScoutSettlementUsesPickRegion() is @Disabled"/>
+  </testcase>
+  <testcase name="testGoldsmithSuccess" classname="CardTest" time="0">
+    <skipped message="void CardTest.testGoldsmithSuccess() is @Disabled"/>
+  </testcase>
+  <testcase name="testBrigittaFlagSet" classname="CardTest" time="0.001">
+    <system-out><![CDATA[ApplyEffect: Brigitta the Wise Woman at (0,0)
+]]></system-out>
+  </testcase>
+  <testcase name="testRelocationBadChoice" classname="CardTest" time="0">
+    <skipped message="void CardTest.testRelocationBadChoice() is @Disabled"/>
+  </testcase>
+  <testcase name="testBuildingBoostsRegion" classname="CardTest" time="0.001"/>
+  <testcase name="testNmEqualsAndNmAt" classname="CardTest" time="0.001"/>
+</testsuite>

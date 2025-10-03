@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Card.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">principia-tests</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Card.java</span></div><h1>Card.java</h1><pre class="source lang-java linenums">// Card.java
+// Quick &amp; dirty, Basic-set only, refactored to reduce duplication
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+
+public class Card implements Comparable&lt;Card&gt; {
+
+    // ---------- Public fields (keep simple for the take-home) ----------
+    public String name, theme, type, placement, cost, oneOf;
+    public String victoryPoints, CP, SP, FP, PP, LP, KP, cardText;
+    public String germanName, Requires, protectionOrRemoval;
+
+    // Regions track “stored” resources by rotating; here we model it as an int
+    // (0..3)
+<span class="pc" id="L22">    public int regionProduction = 0;</span>
+    // Regions use production die faces (1..6). 0 means “not a region” / unassigned.
+<span class="pc" id="L24">    public int diceRoll = 0;</span>
+
+    // ---------- Global piles for the Basic set ----------
+<span class="fc" id="L27">    public static Vector&lt;Card&gt; regions = new Vector&lt;&gt;();</span>
+<span class="fc" id="L28">    public static Vector&lt;Card&gt; roads = new Vector&lt;&gt;();</span>
+<span class="fc" id="L29">    public static Vector&lt;Card&gt; settlements = new Vector&lt;&gt;();</span>
+<span class="fc" id="L30">    public static Vector&lt;Card&gt; cities = new Vector&lt;&gt;();</span>
+<span class="fc" id="L31">    public static Vector&lt;Card&gt; events = new Vector&lt;&gt;();</span>
+<span class="fc" id="L32">    public static Vector&lt;Card&gt; drawStack1 = new Vector&lt;&gt;();</span>
+<span class="fc" id="L33">    public static Vector&lt;Card&gt; drawStack2 = new Vector&lt;&gt;();</span>
+<span class="fc" id="L34">    public static Vector&lt;Card&gt; drawStack3 = new Vector&lt;&gt;();</span>
+<span class="fc" id="L35">    public static Vector&lt;Card&gt; drawStack4 = new Vector&lt;&gt;();</span>
+
+    // ---------- Construction ----------
+<span class="nc" id="L38">    public Card() {</span>
+<span class="nc" id="L39">    }</span>
+
+    public Card(String name, String theme, String type,
+            String germanName, String placement,
+            String oneOf, String cost,
+            String victoryPoints, String CP, String SP, String FP,
+            String PP, String LP, String KP, String Requires,
+<span class="fc" id="L46">            String cardText, String protectionOrRemoval) {</span>
+<span class="fc" id="L47">        this.name = name;</span>
+<span class="fc" id="L48">        this.theme = theme;</span>
+<span class="fc" id="L49">        this.type = type;</span>
+<span class="fc" id="L50">        this.germanName = germanName;</span>
+<span class="fc" id="L51">        this.placement = placement;</span>
+<span class="fc" id="L52">        this.oneOf = oneOf;</span>
+<span class="fc" id="L53">        this.cost = cost;</span>
+<span class="fc" id="L54">        this.victoryPoints = victoryPoints;</span>
+<span class="fc" id="L55">        this.CP = CP;</span>
+<span class="fc" id="L56">        this.SP = SP;</span>
+<span class="fc" id="L57">        this.FP = FP;</span>
+<span class="fc" id="L58">        this.PP = PP;</span>
+<span class="fc" id="L59">        this.LP = LP;</span>
+<span class="fc" id="L60">        this.KP = KP;</span>
+<span class="fc" id="L61">        this.Requires = Requires;</span>
+<span class="fc" id="L62">        this.cardText = cardText;</span>
+<span class="fc" id="L63">        this.protectionOrRemoval = protectionOrRemoval;</span>
+<span class="fc" id="L64">    }</span>
+
+    @Override
+    public String toString() {
+<span class="fc" id="L68">        return name;</span>
+    }
+
+    @Override
+    public int compareTo(Card o) {
+<span class="fc" id="L73">        return this.name.compareToIgnoreCase(o.name);</span>
+    }
+
+    // ---------- Tiny helpers (kept local so the file stays self-contained)
+    // ----------
+    static boolean nmEquals(String a, String b) {
+<span class="pc bpc" id="L79" title="1 of 4 branches missed.">        return a != null &amp;&amp; a.equalsIgnoreCase(b);</span>
+    }
+
+    static boolean nmAt(Card c, String a, String b) {
+<span class="pc bpc" id="L83" title="1 of 4 branches missed.">        if (c == null || c.name == null)</span>
+<span class="fc" id="L84">            return false;</span>
+<span class="fc" id="L85">        String n = c.name;</span>
+<span class="pc bpc" id="L86" title="3 of 4 branches missed.">        return n.equalsIgnoreCase(a) || n.equalsIgnoreCase(b);</span>
+    }
+
+    static int asInt(String s, int def) {
+        try {
+<span class="fc bfc" id="L91" title="All 2 branches covered.">            if (s == null)</span>
+<span class="fc" id="L92">                return def;</span>
+<span class="fc" id="L93">            return Integer.parseInt(s.trim());</span>
+<span class="fc" id="L94">        } catch (Exception e) {</span>
+<span class="fc" id="L95">            return def;</span>
+        }
+    }
+
+    static String gs(JsonObject o, String k) {
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        if (!o.has(k))</span>
+<span class="fc" id="L101">            return null;</span>
+<span class="fc" id="L102">        JsonElement e = o.get(k);</span>
+<span class="pc bpc" id="L103" title="1 of 4 branches missed.">        return (e == null || e.isJsonNull()) ? null : e.getAsString();</span>
+    }
+
+    static int gi(JsonObject o, String k, int def) {
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        if (!o.has(k))</span>
+<span class="fc" id="L108">            return def;</span>
+        try {
+<span class="fc" id="L110">            return o.get(k).getAsInt();</span>
+<span class="nc" id="L111">        } catch (Exception e) {</span>
+<span class="nc" id="L112">            return def;</span>
+        }
+    }
+
+    // Pop first card by name (case-insensitive) from a vector
+    // BUG: when initializing principality we don't seem to remove the item so it
+    // overwrites...
+    public static Card popCardByName(Vector&lt;Card&gt; cards, String name) {
+<span class="pc bpc" id="L120" title="2 of 4 branches missed.">        if (cards == null || name == null)</span>
+<span class="nc" id="L121">            return null;</span>
+<span class="fc" id="L122">        String target = name.trim();</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for (int i = 0; i &lt; cards.size(); i++) {</span>
+<span class="fc" id="L124">            Card c = cards.get(i);</span>
+<span class="pc bpc" id="L125" title="2 of 6 branches missed.">            if (c != null &amp;&amp; c.name != null &amp;&amp; c.name.trim().equalsIgnoreCase(target)) {</span>
+                // Remove-by-index guarantees we return a unique instance and it’s gone from the
+                // deck
+<span class="fc" id="L128">                return cards.remove(i);</span>
+            }
+        }
+<span class="fc" id="L131">        return null; // not found</span>
+    }
+
+    // Extract all cards whose public String field `attribute` equals `value`
+    public static Vector&lt;Card&gt; extractCardsByAttribute(Vector&lt;Card&gt; cards, String attribute, String value) {
+<span class="fc" id="L136">        Vector&lt;Card&gt; out = new Vector&lt;&gt;();</span>
+        try {
+<span class="fc" id="L138">            java.lang.reflect.Field f = Card.class.getField(attribute);</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">            for (int i = cards.size() - 1; i &gt;= 0; i--) {</span>
+<span class="fc" id="L140">                Card c = cards.get(i);</span>
+<span class="fc" id="L141">                Object v = f.get(c);</span>
+<span class="pc bpc" id="L142" title="1 of 4 branches missed.">                if (v != null &amp;&amp; String.valueOf(v).equalsIgnoreCase(value)) {</span>
+<span class="fc" id="L143">                    out.add(0, cards.remove(i));</span>
+                }
+            }
+<span class="nc" id="L146">        } catch (Exception ignored) {</span>
+<span class="fc" id="L147">        }</span>
+<span class="fc" id="L148">        return out;</span>
+    }
+
+    // ---------- Loading ONLY the Basic set into piles ----------
+    public static void loadBasicCards(String jsonPath) throws IOException {
+<span class="fc" id="L153">        Vector&lt;Card&gt; allBasic = new Vector&lt;&gt;();</span>
+
+<span class="fc" id="L155">        try (FileReader fr = new FileReader(jsonPath)) {</span>
+<span class="fc" id="L156">            JsonElement root = JsonParser.parseReader(fr);</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">            if (!root.isJsonArray())</span>
+<span class="nc" id="L158">                throw new IOException(&quot;cards.json: expected top-level array&quot;);</span>
+<span class="fc" id="L159">            JsonArray arr = root.getAsJsonArray();</span>
+
+<span class="fc bfc" id="L161" title="All 2 branches covered.">            for (JsonElement el : arr) {</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">                if (!el.isJsonObject())</span>
+<span class="nc" id="L163">                    continue;</span>
+<span class="fc" id="L164">                JsonObject o = el.getAsJsonObject();</span>
+<span class="fc" id="L165">                String theme = gs(o, &quot;theme&quot;);</span>
+<span class="pc bpc" id="L166" title="1 of 4 branches missed.">                if (theme == null || !theme.toLowerCase().contains(&quot;basic&quot;))</span>
+<span class="fc" id="L167">                    continue; // Introductory only</span>
+
+<span class="fc" id="L169">                int number = gi(o, &quot;number&quot;, 1);</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">                for (int i = 0; i &lt; number; i++) {</span>
+<span class="fc" id="L171">                    Card proto = new Card(</span>
+<span class="fc" id="L172">                            gs(o, &quot;name&quot;), theme, gs(o, &quot;type&quot;),</span>
+<span class="fc" id="L173">                            gs(o, &quot;germanName&quot;), gs(o, &quot;placement&quot;),</span>
+<span class="fc" id="L174">                            gs(o, &quot;oneOf&quot;), gs(o, &quot;cost&quot;),</span>
+<span class="fc" id="L175">                            gs(o, &quot;victoryPoints&quot;), gs(o, &quot;CP&quot;), gs(o, &quot;SP&quot;), gs(o, &quot;FP&quot;),</span>
+<span class="fc" id="L176">                            gs(o, &quot;PP&quot;), gs(o, &quot;LP&quot;), gs(o, &quot;KP&quot;), gs(o, &quot;Requires&quot;),</span>
+<span class="fc" id="L177">                            gs(o, &quot;cardText&quot;), gs(o, &quot;protectionOrRemoval&quot;));</span>
+<span class="fc" id="L178">                    allBasic.add(proto);</span>
+                }
+<span class="fc" id="L180">            }</span>
+        }
+
+        // Split into piles we care about
+        // Center cards
+<span class="fc" id="L185">        roads = extractCardsByAttribute(allBasic, &quot;name&quot;, &quot;Road&quot;);</span>
+<span class="fc" id="L186">        settlements = extractCardsByAttribute(allBasic, &quot;name&quot;, &quot;Settlement&quot;);</span>
+<span class="fc" id="L187">        cities = extractCardsByAttribute(allBasic, &quot;name&quot;, &quot;City&quot;);</span>
+
+        // Regions: &quot;type&quot; == &quot;Region&quot;
+<span class="fc" id="L190">        regions = extractCardsByAttribute(allBasic, &quot;type&quot;, &quot;Region&quot;);</span>
+
+        // Events
+<span class="fc" id="L193">        events = extractCardsByAttribute(allBasic, &quot;placement&quot;, &quot;Event&quot;);</span>
+        // Place Yule 4th from bottom per cheat sheet
+<span class="fc" id="L195">        Card yule = popCardByName(events, &quot;Yule&quot;);</span>
+<span class="fc" id="L196">        Collections.shuffle(events);</span>
+<span class="pc bpc" id="L197" title="1 of 4 branches missed.">        if (yule != null &amp;&amp; events.size() &gt;= 3) {</span>
+<span class="fc" id="L198">            events.add(Math.max(0, events.size() - 3), yule);</span>
+        }
+
+        // Remaining “draw stack” cards (action/expansion/units)
+<span class="fc" id="L202">        Collections.shuffle(allBasic);</span>
+<span class="fc" id="L203">        int stackSize = 9; // Intro game</span>
+<span class="fc" id="L204">        drawStack1 = new Vector&lt;&gt;(allBasic.subList(0, Math.min(stackSize, allBasic.size())));</span>
+<span class="fc" id="L205">        drawStack2 = new Vector&lt;&gt;(allBasic.subList(Math.min(stackSize, allBasic.size()),</span>
+<span class="fc" id="L206">                Math.min(2 * stackSize, allBasic.size())));</span>
+<span class="fc" id="L207">        drawStack3 = new Vector&lt;&gt;(allBasic.subList(Math.min(2 * stackSize, allBasic.size()),</span>
+<span class="fc" id="L208">                Math.min(3 * stackSize, allBasic.size())));</span>
+<span class="fc" id="L209">        drawStack4 = new Vector&lt;&gt;(allBasic.subList(Math.min(3 * stackSize, allBasic.size()),</span>
+<span class="fc" id="L210">                Math.min(4 * stackSize, allBasic.size())));</span>
+<span class="fc" id="L211">    }</span>
+
+    // ---------- Placement validations (ugly but centralized) ----------
+    private static boolean isAboveOrBelowSettlementOrCity(Player p, int row, int col) {
+        // Inner ring: ±1 from center settlement/city
+<span class="nc" id="L216">        Card up1 = p.getCard(row - 1, col);</span>
+<span class="nc" id="L217">        Card down1 = p.getCard(row + 1, col);</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">        if (nmAt(up1, &quot;Settlement&quot;, &quot;City&quot;))</span>
+<span class="nc" id="L219">            return true;</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">        if (nmAt(down1, &quot;Settlement&quot;, &quot;City&quot;))</span>
+<span class="nc" id="L221">            return true;</span>
+
+        // Outer ring allowed *only* if the inner slot is already filled (fill inner
+        // first)
+<span class="nc" id="L225">        Card up2 = p.getCard(row - 2, col);</span>
+<span class="nc" id="L226">        Card down2 = p.getCard(row + 2, col);</span>
+<span class="nc bnc" id="L227" title="All 6 branches missed.">        boolean outerOK = ((nmAt(up2, &quot;City&quot;, &quot;City&quot;) || nmAt(up2, &quot;Settlement&quot;, &quot;Settlement&quot;)) &amp;&amp; up1 != null) ||</span>
+<span class="nc bnc" id="L228" title="All 6 branches missed.">                ((nmAt(down2, &quot;City&quot;, &quot;City&quot;) || nmAt(down2, &quot;Settlement&quot;, &quot;Settlement&quot;)) &amp;&amp; down1 != null);</span>
+
+<span class="nc" id="L230">        return outerOK;</span>
+    }
+
+    private static boolean isCenterSlot(int row) {
+        // By convention: inner/outer rows hold expansions &amp; regions; middle row is
+        // center (roads/settlements/cities)
+<span class="nc bnc" id="L236" title="All 2 branches missed.">        return row % 2 == 0; // 0,2,4,... =&gt; center columns; we use row 2 initially as center</span>
+    }
+
+    // Determine if region name matches what a booster affects
+    public static boolean buildingBoostsRegion(String buildingName, String regionName) {
+<span class="pc bpc" id="L241" title="2 of 4 branches missed.">        if (buildingName == null || regionName == null)</span>
+<span class="nc" id="L242">            return false;</span>
+<span class="pc bpc" id="L243" title="1 of 4 branches missed.">        if (buildingName.equalsIgnoreCase(&quot;Iron Foundry&quot;) &amp;&amp; regionName.equalsIgnoreCase(&quot;Mountain&quot;))</span>
+<span class="fc" id="L244">            return true;</span>
+<span class="pc bpc" id="L245" title="3 of 4 branches missed.">        if (buildingName.equalsIgnoreCase(&quot;Grain Mill&quot;) &amp;&amp; regionName.equalsIgnoreCase(&quot;Field&quot;))</span>
+<span class="nc" id="L246">            return true;</span>
+<span class="pc bpc" id="L247" title="3 of 4 branches missed.">        if (buildingName.equalsIgnoreCase(&quot;Lumber Camp&quot;) &amp;&amp; regionName.equalsIgnoreCase(&quot;Forest&quot;))</span>
+<span class="nc" id="L248">            return true;</span>
+<span class="pc bpc" id="L249" title="3 of 4 branches missed.">        if (buildingName.equalsIgnoreCase(&quot;Brick Factory&quot;) &amp;&amp; regionName.equalsIgnoreCase(&quot;Hill&quot;))</span>
+<span class="nc" id="L250">            return true;</span>
+<span class="pc bpc" id="L251" title="3 of 4 branches missed.">        if (buildingName.equalsIgnoreCase(&quot;Weaver’s Shop&quot;) &amp;&amp; regionName.equalsIgnoreCase(&quot;Pasture&quot;))</span>
+<span class="nc" id="L252">            return true;</span>
+<span class="pc bpc" id="L253" title="3 of 4 branches missed.">        if (buildingName.equalsIgnoreCase(&quot;Weaver's Shop&quot;) &amp;&amp; regionName.equalsIgnoreCase(&quot;Pasture&quot;))</span>
+<span class="nc" id="L254">            return true; // ascii</span>
+<span class="fc" id="L255">        return false;</span>
+    }
+
+    // Place the two diagonal regions after a new settlement (ugly prompt kept here)
+    private void placeTwoDiagonalRegions(Player active, int row, int col) {
+        // Decide which side is the “open side” (the side without a road)
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        int colMod = (active.getCard(row, col - 1) == null) ? -1 : 1;</span>
+<span class="nc" id="L262">        int sideCol = col + colMod;</span>
+
+        // Draw or choose 2 regions
+        Card first, second;
+
+<span class="nc bnc" id="L267" title="All 2 branches missed.">        if (active.flags.contains(&quot;SCOUT_NEXT_SETTLEMENT&quot;)) {</span>
+            // SCOUT: let player pick two specific regions from the region stack by name or
+            // index
+<span class="nc" id="L270">            active.sendMessage(&quot;PROMPT: SCOUT - Choose first region (name or index):&quot;);</span>
+<span class="nc" id="L271">            String s1 = active.receiveMessage();</span>
+<span class="nc" id="L272">            first = pickRegionFromStackByNameOrIndex(s1);</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">            if (first == null) {</span>
+                // fallback to top
+<span class="nc bnc" id="L275" title="All 2 branches missed.">                first = Card.regions.isEmpty() ? null : Card.regions.remove(0);</span>
+            }
+
+<span class="nc" id="L278">            active.sendMessage(&quot;PROMPT: SCOUT - Choose second region (name or index):&quot;);</span>
+<span class="nc" id="L279">            String s2 = active.receiveMessage();</span>
+<span class="nc" id="L280">            second = pickRegionFromStackByNameOrIndex(s2);</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">            if (second == null) {</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">                second = Card.regions.isEmpty() ? null : Card.regions.remove(0);</span>
+            }
+
+<span class="nc bnc" id="L285" title="All 4 branches missed.">            if (first == null || second == null) {</span>
+<span class="nc" id="L286">                active.sendMessage(&quot;SCOUT: Region stack exhausted.&quot;);</span>
+                // still clear the flag to avoid leaking it
+<span class="nc" id="L288">                active.flags.remove(&quot;SCOUT_NEXT_SETTLEMENT&quot;);</span>
+<span class="nc" id="L289">                return;</span>
+            }
+<span class="nc" id="L291">        } else {</span>
+            // normal: take top two
+<span class="nc bnc" id="L293" title="All 2 branches missed.">            if (Card.regions.size() &lt; 2) {</span>
+<span class="nc" id="L294">                active.sendMessage(&quot;Region stack does not have two cards.&quot;);</span>
+<span class="nc" id="L295">                return;</span>
+            }
+<span class="nc" id="L297">            first = Card.regions.remove(0);</span>
+<span class="nc" id="L298">            second = Card.regions.remove(0);</span>
+        }
+
+        // Tell the player which two we drew/selected
+<span class="nc" id="L302">        active.sendMessage(&quot;New settlement regions drawn/selected:&quot;);</span>
+<span class="nc" id="L303">        active.sendMessage(&quot;  1) &quot; + first.name + &quot;   2) &quot; + second.name);</span>
+
+        // Ask where to put the first one (top/bottom), second goes to the other
+<span class="nc bnc" id="L306" title="All 2 branches missed.">        active.sendMessage(&quot;PROMPT: Place FIRST region on &quot; + (colMod == -1 ? &quot;LEFT&quot; : &quot;RIGHT&quot;)</span>
+                + &quot; side: TOP or BOTTOM? (T/B)&quot;);
+<span class="nc" id="L308">        String choice = active.receiveMessage();</span>
+<span class="nc bnc" id="L309" title="All 4 branches missed.">        boolean top = choice != null &amp;&amp; choice.trim().toUpperCase().startsWith(&quot;T&quot;);</span>
+<span class="nc" id="L310">        row = 2; // center row</span>
+<span class="nc" id="L311">        int topRow = row - 1;</span>
+<span class="nc" id="L312">        int bottomRow = row + 1;</span>
+
+<span class="nc bnc" id="L314" title="All 2 branches missed.">        if (top) {</span>
+<span class="nc" id="L315">            active.placeCard(topRow, sideCol, first);</span>
+<span class="nc" id="L316">            active.placeCard(bottomRow, sideCol, second);</span>
+        } else {
+<span class="nc" id="L318">            active.placeCard(topRow, sideCol, second);</span>
+<span class="nc" id="L319">            active.placeCard(bottomRow, sideCol, first);</span>
+        }
+
+        // SCOUT benefit is consumed now; clear the flag
+<span class="nc" id="L323">        active.flags.remove(&quot;SCOUT_NEXT_SETTLEMENT&quot;);</span>
+<span class="nc" id="L324">    }</span>
+
+    // Helper: choose region by name or index from Card.regions
+    private Card pickRegionFromStackByNameOrIndex(String spec) {
+<span class="nc bnc" id="L328" title="All 4 branches missed.">        if (spec == null || spec.isBlank())</span>
+<span class="nc" id="L329">            return null;</span>
+<span class="nc" id="L330">        spec = spec.trim();</span>
+        // try index
+        try {
+<span class="nc" id="L333">            int idx = Integer.parseInt(spec);</span>
+<span class="nc bnc" id="L334" title="All 4 branches missed.">            if (idx &gt;= 0 &amp;&amp; idx &lt; Card.regions.size()) {</span>
+<span class="nc" id="L335">                return Card.regions.remove(idx);</span>
+            }
+<span class="nc" id="L337">        } catch (Exception ignored) {</span>
+<span class="nc" id="L338">        }</span>
+        // try by name (first match)
+<span class="nc bnc" id="L340" title="All 2 branches missed.">        for (int i = 0; i &lt; Card.regions.size(); i++) {</span>
+<span class="nc" id="L341">            Card c = Card.regions.get(i);</span>
+<span class="nc bnc" id="L342" title="All 6 branches missed.">            if (c != null &amp;&amp; c.name != null &amp;&amp; c.name.equalsIgnoreCase(spec)) {</span>
+<span class="nc" id="L343">                return Card.regions.remove(i);</span>
+            }
+        }
+<span class="nc" id="L346">        return null;</span>
+    }
+
+    // ---------- Main effect / placement entry ----------
+    // Returns true if placed/applied; false if illegal placement
+    public boolean applyEffect(Player active, Player other, int row, int col) {
+<span class="pc bpc" id="L352" title="1 of 2 branches missed.">        String nm = (name == null ? &quot;&quot; : name);</span>
+<span class="fc" id="L353">        System.out.println(&quot;ApplyEffect: &quot; + nm + &quot; at (&quot; + row + &quot;,&quot; + col + &quot;)&quot;);</span>
+        // 0) Early validation for occupied slot
+<span class="pc bpc" id="L355" title="1 of 2 branches missed.">        if (active.getCard(row, col) != null) {</span>
+<span class="nc" id="L356">            active.sendMessage(&quot;That space is occupied.&quot;);</span>
+<span class="nc" id="L357">            return false;</span>
+        }
+
+        // 1) Center cards: Road / Settlement / City
+<span class="pc bpc" id="L361" title="3 of 6 branches missed.">        if (nmEquals(nm, &quot;Road&quot;) || nmEquals(nm, &quot;Settlement&quot;) || nmEquals(nm, &quot;City&quot;)) {</span>
+<span class="nc bnc" id="L362" title="All 2 branches missed.">            if (!isCenterSlot(row)) {</span>
+<span class="nc" id="L363">                active.sendMessage(&quot;Roads/Settlements/Cities must go in the center row(s).&quot;);</span>
+<span class="nc" id="L364">                return false;</span>
+            }
+
+<span class="nc bnc" id="L367" title="All 2 branches missed.">            if (nmEquals(nm, &quot;Road&quot;)) {</span>
+                // Just allow anywhere center that touches a center card or extends line
+                // (Keep it permissive/ugly)
+<span class="nc" id="L370">                active.placeCard(row, col, this);</span>
+<span class="nc" id="L371">                active.sendMessage(&quot;Built a Road.&quot;);</span>
+                // Expand board if we built at an edge
+<span class="nc" id="L373">                active.expandAfterEdgeBuild(col);</span>
+<span class="nc" id="L374">                return true;</span>
+            }
+
+<span class="nc bnc" id="L377" title="All 2 branches missed.">            if (nmEquals(nm, &quot;Settlement&quot;)) {</span>
+                // Simplified: must be next to a Road (left or right) and empty here
+<span class="nc" id="L379">                Card L1 = active.getCard(row, col - 1);</span>
+<span class="nc" id="L380">                Card R1 = active.getCard(row, col + 1);</span>
+<span class="nc bnc" id="L381" title="All 6 branches missed.">                boolean hasRoad = (L1 != null &amp;&amp; nmEquals(L1.name, &quot;Road&quot;))</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">                        || (R1 != null &amp;&amp; nmEquals(R1.name, &quot;Road&quot;));</span>
+<span class="nc bnc" id="L383" title="All 2 branches missed.">                if (!hasRoad) {</span>
+<span class="nc" id="L384">                    active.sendMessage(&quot;Settlement must be placed next to a Road.&quot;);</span>
+<span class="nc" id="L385">                    return false;</span>
+                }
+<span class="nc" id="L387">                active.placeCard(row, col, this);</span>
+<span class="nc" id="L388">                active.victoryPoints += 1;</span>
+
+                // Expand and capture the updated column
+<span class="nc" id="L391">                col = active.expandAfterEdgeBuild(col);</span>
+
+                // Now place diagonals using the correct, updated col
+<span class="nc" id="L394">                placeTwoDiagonalRegions(active, row, col);</span>
+
+<span class="nc" id="L396">                active.lastSettlementRow = row;</span>
+<span class="nc" id="L397">                active.lastSettlementCol = col;</span>
+<span class="nc" id="L398">                return true;</span>
+            }
+
+<span class="nc bnc" id="L401" title="All 2 branches missed.">            if (nmEquals(nm, &quot;City&quot;)) {</span>
+                // Must be on top of an existing settlement in the same slot (same row,col)
+                // For ugly simplicity: allow upgrading if a Settlement exists exactly here
+<span class="nc" id="L404">                Card under = active.getCard(row, col);</span>
+<span class="nc bnc" id="L405" title="All 4 branches missed.">                if (under == null || !nmEquals(under.name, &quot;Settlement&quot;)) {</span>
+<span class="nc" id="L406">                    active.sendMessage(&quot;City must be placed on top of an existing Settlement (same slot).&quot;);</span>
+<span class="nc" id="L407">                    return false;</span>
+                }
+<span class="nc" id="L409">                active.placeCard(row, col, this);</span>
+<span class="nc" id="L410">                active.victoryPoints += 1; // city is 2VP total; settlement vp ignored here, we just add +1</span>
+<span class="nc" id="L411">                return true;</span>
+            }
+        }
+
+        // 2) Regions: allow only in region rows (not center); we set default
+        // production=1
+<span class="pc bpc" id="L417" title="1 of 2 branches missed.">        if (&quot;Region&quot;.equalsIgnoreCase(type)) {</span>
+<span class="nc bnc" id="L418" title="All 2 branches missed.">            if (isCenterSlot(row)) {</span>
+<span class="nc" id="L419">                active.sendMessage(&quot;Regions must be placed above/below the center row.&quot;);</span>
+<span class="nc" id="L420">                return false;</span>
+            }
+<span class="nc bnc" id="L422" title="All 2 branches missed.">            if (regionProduction &lt;= 0)</span>
+<span class="nc" id="L423">                regionProduction = 1;</span>
+<span class="nc" id="L424">            active.placeCard(row, col, this);</span>
+<span class="nc" id="L425">            return true;</span>
+        }
+
+        // 3) Settlement/City Expansions (Buildings &amp; Units)
+<span class="pc bpc" id="L429" title="1 of 4 branches missed.">        if (placement != null &amp;&amp; placement.equalsIgnoreCase(&quot;Settlement/city&quot;)) {</span>
+<span class="nc bnc" id="L430" title="All 2 branches missed.">            if (!isAboveOrBelowSettlementOrCity(active, row, col)) {</span>
+<span class="nc" id="L431">                active.sendMessage(&quot;Expansion must be above/below a Settlement or City (fill inner ring first).&quot;);</span>
+<span class="nc" id="L432">                return false;</span>
+            }
+            // one-of check (simple)
+<span class="nc bnc" id="L435" title="All 4 branches missed.">            if (oneOf != null &amp;&amp; oneOf.trim().equalsIgnoreCase(&quot;1x&quot;)) {</span>
+<span class="nc bnc" id="L436" title="All 2 branches missed.">                if (active.hasInPrincipality(nm)) {</span>
+<span class="nc" id="L437">                    active.sendMessage(&quot;You may only have one '&quot; + nm + &quot;' in your principality.&quot;);</span>
+<span class="nc" id="L438">                    return false;</span>
+                }
+            }
+<span class="nc" id="L441">            System.out.println(&quot;Passed placement checks for &quot; + nm);</span>
+            // Buildings that “double” adjacent regions when the number hits (enforced
+            // during production)
+<span class="nc bnc" id="L444" title="All 2 branches missed.">            if (&quot;Building&quot;.equalsIgnoreCase(type)) {</span>
+                // Just place it. Production phase will check adjacency and apply +1 increment
+                // (cap 3).
+<span class="nc" id="L447">                active.placeCard(row, col, this);</span>
+<span class="nc" id="L448">                System.out.println(&quot;Contained Building&quot;);</span>
+<span class="nc bnc" id="L449" title="All 2 branches missed.">                if (nmEquals(nm, &quot;Abbey&quot;)) {</span>
+<span class="nc" id="L450">                    active.progressPoints += 1;</span>
+<span class="nc bnc" id="L451" title="All 2 branches missed.">                } else if (nmEquals(nm, &quot;Marketplace&quot;)) {</span>
+<span class="nc" id="L452">                    active.flags.add(&quot;MARKETPLACE&quot;);</span>
+<span class="nc bnc" id="L453" title="All 2 branches missed.">                } else if (nmEquals(nm, &quot;Parish Hall&quot;)) {</span>
+<span class="nc" id="L454">                    active.flags.add(&quot;PARISH&quot;);</span>
+<span class="nc bnc" id="L455" title="All 2 branches missed.">                } else if (nmEquals(nm, &quot;Storehouse&quot;)) {</span>
+<span class="nc" id="L456">                    active.flags.add(&quot;STOREHOUSE@&quot; + row + &quot;,&quot; + col);</span>
+<span class="nc bnc" id="L457" title="All 2 branches missed.">                } else if (nmEquals(nm, &quot;Toll Bridge&quot;)) {</span>
+<span class="nc" id="L458">                    active.flags.add(&quot;TOLLB&quot;);</span>
+                }
+<span class="nc" id="L460">                return true;</span>
+            }
+
+            // Units
+<span class="nc bnc" id="L464" title="All 2 branches missed.">            if (type.contains(&quot;Unit&quot;)) {</span>
+<span class="nc" id="L465">                System.out.println(&quot;Contained UNIT!!!!!&quot;);</span>
+                // Large Trade Ship: adjacency 2-for-1 between L/R regions (handled in Server)
+<span class="nc bnc" id="L467" title="All 2 branches missed.">                if (nmEquals(nm, &quot;Large Trade Ship&quot;)) {</span>
+<span class="nc" id="L468">                    active.placeCard(row, col, this);</span>
+<span class="nc" id="L469">                    active.flags.add(&quot;LTS@&quot; + row + &quot;,&quot; + col);</span>
+<span class="nc" id="L470">                    return true;</span>
+                }
+                // “Common” trade ships: 2:1 bank for specific resource (handled in Server)
+<span class="nc bnc" id="L473" title="All 2 branches missed.">                if (nm.toLowerCase().endsWith(&quot; ship&quot;)) {</span>
+<span class="nc" id="L474">                    active.placeCard(row, col, this);</span>
+<span class="nc" id="L475">                    String res = nm.split(&quot;\\s+&quot;)[0]; // Brick/Gold/Grain/Lumber/Ore/Wool</span>
+<span class="nc" id="L476">                    active.flags.add(&quot;2FOR1_&quot; + res.toUpperCase());</span>
+<span class="nc" id="L477">                    return true;</span>
+                }
+
+                // Heroes: just add SP/FP/CP/etc.
+<span class="nc" id="L481">                int sp = asInt(SP, 0), fp = asInt(FP, 0), cp = asInt(CP, 0), pp = asInt(PP, 0), kp = asInt(KP, 0);</span>
+<span class="nc bnc" id="L482" title="All 2 branches missed.">                if (sp != 0)</span>
+<span class="nc" id="L483">                    active.skillPoints += sp;</span>
+<span class="nc bnc" id="L484" title="All 2 branches missed.">                if (fp != 0)</span>
+<span class="nc" id="L485">                    active.strengthPoints += fp;</span>
+<span class="nc bnc" id="L486" title="All 2 branches missed.">                if (cp != 0)</span>
+<span class="nc" id="L487">                    active.commercePoints += cp;</span>
+<span class="nc bnc" id="L488" title="All 2 branches missed.">                if (pp != 0)</span>
+<span class="nc" id="L489">                    active.progressPoints += pp;</span>
+<span class="nc bnc" id="L490" title="All 2 branches missed.">                if (kp != 0)</span>
+<span class="nc" id="L491">                    active.victoryPoints += kp;</span>
+<span class="nc" id="L492">                active.placeCard(row, col, this);</span>
+<span class="nc" id="L493">                return true;</span>
+            }
+        }
+
+        // 4) Pure action cards (Basic intro handful):
+        // We keep these very small; most are handled in Server (events/Brigand etc.)
+<span class="pc bpc" id="L499" title="1 of 4 branches missed.">        if (&quot;Action&quot;.equalsIgnoreCase(placement) || &quot;Action&quot;.equalsIgnoreCase(type)) {</span>
+            // e.g., Merchant Caravan: “gain 2 of your choice by discarding any 2 resources”
+<span class="pc bpc" id="L501" title="1 of 2 branches missed.">            if (nmEquals(nm, &quot;Merchant Caravan&quot;)) {</span>
+<span class="nc bnc" id="L502" title="All 2 branches missed.">                if (active.totalAllResources() &lt; 2) {</span>
+<span class="nc" id="L503">                    active.sendMessage(&quot;You need at least 2 resources to play Merchant Caravan.&quot;);</span>
+<span class="nc" id="L504">                    return false;</span>
+                }
+                // Just let player pick 2 to discard, then 2 to gain
+                // (opting out by discarding and gaining same resource is allowed)
+<span class="nc bnc" id="L508" title="All 2 branches missed.">                for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L509">                    active.sendMessage(</span>
+                            &quot;PROMPT: Type Discard resource #&quot; + (i + 1) + &quot; [Brick|Grain|Lumber|Wool|Ore|Gold]:&quot;);
+<span class="nc" id="L511">                    String g = active.receiveMessage();</span>
+<span class="nc" id="L512">                    active.removeResource(g, 1);</span>
+                }
+<span class="nc bnc" id="L514" title="All 2 branches missed.">                for (int i = 0; i &lt; 2; i++) {</span>
+<span class="nc" id="L515">                    active.sendMessage(</span>
+                            &quot;PROMPT: Type Gain resource #&quot; + (i + 1) + &quot; [Brick|Grain|Lumber|Wool|Ore|Gold]:&quot;);
+<span class="nc" id="L517">                    String g = active.receiveMessage();</span>
+<span class="nc" id="L518">                    active.gainResource(g);</span>
+                }
+<span class="nc" id="L520">                return true;</span>
+            }
+
+<span class="fc bfc" id="L523" title="All 2 branches covered.">            if (nmEquals(nm, &quot;Scout&quot;)) {</span>
+                // Only meaningful when used with a new settlement (Server stores
+                // lastSettlementRow/Col)
+<span class="fc" id="L526">                active.flags.add(&quot;SCOUT_NEXT_SETTLEMENT&quot;);</span>
+<span class="fc" id="L527">                return true;</span>
+            }
+
+<span class="fc bfc" id="L530" title="All 2 branches covered.">            if (nmEquals(nm, &quot;Brigitta the Wise Woman&quot;)) {</span>
+                // Choose production die result before rolling; we store forced value in Server
+<span class="fc" id="L532">                active.flags.add(&quot;BRIGITTA&quot;);</span>
+<span class="fc" id="L533">                return true;</span>
+            }
+
+            // Discard 3 gold and take any 2 resources of your choice in return.
+<span class="pc bpc" id="L537" title="1 of 2 branches missed.">            if (nmEquals(nm, &quot;Goldsmith&quot;)) {</span>
+<span class="nc bnc" id="L538" title="All 2 branches missed.">                if (!active.removeResource(&quot;Gold&quot;, 3)) {</span>
+<span class="nc" id="L539">                    active.sendMessage(&quot;Goldsmith: you need 3 Gold to play this.&quot;);</span>
+<span class="nc" id="L540">                    return false;</span>
+                }
+<span class="nc" id="L542">                active.sendMessage(&quot;Goldsmith: choose two resources to gain:&quot;);</span>
+<span class="nc bnc" id="L543" title="All 2 branches missed.">                for (int i = 1; i &lt;= 2; i++) {</span>
+<span class="nc" id="L544">                    active.sendMessage(&quot;Pick resource #&quot; + i + &quot; [Brick|Grain|Lumber|Wool|Ore|Gold]:&quot;);</span>
+<span class="nc" id="L545">                    String g = active.receiveMessage();</span>
+<span class="nc" id="L546">                    active.gainResource(g);</span>
+                }
+<span class="nc" id="L548">                return true;</span>
+            }
+
+            // Swap 2 of your own Regions OR 2 of your own Expansion cards.
+            // Stored resources on Regions remain on the same cards; placement rules must
+            // hold.
+<span class="pc bpc" id="L554" title="1 of 2 branches missed.">            if (nmEquals(nm, &quot;Relocation&quot;)) {</span>
+<span class="fc" id="L555">                active.sendMessage(</span>
+                        &quot;PROMPT: Relocation - Type 'REGION' to swap two regions or 'EXP' to swap two expansions:&quot;);
+<span class="fc" id="L557">                String pick = active.receiveMessage();</span>
+<span class="pc bpc" id="L558" title="2 of 4 branches missed.">                boolean swapRegions = (pick != null &amp;&amp; pick.trim().toUpperCase().startsWith(&quot;R&quot;));</span>
+<span class="pc bpc" id="L559" title="2 of 4 branches missed.">                boolean swapExp = (pick != null &amp;&amp; pick.trim().toUpperCase().startsWith(&quot;E&quot;));</span>
+<span class="pc bpc" id="L560" title="2 of 4 branches missed.">                if (!swapRegions &amp;&amp; !swapExp) {</span>
+<span class="nc" id="L561">                    active.sendMessage(&quot;Relocation canceled (need REGION or EXP).&quot;);</span>
+<span class="nc" id="L562">                    return false;</span>
+                }
+
+                // Read two coordinates
+<span class="fc" id="L566">                active.sendMessage(&quot;PROMPT: Enter first coordinate (row col):&quot;);</span>
+<span class="fc" id="L567">                int r1 = 0, c1 = 0;</span>
+                try {
+<span class="fc" id="L569">                    String[] t = active.receiveMessage().trim().split(&quot;\\s+&quot;);</span>
+<span class="fc" id="L570">                    r1 = Integer.parseInt(t[0]);</span>
+<span class="fc" id="L571">                    c1 = Integer.parseInt(t[1]);</span>
+<span class="nc" id="L572">                } catch (Exception e) {</span>
+<span class="nc" id="L573">                    active.sendMessage(&quot;Invalid coordinate.&quot;);</span>
+<span class="nc" id="L574">                    return false;</span>
+<span class="fc" id="L575">                }</span>
+<span class="fc" id="L576">                active.sendMessage(&quot;PROMPT: Enter second coordinate (row col):&quot;);</span>
+<span class="fc" id="L577">                int r2 = 0, c2 = 0;</span>
+                try {
+<span class="fc" id="L579">                    String[] t = active.receiveMessage().trim().split(&quot;\\s+&quot;);</span>
+<span class="fc" id="L580">                    r2 = Integer.parseInt(t[0]);</span>
+<span class="fc" id="L581">                    c2 = Integer.parseInt(t[1]);</span>
+<span class="nc" id="L582">                } catch (Exception e) {</span>
+<span class="nc" id="L583">                    active.sendMessage(&quot;Invalid coordinate.&quot;);</span>
+<span class="nc" id="L584">                    return false;</span>
+<span class="fc" id="L585">                }</span>
+
+<span class="fc" id="L587">                Card a = active.getCard(r1, c1);</span>
+<span class="fc" id="L588">                Card b = active.getCard(r2, c2);</span>
+<span class="pc bpc" id="L589" title="3 of 4 branches missed.">                if (a == null || b == null) {</span>
+<span class="fc" id="L590">                    active.sendMessage(&quot;Relocation: both positions must contain cards.&quot;);</span>
+<span class="fc" id="L591">                    return false;</span>
+                }
+
+<span class="nc bnc" id="L594" title="All 2 branches missed.">                if (swapRegions) {</span>
+<span class="nc bnc" id="L595" title="All 4 branches missed.">                    if (!isRegionCard(a) || !isRegionCard(b)) {</span>
+<span class="nc" id="L596">                        active.sendMessage(&quot;Relocation (Region): both cards must be Regions.&quot;);</span>
+<span class="nc" id="L597">                        return false;</span>
+                    }
+                    // target slots must be valid region slots (i.e., not center)
+<span class="nc bnc" id="L600" title="All 4 branches missed.">                    if (isCenterSlot(r1) || isCenterSlot(r2)) {</span>
+<span class="nc" id="L601">                        active.sendMessage(&quot;Relocation: regions must be outside center row.&quot;);</span>
+<span class="nc" id="L602">                        return false;</span>
+                    }
+                    // Swap without re-applying effects
+<span class="nc" id="L605">                    active.placeCard(r1, c1, b);</span>
+<span class="nc" id="L606">                    active.placeCard(r2, c2, a);</span>
+<span class="nc" id="L607">                    active.sendMessage(&quot;Relocation done (Regions swapped).&quot;);</span>
+<span class="nc" id="L608">                    return true;</span>
+                } else { // swapExp
+<span class="nc bnc" id="L610" title="All 4 branches missed.">                    if (!isExpansionCard(a) || !isExpansionCard(b)) {</span>
+<span class="nc" id="L611">                        active.sendMessage(&quot;Relocation (Expansion): both cards must be expansions.&quot;);</span>
+<span class="nc" id="L612">                        return false;</span>
+                    }
+                    // Must still obey expansion placement for each target slot
+<span class="nc bnc" id="L615" title="All 2 branches missed.">                    if (!isAboveOrBelowSettlementOrCity(active, r2, c2)</span>
+<span class="nc bnc" id="L616" title="All 2 branches missed.">                            || !isAboveOrBelowSettlementOrCity(active, r1, c1)) {</span>
+<span class="nc" id="L617">                        active.sendMessage(&quot;Relocation: target slot is not valid for an expansion.&quot;);</span>
+<span class="nc" id="L618">                        return false;</span>
+                    }
+<span class="nc" id="L620">                    active.placeCard(r1, c1, b);</span>
+<span class="nc" id="L621">                    active.placeCard(r2, c2, a);</span>
+<span class="nc" id="L622">                    active.sendMessage(&quot;Relocation done (Expansions swapped).&quot;);</span>
+<span class="nc" id="L623">                    return true;</span>
+                }
+            }
+
+            // Default: treat as “+1 VP”
+<span class="nc" id="L628">            active.victoryPoints += 1;</span>
+<span class="nc" id="L629">            active.sendMessage(&quot;Played &quot; + nm + &quot;: +1 VP (default).&quot;);</span>
+<span class="nc" id="L630">            return true;</span>
+        }
+
+        // Fallback: accept placement (ugly default)
+<span class="fc" id="L634">        active.placeCard(row, col, this);</span>
+<span class="fc" id="L635">        return true;</span>
+    }
+
+    // ----- tiny helpers used above -----
+    private boolean isRegionCard(Card c) {
+<span class="nc bnc" id="L640" title="All 6 branches missed.">        return c != null &amp;&amp; c.type != null &amp;&amp; c.type.equalsIgnoreCase(&quot;Region&quot;);</span>
+    }
+
+    private boolean isExpansionCard(Card c) {
+<span class="nc bnc" id="L644" title="All 2 branches missed.">        if (c == null)</span>
+<span class="nc" id="L645">            return false;</span>
+<span class="nc bnc" id="L646" title="All 2 branches missed.">        String pl = (c.placement == null ? &quot;&quot; : c.placement.toLowerCase());</span>
+<span class="nc" id="L647">        return pl.contains(&quot;expansion&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
