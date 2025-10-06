@@ -356,16 +356,7 @@ public class Card implements Comparable<Card> {
 
 
         if (nmEquals(nm, "City")) {
-                // Must be on top of an existing settlement in the same slot (same row,col)
-                // For ugly simplicity: allow upgrading if a Settlement exists exactly here
-                Card under = active.getCard(row, col);
-                if (under == null || !nmEquals(under.name, "Settlement")) {
-                    active.sendMessage("City must be placed on top of an existing Settlement (same slot).");
-                    return false;
-                }
-                active.placeCard(row, col, this);
-                active.victoryPoints += 1; // city is 2VP total; settlement vp ignored here, we just add +1
-                return true;
+               return place_city(row, col, this, active);
             }
         // 0) Early validation for occupied slot
         if (active.getCard(row, col) != null) {
@@ -653,5 +644,16 @@ public class Card implements Comparable<Card> {
             return false;
         String pl = (c.placement == null ? "" : c.placement.toLowerCase());
         return pl.contains("expansion");
+    }
+
+    private boolean place_city(int row, int col, Card card, Player player){
+         Card under = player.getCard(row, col);
+                if (under == null || !nmEquals(under.name, "Settlement")) {
+                    player.sendMessage("City must be placed on top of an existing Settlement (same slot).");
+                    return false;
+                }
+                player.placeCard(row, col, this);
+                player.victoryPoints += 1; // city is 2VP total; settlement vp ignored here, we just add +1
+                return true;
     }
 }
