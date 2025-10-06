@@ -430,6 +430,7 @@ public class Card implements Comparable<Card> {
             return true;
         }
 
+
         // 3) Settlement/City Expansions (Buildings & Units)
         if (placement != null && placement.equalsIgnoreCase("Settlement/city")) {
             if (!isAboveOrBelowSettlementOrCity(active, row, col)) {
@@ -492,7 +493,7 @@ public class Card implements Comparable<Card> {
                 return true;
             }
         }
-
+        
         // 4) Pure action cards (Basic intro handful):
         // We keep these very small; most are handled in Server (events/Brigand etc.)
         if ("Action".equalsIgnoreCase(placement) || "Action".equalsIgnoreCase(type)) {
