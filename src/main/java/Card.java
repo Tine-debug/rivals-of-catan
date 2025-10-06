@@ -433,36 +433,12 @@ public class Card implements Comparable<Card> {
 
         // 3) Settlement/City Expansions (Buildings & Units)
         if (placement != null && placement.equalsIgnoreCase("Settlement/city")) {
-            if (!isAboveOrBelowSettlementOrCity(active, row, col)) {
-                active.sendMessage("Expansion must be above/below a Settlement or City (fill inner ring first).");
-                return false;
-            }
-            // one-of check (simple)
-            if (oneOf != null && oneOf.trim().equalsIgnoreCase("1x")) {
-                if (active.hasInPrincipality(nm)) {
-                    active.sendMessage("You may only have one '" + nm + "' in your principality.");
-                    return false;
-                }
-            }
+
+            if (is_Valid_placement_extentions(active, row, col, nm)) return false;
             System.out.println("Passed placement checks for " + nm);
-            // Buildings that “double” adjacent regions when the number hits (enforced
-            // during production)
+
             if ("Building".equalsIgnoreCase(type)) {
-                // Just place it. Production phase will check adjacency and apply +1 increment
-                // (cap 3).
-                active.placeCard(row, col, this);
-                System.out.println("Contained Building");
-                if (nmEquals(nm, "Abbey")) {
-                    active.progressPoints += 1;
-                } else if (nmEquals(nm, "Marketplace")) {
-                    active.flags.add("MARKETPLACE");
-                } else if (nmEquals(nm, "Parish Hall")) {
-                    active.flags.add("PARISH");
-                } else if (nmEquals(nm, "Storehouse")) {
-                    active.flags.add("STOREHOUSE@" + row + "," + col);
-                } else if (nmEquals(nm, "Toll Bridge")) {
-                    active.flags.add("TOLLB");
-                }
+                place_building(row, col, this, active);
                 return true;
             }
 
@@ -633,6 +609,38 @@ public class Card implements Comparable<Card> {
         // Fallback: accept placement (ugly default)
         active.placeCard(row, col, this);
         return true;
+    }
+
+    private boolean is_Valid_placement_extentions(Player active, int row, int col, String nm) {
+        if (!isAboveOrBelowSettlementOrCity(active, row, col)) {
+            active.sendMessage("Expansion must be above/below a Settlement or City (fill inner ring first).");
+            return true;
+        }
+        // one-of check (simple)
+        if (oneOf != null && oneOf.trim().equalsIgnoreCase("1x")) {
+            if (active.hasInPrincipality(nm)) {
+                active.sendMessage("You may only have one '" + nm + "' in your principality.");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void place_building(int row,int col,Card card, Player player){
+                    player.placeCard(row, col, this);
+                System.out.println("Contained Building");
+                if (nmEquals(card.name, "Abbey")) {
+                    player.progressPoints += 1;
+                } else if (nmEquals(card.name, "Marketplace")) {
+                    player.flags.add("MARKETPLACE");
+                } else if (nmEquals(card.name, "Parish Hall")) {
+                    player.flags.add("PARISH");
+                } else if (nmEquals(card.name, "Storehouse")) {
+                    player.flags.add("STOREHOUSE@" + row + "," + col);
+                } else if (nmEquals(card.name, "Toll Bridge")) {
+                    player.flags.add("TOLLB");
+                }
+
     }
 
     // ----- tiny helpers used above -----
