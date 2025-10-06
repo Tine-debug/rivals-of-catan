@@ -1,14 +1,15 @@
 // Card.java
 // Quick & dirty, Basic-set only, refactored to reduce duplication
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Vector;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.*;
 
 public class Card implements Comparable<Card> {
 
@@ -351,6 +352,21 @@ public class Card implements Comparable<Card> {
     public boolean applyEffect(Player active, Player other, int row, int col) {
         String nm = (name == null ? "" : name);
         System.out.println("ApplyEffect: " + nm + " at (" + row + "," + col + ")");
+
+
+
+        if (nmEquals(nm, "City")) {
+                // Must be on top of an existing settlement in the same slot (same row,col)
+                // For ugly simplicity: allow upgrading if a Settlement exists exactly here
+                Card under = active.getCard(row, col);
+                if (under == null || !nmEquals(under.name, "Settlement")) {
+                    active.sendMessage("City must be placed on top of an existing Settlement (same slot).");
+                    return false;
+                }
+                active.placeCard(row, col, this);
+                active.victoryPoints += 1; // city is 2VP total; settlement vp ignored here, we just add +1
+                return true;
+            }
         // 0) Early validation for occupied slot
         if (active.getCard(row, col) != null) {
             active.sendMessage("That space is occupied.");
@@ -398,18 +414,7 @@ public class Card implements Comparable<Card> {
                 return true;
             }
 
-            if (nmEquals(nm, "City")) {
-                // Must be on top of an existing settlement in the same slot (same row,col)
-                // For ugly simplicity: allow upgrading if a Settlement exists exactly here
-                Card under = active.getCard(row, col);
-                if (under == null || !nmEquals(under.name, "Settlement")) {
-                    active.sendMessage("City must be placed on top of an existing Settlement (same slot).");
-                    return false;
-                }
-                active.placeCard(row, col, this);
-                active.victoryPoints += 1; // city is 2VP total; settlement vp ignored here, we just add +1
-                return true;
-            }
+            
         }
 
         // 2) Regions: allow only in region rows (not center); we set default
@@ -479,16 +484,10 @@ public class Card implements Comparable<Card> {
 
                 // Heroes: just add SP/FP/CP/etc.
                 int sp = asInt(SP, 0), fp = asInt(FP, 0), cp = asInt(CP, 0), pp = asInt(PP, 0), kp = asInt(KP, 0);
-                if (sp != 0)
-                    active.skillPoints += sp;
-                if (fp != 0)
-                    active.strengthPoints += fp;
-                if (cp != 0)
-                    active.commercePoints += cp;
-                if (pp != 0)
-                    active.progressPoints += pp;
-                if (kp != 0)
-                    active.victoryPoints += kp;
+                active.skillPoints += fp;
+                active.strengthPoints += sp;
+                active.commercePoints += cp;
+                active.progressPoints += pp;
                 active.placeCard(row, col, this);
                 return true;
             }
