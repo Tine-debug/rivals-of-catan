@@ -8,6 +8,7 @@ class CardApplyEffectTest {
 
   static class StubPlayer extends Player {
     public Card[][] board = new Card[5][5];
+    public int numres = 10;
 
     @Override
     public void placeCard(int r, int c, Card card) { board[r][c] = card; }
@@ -21,16 +22,24 @@ class CardApplyEffectTest {
     public int expandAfterEdgeBuild(int col) { return col; }
 
     @Override
-    public boolean hasInPrincipality(String nm) { return false; }
+    public boolean hasInPrincipality(String nm) { 
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            if (board[i][j] != null && board[i][j].name.equalsIgnoreCase(nm)) return true;
+        }
+    }
+    return false;
+    }
+
 
     @Override
     public void sendMessage(Object msg) {}
 
     @Override
-    public String receiveMessage() { return "T"; }
+    public String receiveMessage() { return "Brick"; }
 
     @Override
-    public int totalAllResources() { return 10; }
+    public int totalAllResources() { return this.numres; }
 
     @Override
     public boolean removeResource(String r,int amt) { return true; }
@@ -38,7 +47,6 @@ class CardApplyEffectTest {
     @Override
     public void gainResource(String r) {}
 }
-
 
     StubPlayer p;
 
@@ -60,6 +68,12 @@ class CardApplyEffectTest {
         assertTrue(sett.applyEffect(p,p,2,2));
     }
 
+
+    @Test
+    void testApplySettlementwithoutRoad(){
+        Card sett = new Card(); sett.name="Settlement";
+        assertFalse(sett.applyEffect(p,p,2,2));
+    }
 
     @Test
     void testApplyCityOnSettlement() {
@@ -92,6 +106,8 @@ class CardApplyEffectTest {
     void testApplyActionMerchantCaravan() {
         Card m = new Card(); m.name="Merchant Caravan"; m.placement="Action";
         assertTrue(m.applyEffect(p,p,0,0));
+        p.numres = 1;
+        assertFalse(m.applyEffect(p,p,0,0));
     }
 
     @Test
@@ -131,6 +147,95 @@ class CardApplyEffectTest {
         Card road = new Card(); road.name = "Road";
         assertFalse(road.applyEffect(p, p, 1, 1));
 
+    }
+
+    @Test
+    void testNotaboveSettlement(){
+        Card rand = new Card(); rand.placement = "Settlement/city";
+        assertFalse(rand.applyEffect(p, p, 1, 1));
+
+    }
+
+    @Test
+    void testoneof(){
+        Card rand = new Card(); rand.placement = "Settlement/city"; rand.name = "rand"; rand.type= "Unit";
+        rand.oneOf = "1x";
+        Card sett = new Card(); sett.name="Settlement";
+        p.placeCard(2,2,sett);
+        assertTrue(rand.applyEffect(p, p, 1, 2));
+        assertFalse(rand.applyEffect(p, p, 3, 2));
+    }
+
+    @Test
+    void testplaybuilding(){
+        Card sett = new Card(); sett.name="Settlement";
+        p.placeCard(2,2,sett);
+        Card building = new Card(); building.name = "Abbey"; building.placement = "Settlement/city"; building.type = "Building";
+        assertTrue(building.applyEffect(p, p, 1, 2));
+        assertEquals(p.progressPoints, 1);
+    }
+
+    @Test
+    void testplayMarketplace(){
+        Card sett = new Card(); sett.name="Settlement";
+        p.placeCard(2,2,sett);
+        Card building = new Card(); building.name = "Marketplace"; building.placement = "Settlement/city"; building.type = "Building";
+        assertTrue(building.applyEffect(p, p, 1, 2));
+        assertTrue(p.flags.contains("MARKETPLACE"));
+    }
+
+    @Test
+    void testplayParishHall(){
+        Card sett = new Card(); sett.name="Settlement";
+        p.placeCard(2,2,sett);
+        Card building = new Card(); building.name = "Parish Hall"; building.placement = "Settlement/city"; building.type = "Building";
+        assertTrue(building.applyEffect(p, p, 1, 2));
+        assertTrue(p.flags.contains("PARISH"));
+    }
+
+    @Test
+    void testplayStorehouse(){
+        Card sett = new Card(); sett.name="Settlement";
+        p.placeCard(2,2,sett);
+        Card building = new Card(); building.name =  "Storehouse"; building.placement = "Settlement/city"; building.type = "Building";
+        assertTrue(building.applyEffect(p, p, 1, 2));
+        assertTrue(p.flags.contains("STOREHOUSE@1,2"));
+    }
+
+     @Test
+    void testplayTollBridge(){
+        Card sett = new Card(); sett.name="Settlement";
+        p.placeCard(2,2,sett);
+        Card building = new Card(); building.name =  "Toll Bridge"; building.placement = "Settlement/city"; building.type = "Building";
+        assertTrue(building.applyEffect(p, p, 1, 2));
+        assertTrue(p.flags.contains("TOLLB"));
+    }
+
+    @Test
+    void testplayRandbuild(){
+        Card sett = new Card(); sett.name="Settlement";
+        p.placeCard(2,2,sett);
+        Card building = new Card(); building.name =  "Rand"; building.placement = "Settlement/city"; building.type = "Building";
+        assertTrue(building.applyEffect(p, p, 1, 2));
+    }
+
+    @Test
+    void testplayLargeTradeShip(){
+        Card sett = new Card(); sett.name="Settlement";
+        p.placeCard(2,2,sett);
+        Card unit = new Card(); unit.name =  "Large Trade Ship"; unit.placement = "Settlement/city"; unit.type = "Unit";
+        assertTrue(unit.applyEffect(p, p, 1, 2));
+        assertTrue(p.flags.contains("LTS@1,2"));
+    }
+
+    @Test
+    void testplayBrickShip(){
+        Card sett = new Card(); sett.name="Settlement";
+        p.placeCard(2,2,sett);
+        Card unit = new Card(); unit.name =  "Brick ship"; unit.placement = "Settlement/city"; unit.type = "Unit";
+        assertTrue(unit.applyEffect(p, p, 1, 2));
+        System.out.println(p.flags.toString());
+        assertTrue(p.flags.contains("2FOR1_BRICK"));
     }
 
 }
