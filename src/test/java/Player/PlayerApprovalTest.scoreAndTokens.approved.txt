@@ -1,0 +1,3 @@
+Player score vs opponent: 4
+Has trade token: true
+Has strength token: false

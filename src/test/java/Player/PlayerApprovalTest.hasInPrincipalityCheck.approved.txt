@@ -1,0 +1,1 @@
+Has Mine: true, Has Forest: false
