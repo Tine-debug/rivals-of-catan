@@ -150,7 +150,7 @@ public class Card implements Comparable<Card> {
     }
 
     // ---------- Loading ONLY the Basic set into piles ----------
-    public static void loadBasicCards(String jsonPath) throws IOException {
+    public static Vector<Card> loadThemeCards(String jsonPath, String desiredTheme) throws IOException {
         Vector<Card> allBasic = new Vector<>();
 
         try (FileReader fr = new FileReader(jsonPath)) {
@@ -164,8 +164,8 @@ public class Card implements Comparable<Card> {
                     continue;
                 JsonObject o = el.getAsJsonObject();
                 String theme = gs(o, "theme");
-                if (theme == null || !theme.toLowerCase().contains("basic"))
-                    continue; // Introductory only
+                if (theme == null || !theme.toLowerCase().contains(desiredTheme))
+                    continue; 
 
                 int number = gi(o, "number", 1);
                 for (int i = 0; i < number; i++) {
@@ -180,7 +180,12 @@ public class Card implements Comparable<Card> {
                 }
             }
         }
+        return allBasic;
+    }
+    public static void loadBasicCards(String jsonPath) throws IOException {
+        //Load Cards and split them into stacks
 
+        Vector<Card> allBasic = loadThemeCards(jsonPath, "basic");
         // Split into piles we care about
         // Center cards
         roads = extractCardsByAttribute(allBasic, "name", "Road");
@@ -210,6 +215,7 @@ public class Card implements Comparable<Card> {
         drawStack4 = new Vector<>(allBasic.subList(Math.min(3 * stackSize, allBasic.size()),
                 Math.min(4 * stackSize, allBasic.size())));
     }
+
 
     // ---------- Placement validations (ugly but centralized) ----------
     private static boolean isAboveOrBelowSettlementOrCity(Player p, int row, int col) {
