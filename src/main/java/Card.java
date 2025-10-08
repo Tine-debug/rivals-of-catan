@@ -150,7 +150,7 @@ public class Card implements Comparable<Card> {
     }
 
     // ---------- Loading ONLY the Basic set into piles ----------
-    public static Vector<Card> loadThemeCards(String jsonPath, String desiredTheme) throws IOException {
+    public static Vector<Card> loadThemeCards(String jsonPath, String desiredTheme, boolean loadmuliple) throws IOException {
         Vector<Card> allBasic = new Vector<>();
 
         try (FileReader fr = new FileReader(jsonPath)) {
@@ -166,8 +166,9 @@ public class Card implements Comparable<Card> {
                 String theme = gs(o, "theme");
                 if (theme == null || !theme.toLowerCase().contains(desiredTheme))
                     continue; 
-
-                int number = gi(o, "number", 1);
+                int number;
+                if (loadmuliple) number = gi(o, "number", 1);
+                else number = 1;
                 for (int i = 0; i < number; i++) {
                     Card proto = new Card(
                             gs(o, "name"), theme, gs(o, "type"),
@@ -185,7 +186,8 @@ public class Card implements Comparable<Card> {
     public static void loadBasicCards(String jsonPath) throws IOException {
         //Load Cards and split them into stacks
 
-        Vector<Card> allBasic = loadThemeCards(jsonPath, "basic");
+        Vector<Card> allBasic = loadThemeCards(jsonPath, "basic", true);
+
         // Split into piles we care about
         // Center cards
         roads = extractCardsByAttribute(allBasic, "name", "Road");
@@ -238,9 +240,7 @@ public class Card implements Comparable<Card> {
     }
 
     private static boolean isCenterSlot(int row) {
-        // By convention: inner/outer rows hold expansions & regions; middle row is
-        // center (roads/settlements/cities)
-        return row % 2 == 0; // 0,2,4,... => center columns; we use row 2 initially as center
+        return row == 2; 
     }
 
     // Determine if region name matches what a booster affects
@@ -500,7 +500,7 @@ public class Card implements Comparable<Card> {
                 return true;
             }
 
-            if (nmEquals(nm, "Brigitta the Wise Woman")) {
+            if (nmEquals(nm, "Brigitta, the Wise Woman")) {
                 // Choose production die result before rolling; we store forced value in Server
                 active.flags.add("BRIGITTA");
                 return true;
