@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import org.approvaltests.Approvals;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -31,16 +32,31 @@ public class CardApplyEffectApprovalTest {
     StubPlayer player2;
     static Vector<int[]> interestingFields = new Vector<>();
 
+    static void resetStack(){
+        try {
+            Card.loadBasicCards("cards.json");
+            }    catch (Exception e) {
+            System.err.println("Failed to load");
+            }
+    }
 
-
-    @BeforeAll
-    static void setupCardsandFields() {
+    static void resetBasicCards(){
         try {
             basicCards = Card.loadThemeCards("cards.json", "basic", false);
-            Card.loadBasicCards("cards.json");
         } catch (Exception e) {
             System.err.println("Failed to load");
         }
+    }
+
+    @BeforeEach
+    void reset(){
+        resetStack();
+    }
+
+    @BeforeAll
+    static void setupCardsandFields() {
+        resetStack();
+        resetBasicCards();
             for (int i = 0; i<5 ; i++){
                 for (int j = 0; j<6 ; j++){
                     interestingFields.add(new int[]{i, j});
@@ -53,13 +69,19 @@ public class CardApplyEffectApprovalTest {
         }
 
 
+    
+    Card getCard(String name){
+        resetBasicCards();
+                Card res = Card.popCardByName(basicCards, name);
+        resetBasicCards();
+        return res;
+
+    }
+
+
 
     void setupPlayer1(){
-                try {
-            Card.loadBasicCards("cards.json");
-        } catch (Exception e) {
-            System.err.println("Failed to load");
-        }
+        resetStack();
         player1 = new StubPlayer();
         player1.commercePoints = 3;
         player1.progressPoints = 3;
@@ -75,11 +97,8 @@ public class CardApplyEffectApprovalTest {
     }
 
      void setupPlayer2 (){
-        try {
-                Card.loadBasicCards("cards.json");
-                } catch (Exception e) {
-                    System.err.println("Failed to load");
-                }
+
+            resetStack();
                 player2 = new StubPlayer();
                 int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
                 Server.pricipalityinitoneplayer(player2, regionDice, 2,  1);
@@ -172,12 +191,8 @@ public class CardApplyEffectApprovalTest {
         void testCardApplyEffectRoadSettlement () {
             String result = "";
             setupPlayer1();
-             try {
-            basicCards = Card.loadThemeCards("cards.json", "basic", false);
-            }    catch (Exception e) {
-            System.err.println("Failed to load");
-        }
-           Card road = Card.popCardByName(basicCards, "Road");
+
+           Card road = getCard("Road");
             for (int j = 0; j < interestingFields.size(); j++)
             {
                 result = result + "\n at: " + interestingFields.get(j)[0] + "," + interestingFields.get(j)[1] +  "\n";
@@ -187,7 +202,7 @@ public class CardApplyEffectApprovalTest {
             
             
             }
-            Card set = Card.popCardByName(basicCards, "Settlement");
+            Card set = getCard("Settlement");
              for (int j = 0; j < interestingFields.size(); j++)
             {
             result = result + "\n at: " + interestingFields.get(j)[0] + "," + interestingFields.get(j)[1] +  "\n";  
@@ -196,11 +211,7 @@ public class CardApplyEffectApprovalTest {
             result = result + "\n" + player1.flags.toString();
             
             }
-            try {
-            basicCards = Card.loadThemeCards("cards.json", "basic", false);
-            }    catch (Exception e) {
-            System.err.println("Failed to load");
-        }
+    
 
             Approvals.verify(result);
         }
@@ -215,21 +226,12 @@ public class CardApplyEffectApprovalTest {
             player2.removeResource("Grain", 1);
             player2.removeResource("Ore", 1);
 
-            try {
-            basicCards = Card.loadThemeCards("cards.json", "basic", false);
-            }    catch (Exception e) {
-            System.err.println("Failed to load");
-            }
-            Card merchand = Card.popCardByName(basicCards, "Merchant Caravan");
+
+            Card merchand = getCard("Merchant Caravan");
             result = result + String.valueOf(merchand.applyEffect(player2, player2, 0, 0));
             result = result + "\n" + player2.printPrincipality();
             result = result + "\n" + player2.flags.toString();
             Approvals.verify(result);
-             try {
-            basicCards = Card.loadThemeCards("cards.json", "basic", false);
-            }    catch (Exception e) {
-            System.err.println("Failed to load");
-            }
 
         }
 
@@ -258,32 +260,14 @@ public class CardApplyEffectApprovalTest {
     @ParameterizedTest
     @ValueSource(strings = {"Region", "EXP"})
     void applyEffectswap(String nameChanged){
-                try {
-                Card.loadBasicCards("cards.json");
-                } catch (Exception e) {
-                    System.err.println("Failed to load");
-                }
+        resetStack();
         SwapPlayer player3 = new SwapPlayer();
         int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         Server.pricipalityinitoneplayer(player3, regionDice, 2,  1);
 
-        try {
-            basicCards = Card.loadThemeCards("cards.json", "basic", false);
-            }    catch (Exception e) {
-            System.err.println("Failed to load");
-            }
-        Card brickfactory = Card.popCardByName(basicCards, "Brick Factory");
-        Card harald = Card.popCardByName(basicCards, "Harald");
-        Card reloc = Card.popCardByName(basicCards, "Relocation");
-
-        try {
-            basicCards = Card.loadThemeCards("cards.json", "basic", false);
-            }    catch (Exception e) {
-            System.err.println("Failed to load");
-            }
-
-
-
+        Card brickfactory = getCard("Brick Factory");
+        Card harald =  getCard("Harald");
+        Card reloc = getCard("Relocation");
 
         for (int i = 0; i < 5; i++){
             for (int j = 0; j < 5; j++){
