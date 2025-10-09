@@ -649,7 +649,7 @@ public class Card implements Comparable<Card> {
         if (c == null)
             return false;
         String pl = (c.placement == null ? "" : c.placement.toLowerCase());
-        return pl.contains("expansion");
+        return pl.contains("settlement/city");
     }
 
     private boolean place_city(int row, int col, Card card, Player player){
