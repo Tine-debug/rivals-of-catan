@@ -5,9 +5,11 @@ import java.util.stream.Stream;
 
 import org.approvaltests.Approvals;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 
 
@@ -22,10 +24,13 @@ public class CardApplyEffectApprovalTest {
 
 }
 
+
+
     static Vector<Card> basicCards;
     StubPlayer player1;
     StubPlayer player2;
     static Vector<int[]> interestingFields = new Vector<>();
+
 
 
     @BeforeAll
@@ -60,17 +65,18 @@ public class CardApplyEffectApprovalTest {
         player1.progressPoints = 3;
         player1.skillPoints = 3;
         player1.strengthPoints = 3;
+        int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
+        Server.pricipalityinitoneplayer(player1, regionDice, 2,  1);
+        player1.gainResource("Gold");
         player1.gainResource("Gold");
         player1.gainResource("Gold");
         player1.gainResource("Wool");
-        int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
-        Server.pricipalityinitoneplayer(player1, regionDice, 2,  1);
 
     }
 
      void setupPlayer2 (){
         try {
-                    Card.loadBasicCards("cards.json");
+                Card.loadBasicCards("cards.json");
                 } catch (Exception e) {
                     System.err.println("Failed to load");
                 }
@@ -88,6 +94,7 @@ public class CardApplyEffectApprovalTest {
     for (int i = 0; i < basicCards.size(); i++) {
         Card card = basicCards.get(i);
             args.add(Arguments.of( card.name, i, card));
+            
     }
     return args.stream();
     }
@@ -161,6 +168,144 @@ public class CardApplyEffectApprovalTest {
             Approvals.verify(result, Approvals.NAMES.withParameters(i + cardname));
         }
 
+        @Test
+        void testCardApplyEffectRoadSettlement () {
+            String result = "";
+            setupPlayer1();
+             try {
+            basicCards = Card.loadThemeCards("cards.json", "basic", false);
+            }    catch (Exception e) {
+            System.err.println("Failed to load");
+        }
+           Card road = Card.popCardByName(basicCards, "Road");
+            for (int j = 0; j < interestingFields.size(); j++)
+            {
+                result = result + "\n at: " + interestingFields.get(j)[0] + "," + interestingFields.get(j)[1] +  "\n";
+                result = result + "\n"+ String.valueOf(road.applyEffect(player1, player1, interestingFields.get(j)[0], interestingFields.get(j)[1]));
+                result = result + "\n" + player1.printPrincipality();
+                result = result + "\n" + player1.flags.toString();
+            
+            
+            }
+            Card set = Card.popCardByName(basicCards, "Settlement");
+             for (int j = 0; j < interestingFields.size(); j++)
+            {
+            result = result + "\n at: " + interestingFields.get(j)[0] + "," + interestingFields.get(j)[1] +  "\n";  
+            result = result + "\n"+ String.valueOf(set.applyEffect(player1, player1, interestingFields.get(j)[0], interestingFields.get(j)[1]));
+            result = result + "\n" + player1.printPrincipality();
+            result = result + "\n" + player1.flags.toString();
+            
+            }
+            try {
+            basicCards = Card.loadThemeCards("cards.json", "basic", false);
+            }    catch (Exception e) {
+            System.err.println("Failed to load");
+        }
+
+            Approvals.verify(result);
+        }
+
+        @Test
+        void MerchandCaravannoRessources(){
+            String result = "";
+            setupPlayer2();
+            player2.removeResource("Brick", 1);
+            player2.removeResource("Wool", 1);
+            player2.removeResource("Lumber", 1);
+            player2.removeResource("Grain", 1);
+            player2.removeResource("Ore", 1);
+
+            try {
+            basicCards = Card.loadThemeCards("cards.json", "basic", false);
+            }    catch (Exception e) {
+            System.err.println("Failed to load");
+            }
+            Card merchand = Card.popCardByName(basicCards, "Merchant Caravan");
+            result = result + String.valueOf(merchand.applyEffect(player2, player2, 0, 0));
+            result = result + "\n" + player2.printPrincipality();
+            result = result + "\n" + player2.flags.toString();
+            Approvals.verify(result);
+             try {
+            basicCards = Card.loadThemeCards("cards.json", "basic", false);
+            }    catch (Exception e) {
+            System.err.println("Failed to load");
+            }
+
+        }
+
+
+    static class SwapPlayer extends StubPlayer{
+        public Vector<String[]> messages = new Vector();
+        public int messagenumber = 0;
+        public int messageblock = 0;
+        @Override
+        public String receiveMessage() { 
+            String message = "";
+            try {
+                message = messages.get(messageblock)[messagenumber];
+                if (messagenumber<2) messagenumber++;
+                else{
+                    messagenumber = 0;
+                    messageblock++;
+                }
+            } catch (Exception e) {
+                
+            }
+            
+            return message; }
+        
+    }
+    @ParameterizedTest
+    @ValueSource(strings = {"Region", "EXP"})
+    void applyEffectswap(String nameChanged){
+                try {
+                Card.loadBasicCards("cards.json");
+                } catch (Exception e) {
+                    System.err.println("Failed to load");
+                }
+        SwapPlayer player3 = new SwapPlayer();
+        int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
+        Server.pricipalityinitoneplayer(player3, regionDice, 2,  1);
+
+        try {
+            basicCards = Card.loadThemeCards("cards.json", "basic", false);
+            }    catch (Exception e) {
+            System.err.println("Failed to load");
+            }
+        Card brickfactory = Card.popCardByName(basicCards, "Brick Factory");
+        Card harald = Card.popCardByName(basicCards, "Harald");
+        Card reloc = Card.popCardByName(basicCards, "Relocation");
+
+        try {
+            basicCards = Card.loadThemeCards("cards.json", "basic", false);
+            }    catch (Exception e) {
+            System.err.println("Failed to load");
+            }
+
+
+
+
+        for (int i = 0; i < 5; i++){
+            for (int j = 0; j < 5; j++){
+                String[] newBlock = {nameChanged, String.format("%d %d", i, j), String.format("%d %d", i + 2, j)};
+                player3.messages.add(newBlock);
+                if (i<2)brickfactory.applyEffect(player3, player3, i, j);
+                else harald.applyEffect(player3, player3, i, j);
+            }   
+        } 
+        String result = "";
+        for (int i = 0; i < player3.messages.size(); i++){
+            result = result + "\n" + player3.printPrincipality();
+            result = result + "\n" + List.of(player3.messages.get(i));
+            result = result + "\n" + String.valueOf(reloc.applyEffect(player3, player3, 0, 0));
+            result = result + "\n" + player3.printPrincipality();
+            result = result + "\n" + player3.flags.toString();
+            result = result + "\n ====================================";
+        }
+
+        Approvals.verify(result, Approvals.NAMES.withParameters(nameChanged));
+
+    }
 
     
 
