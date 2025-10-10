@@ -25,21 +25,6 @@ public class Placement{
         }
 
 
-
-        // 2) Regions: allow only in region rows (not center); we set default
-        // production=1
-        if ("Region".equalsIgnoreCase(this.placement)) {
-            if (row == 2) {
-                active.sendMessage("Regions must be placed above/below the center row.");
-                return false;
-            }
-            if (card.regionProduction <= 0)
-                card.regionProduction = 1;
-            active.placeCard(row, col, card);
-            return true;
-        }
-
-
         // 3) Settlement/City Expansions (Buildings & Units)
         if (placement != null && placement.equalsIgnoreCase("Settlement/city")) {
 

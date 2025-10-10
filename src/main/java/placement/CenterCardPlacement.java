@@ -2,7 +2,7 @@
 public class CenterCardPlacement extends Placement{
 
     public CenterCardPlacement() {
-        placement = "Center Card";
+        this.placement = "Center Card";
     }
     
     @Override
