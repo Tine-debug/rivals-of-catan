@@ -7,6 +7,11 @@ public class CenterCardPlacement extends Placement{
     
     @Override
     public boolean applyEffect(Player active, Player other, int row, int col, Card card){
+
+        String nm = (card.name == null ? "" : card.name);
+        System.out.println("ApplyEffect: " + nm + " at (" + row + "," + col + ")");
+
+        
              if (card.name.equals("City")) {
                return card.place_city(row, col, card, active);
             }
