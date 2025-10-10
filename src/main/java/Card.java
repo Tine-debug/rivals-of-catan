@@ -14,9 +14,10 @@ import com.google.gson.JsonParser;
 public class Card implements Comparable<Card> {
 
     // ---------- Public fields (keep simple for the take-home) ----------
-    public String name, theme, type, placement, cost, oneOf;
+    public String name, theme, type, cost, oneOf;
     public String victoryPoints, CP, SP, FP, PP, LP, KP, cardText;
     public String germanName, Requires, protectionOrRemoval;
+    public Placement placement;
 
     // Regions track “stored” resources by rotating; here we model it as an int
     // (0..3)
@@ -49,7 +50,7 @@ public class Card implements Comparable<Card> {
         this.theme = theme;
         this.type = type;
         this.germanName = germanName;
-        this.placement = placement;
+        this.placement = PlacementFactory.createPlacement(placement);
         this.oneOf = oneOf;
         this.cost = cost;
         this.victoryPoints = victoryPoints;
@@ -220,7 +221,7 @@ public class Card implements Comparable<Card> {
 
 
     // ---------- Placement validations (ugly but centralized) ----------
-    private static boolean isAboveOrBelowSettlementOrCity(Player p, int row, int col) {
+    public static boolean isAboveOrBelowSettlementOrCity(Player p, int row, int col) {
         // Inner ring: ±1 from center settlement/city
         Card up1 = p.getCard(row - 1, col);
         Card down1 = p.getCard(row + 1, col);
@@ -263,7 +264,7 @@ public class Card implements Comparable<Card> {
     }
 
     // Place the two diagonal regions after a new settlement (ugly prompt kept here)
-    private void placeTwoDiagonalRegions(Player active, int row, int col) {
+    public void placeTwoDiagonalRegions(Player active, int row, int col) {
         // Decide which side is the “open side” (the side without a road)
         int colMod = (active.getCard(row, col - 1) == null) ? -1 : 1;
         int sideCol = col + colMod;
@@ -356,259 +357,10 @@ public class Card implements Comparable<Card> {
     // ---------- Main effect / placement entry ----------
     // Returns true if placed/applied; false if illegal placement
     public boolean applyEffect(Player active, Player other, int row, int col) {
-        String nm = (name == null ? "" : name);
-        System.out.println("ApplyEffect: " + nm + " at (" + row + "," + col + ")");
-
-
-
-        if (nmEquals(nm, "City")) {
-               return place_city(row, col, this, active);
-            }
-        // 0) Early validation for occupied slot
-        if (active.getCard(row, col) != null) {
-            active.sendMessage("That space is occupied.");
-            return false;
-        }
-
-        // 1) Center cards: Road / Settlement / City
-        if (nmEquals(nm, "Road") || nmEquals(nm, "Settlement") || nmEquals(nm, "City")) {
-            if (!isCenterSlot(row)) {
-                active.sendMessage("Roads/Settlements/Cities must go in the center row(s).");
-                return false;
-            }
-
-            if (nmEquals(nm, "Road")) {
-                // Just allow anywhere center that touches a center card or extends line
-                // (Keep it permissive/ugly)
-                active.placeCard(row, col, this);
-                active.sendMessage("Built a Road.");
-                // Expand board if we built at an edge
-                active.expandAfterEdgeBuild(col);
-                return true;
-            }
-
-            if (nmEquals(nm, "Settlement")) {
-                // Simplified: must be next to a Road (left or right) and empty here
-                Card L1 = active.getCard(row, col - 1);
-                Card R1 = active.getCard(row, col + 1);
-                boolean hasRoad = (L1 != null && nmEquals(L1.name, "Road"))
-                        || (R1 != null && nmEquals(R1.name, "Road"));
-                if (!hasRoad) {
-                    active.sendMessage("Settlement must be placed next to a Road.");
-                    return false;
-                }
-                active.placeCard(row, col, this);
-                active.victoryPoints += 1;
-
-                // Expand and capture the updated column
-                col = active.expandAfterEdgeBuild(col);
-
-                // Now place diagonals using the correct, updated col
-                placeTwoDiagonalRegions(active, row, col);
-
-                active.lastSettlementRow = row;
-                active.lastSettlementCol = col;
-                return true;
-            }
-
-            
-        }
-
-        // 2) Regions: allow only in region rows (not center); we set default
-        // production=1
-        if ("Region".equalsIgnoreCase(type)) {
-            if (isCenterSlot(row)) {
-                active.sendMessage("Regions must be placed above/below the center row.");
-                return false;
-            }
-            if (regionProduction <= 0)
-                regionProduction = 1;
-            active.placeCard(row, col, this);
-            return true;
-        }
-
-
-        // 3) Settlement/City Expansions (Buildings & Units)
-        if (placement != null && placement.equalsIgnoreCase("Settlement/city")) {
-
-            if (is_Valid_placement_extentions(active, row, col, nm)) return false;
-            System.out.println("Passed placement checks for " + nm);
-
-            if ("Building".equalsIgnoreCase(type)) {
-                place_building(row, col, this, active);
-                return true;
-            }
-
-            // Units
-            if (type.contains("Unit")) {
-                System.out.println("Contained UNIT!!!!!");
-                // Large Trade Ship: adjacency 2-for-1 between L/R regions (handled in Server)
-                if (nmEquals(nm, "Large Trade Ship")) {
-                    active.placeCard(row, col, this);
-                    active.flags.add("LTS@" + row + "," + col);
-                    return true;
-                }
-                // “Common” trade ships: 2:1 bank for specific resource (handled in Server)
-                if (nm.toLowerCase().endsWith(" ship")) {
-                    active.placeCard(row, col, this);
-                    String res = nm.split("\\s+")[0]; // Brick/Gold/Grain/Lumber/Ore/Wool
-                    active.flags.add("2FOR1_" + res.toUpperCase());
-                    return true;
-                }
-
-                // Heroes: just add SP/FP/CP/etc.
-                int sp = asInt(SP, 0), fp = asInt(FP, 0), cp = asInt(CP, 0), pp = asInt(PP, 0), kp = asInt(KP, 0);
-                active.skillPoints += fp;
-                active.strengthPoints += sp;
-                active.commercePoints += cp;
-                active.progressPoints += pp;
-                active.placeCard(row, col, this);
-                return true;
-            }
-        }
-        
-        // 4) Pure action cards (Basic intro handful):
-        // We keep these very small; most are handled in Server (events/Brigand etc.)
-        if ("Action".equalsIgnoreCase(placement) || "Action".equalsIgnoreCase(type)) {
-            // e.g., Merchant Caravan: “gain 2 of your choice by discarding any 2 resources”
-            if (nmEquals(nm, "Merchant Caravan")) {
-                if (active.totalAllResources() < 2) {
-                    active.sendMessage("You need at least 2 resources to play Merchant Caravan.");
-                    return false;
-                }
-                // Just let player pick 2 to discard, then 2 to gain
-                // (opting out by discarding and gaining same resource is allowed)
-                for (int i = 0; i < 2; i++) {
-                    active.sendMessage(
-                            "PROMPT: Type Discard resource #" + (i + 1) + " [Brick|Grain|Lumber|Wool|Ore|Gold]:");
-                    String g = active.receiveMessage();
-                    active.removeResource(g, 1);
-                }
-                for (int i = 0; i < 2; i++) {
-                    active.sendMessage(
-                            "PROMPT: Type Gain resource #" + (i + 1) + " [Brick|Grain|Lumber|Wool|Ore|Gold]:");
-                    String g = active.receiveMessage();
-                    active.gainResource(g);
-                }
-                return true;
-            }
-
-            if (nmEquals(nm, "Scout")) {
-                // Only meaningful when used with a new settlement (Server stores
-                // lastSettlementRow/Col)
-                active.flags.add("SCOUT_NEXT_SETTLEMENT");
-                return true;
-            }
-
-            if (nmEquals(nm, "Brigitta, the Wise Woman")) {
-                // Choose production die result before rolling; we store forced value in Server
-                active.flags.add("BRIGITTA");
-                return true;
-            }
-
-            // Discard 3 gold and take any 2 resources of your choice in return.
-            if (nmEquals(nm, "Goldsmith")) {
-                if (!active.removeResource("Gold", 3)) {
-                    active.sendMessage("Goldsmith: you need 3 Gold to play this.");
-                    return false;
-                }
-                active.sendMessage("Goldsmith: choose two resources to gain:");
-                for (int i = 1; i <= 2; i++) {
-                    active.sendMessage("Pick resource #" + i + " [Brick|Grain|Lumber|Wool|Ore|Gold]:");
-                    String g = active.receiveMessage();
-                    active.gainResource(g);
-                }
-                return true;
-            }
-
-            // Swap 2 of your own Regions OR 2 of your own Expansion cards.
-            // Stored resources on Regions remain on the same cards; placement rules must
-            // hold.
-            if (nmEquals(nm, "Relocation")) {
-                active.sendMessage(
-                        "PROMPT: Relocation - Type 'REGION' to swap two regions or 'EXP' to swap two expansions:");
-                String pick = active.receiveMessage();
-                boolean swapRegions = (pick != null && pick.trim().toUpperCase().startsWith("R"));
-                boolean swapExp = (pick != null && pick.trim().toUpperCase().startsWith("E"));
-                if (!swapRegions && !swapExp) {
-                    active.sendMessage("Relocation canceled (need REGION or EXP).");
-                    return false;
-                }
-
-                // Read two coordinates
-                active.sendMessage("PROMPT: Enter first coordinate (row col):");
-                int r1 = 0, c1 = 0;
-                try {
-                    String[] t = active.receiveMessage().trim().split("\\s+");
-                    r1 = Integer.parseInt(t[0]);
-                    c1 = Integer.parseInt(t[1]);
-                } catch (Exception e) {
-                    active.sendMessage("Invalid coordinate.");
-                    return false;
-                }
-                active.sendMessage("PROMPT: Enter second coordinate (row col):");
-                int r2 = 0, c2 = 0;
-                try {
-                    String[] t = active.receiveMessage().trim().split("\\s+");
-                    r2 = Integer.parseInt(t[0]);
-                    c2 = Integer.parseInt(t[1]);
-                } catch (Exception e) {
-                    active.sendMessage("Invalid coordinate.");
-                    return false;
-                }
-
-                Card a = active.getCard(r1, c1);
-                Card b = active.getCard(r2, c2);
-                if (a == null || b == null) {
-                    active.sendMessage("Relocation: both positions must contain cards.");
-                    return false;
-                }
-
-                if (swapRegions) {
-                    if (!isRegionCard(a) || !isRegionCard(b)) {
-                        active.sendMessage("Relocation (Region): both cards must be Regions.");
-                        return false;
-                    }
-                    // target slots must be valid region slots (i.e., not center)
-                    if (isCenterSlot(r1) || isCenterSlot(r2)) {
-                        active.sendMessage("Relocation: regions must be outside center row.");
-                        return false;
-                    }
-                    // Swap without re-applying effects
-                    active.placeCard(r1, c1, b);
-                    active.placeCard(r2, c2, a);
-                    active.sendMessage("Relocation done (Regions swapped).");
-                    return true;
-                } else { // swapExp
-                    if (!isExpansionCard(a) || !isExpansionCard(b)) {
-                        active.sendMessage("Relocation (Expansion): both cards must be expansions.");
-                        return false;
-                    }
-                    // Must still obey expansion placement for each target slot
-                    if (!isAboveOrBelowSettlementOrCity(active, r2, c2)
-                            || !isAboveOrBelowSettlementOrCity(active, r1, c1)) {
-                        active.sendMessage("Relocation: target slot is not valid for an expansion.");
-                        return false;
-                    }
-                    active.placeCard(r1, c1, b);
-                    active.placeCard(r2, c2, a);
-                    active.sendMessage("Relocation done (Expansions swapped).");
-                    return true;
-                }
-            }
-
-            // Default: treat as “+1 VP”
-            active.victoryPoints += 1;
-            active.sendMessage("Played " + nm + ": +1 VP (default).");
-            return true;
-        }
-
-        // Fallback: accept placement (ugly default)
-        active.placeCard(row, col, this);
-        return true;
+        return placement.applyEffect(active, other, row, col, this);
     }
 
-    private boolean is_Valid_placement_extentions(Player active, int row, int col, String nm) {
+    public boolean is_Valid_placement_extentions(Player active, int row, int col, String nm) {
         if (!isAboveOrBelowSettlementOrCity(active, row, col)) {
             active.sendMessage("Expansion must be above/below a Settlement or City (fill inner ring first).");
             return true;
@@ -623,7 +375,7 @@ public class Card implements Comparable<Card> {
         return false;
     }
 
-    private void place_building(int row,int col,Card card, Player player){
+    public void place_building(int row,int col,Card card, Player player){
                     player.placeCard(row, col, this);
                 System.out.println("Contained Building");
                 if (nmEquals(card.name, "Abbey")) {
@@ -641,18 +393,18 @@ public class Card implements Comparable<Card> {
     }
 
     // ----- tiny helpers used above -----
-    private boolean isRegionCard(Card c) {
+    public boolean isRegionCard(Card c) {
         return c != null && c.type != null && c.type.equalsIgnoreCase("Region");
     }
 
-    private boolean isExpansionCard(Card c) {
+    public boolean isExpansionCard(Card c) {
         if (c == null)
             return false;
-        String pl = (c.placement == null ? "" : c.placement.toLowerCase());
+        String pl = (c.placement.placement == null ? "" : c.placement.placement.toLowerCase());
         return pl.contains("settlement/city");
     }
 
-    private boolean place_city(int row, int col, Card card, Player player){
+    public boolean place_city(int row, int col, Card card, Player player){
          Card under = player.getCard(row, col);
                 if (under == null || !nmEquals(under.name, "Settlement")) {
                     player.sendMessage("City must be placed on top of an existing Settlement (same slot).");

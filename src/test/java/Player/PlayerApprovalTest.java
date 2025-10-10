@@ -1,28 +1,26 @@
+import java.util.Vector;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import java.util.*;
 import org.approvaltests.Approvals;
-
-
-
-import java.io.File;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class PlayerApprovalTest {
 
+
     Player player;
 
-
     @BeforeAll
-    static void setup() {
-        // Change folders for approved and received files
-        System.setProperty("approvaltests.approved.directory", "target/approvals/approved");
-        System.setProperty("approvaltests.received.directory", "target/approvals/received");
-    }
+    static void setupall() {
+        try {
+            Vector<Card> BasicCards = Card.loadThemeCards("cards.json", "basic", false);
+        } catch (Exception e) {
+        }
+            System.err.println("Failed to load: ");
+        }
 
     @BeforeEach
-    void setup2() {
+    void setupeach() {
         player = new Player();
     }
 
@@ -33,9 +31,8 @@ public class PlayerApprovalTest {
 
     @Test
     void addCardToPrincipality() {
-        Card hill = new Card();
-        hill.name = "Hill";
-        hill.type = "Region";
+        Card hill = new Card("Hill", null, "Region", null, "Center Card", null, null, 
+        null, null, null, null, null, null, null, "Settlement built" , null, null);
         hill.regionProduction = 1;
         player.placeCard(0, 0, hill);
         Approvals.verify(player.printPrincipality());

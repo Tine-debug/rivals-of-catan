@@ -1,11 +1,17 @@
 // Player.java
 // Public fields kept for “quick & dirty”; helpers centralized to reduce clutter.
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 
 public class Player {
     // --- “Public on purpose” for the exam ---
-    public int victoryPoints = 0;
+    public int victoryPoints = 2;
     public int progressPoints = 0;
     public int skillPoints = 0;
     public int commercePoints = 0;
@@ -274,7 +280,7 @@ public class Player {
 
         // Boosters: Foundry/Mill/Camp/Factory/Shop (hint text)
         if ("Building".equalsIgnoreCase(c.type) &&
-                "Settlement/City Expansions".equalsIgnoreCase(c.placement)) {
+                "Settlement/City Expansions".equalsIgnoreCase(c.placement.placement)) {
             if (nm.endsWith("Foundry"))
                 return "Boosts Ore x2 on match";
             if (nm.endsWith("Mill"))
@@ -301,7 +307,7 @@ public class Player {
             return pts;
 
         // Default: show placement/type short
-        String pl = c.placement == null ? "" : c.placement;
+        String pl = c.placement.placement == null ? "" : c.placement.placement;
         String tp = c.type == null ? "" : c.type;
         if (!pl.isEmpty() || !tp.isEmpty())
             return (pl + " " + tp).trim();

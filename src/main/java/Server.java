@@ -1,11 +1,21 @@
 // Server.java
 // Single-process server/loop (no networking). Introductory game only.
 
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.Vector;
 
 public class Server {
 
@@ -141,6 +151,17 @@ public class Server {
         for (int i = 0; i < players.size(); i++) {
             Player p = players.get(i);
             // center basics
+            pricipalityinitoneplayer(p, regionDice, center, i);
+
+        }
+
+        // Put remaining “fixed dice” regions back in region stack (as in your previous
+        // code)
+        addBackExtraFixedRegions();
+        Collections.shuffle(Card.regions);
+    }
+
+    public static void pricipalityinitoneplayer(Player p, int[][] regionDice, int center, int i){
             p.placeCard(center, 1, Card.popCardByName(Card.settlements, "Settlement"));
             p.placeCard(center, 2, Card.popCardByName(Card.roads, "Road"));
             p.placeCard(center, 3, Card.popCardByName(Card.settlements, "Settlement"));
@@ -171,14 +192,8 @@ public class Server {
             p.placeCard(center + 1, 0, hill);
             p.placeCard(center + 1, 2, past);
             p.placeCard(center + 1, 4, mount);
-
-        }
-
-        // Put remaining “fixed dice” regions back in region stack (as in your previous
-        // code)
-        addBackExtraFixedRegions();
-        Collections.shuffle(Card.regions);
     }
+
 
     private void addBackExtraFixedRegions() {
         // There are two of each of these cards, each with a fixed diceRoll:
@@ -750,7 +765,7 @@ public class Server {
                 if (x == null)
                     continue;
                 String t = x.type == null ? "" : x.type;
-                String pl = x.placement == null ? "" : x.placement;
+                String pl = x.placement.placement == null ? "" : x.placement.placement;
                 if (t.toLowerCase().contains("trade ship") ||
                         (pl.toLowerCase().contains("settlement/city") && x.name != null
                                 && x.name.toLowerCase().endsWith("ship"))) {

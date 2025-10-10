@@ -1,9 +1,12 @@
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.stream.Stream;
 
 import org.approvaltests.Approvals;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +33,7 @@ public class CardApplyEffectApprovalTest {
     static Vector<Card> basicCards;
     StubPlayer player1;
     StubPlayer player2;
+    MessagePlayer player3;
     static Vector<int[]> interestingFields = new Vector<>();
 
     static void resetStack(){
@@ -65,8 +69,23 @@ public class CardApplyEffectApprovalTest {
              interestingFields.add(new int[]{0,1});
              interestingFields.add(new int[]{0,3});
 
-
         }
+    static private PrintStream originalOut;
+    static private PrintStream originalErr;
+
+    @BeforeAll
+    static void suppressOutput() {
+        originalOut = System.out;
+        originalErr = System.err;
+        System.setOut(new PrintStream(OutputStream.nullOutputStream()));
+        System.setErr(new PrintStream(OutputStream.nullOutputStream()));
+    }
+
+    @AfterAll
+    static void restoreOutput() {
+        System.setOut(originalOut);
+        System.setErr(originalErr);
+    }
 
 
     
@@ -236,7 +255,7 @@ public class CardApplyEffectApprovalTest {
         }
 
 
-    static class SwapPlayer extends StubPlayer{
+    static class MessagePlayer extends StubPlayer{
         public Vector<String[]> messages = new Vector();
         public int messagenumber = 0;
         public int messageblock = 0;
@@ -257,11 +276,13 @@ public class CardApplyEffectApprovalTest {
             return message; }
         
     }
+
+
     @ParameterizedTest
     @ValueSource(strings = {"Region", "EXP"})
     void applyEffectswap(String nameChanged){
         resetStack();
-        SwapPlayer player3 = new SwapPlayer();
+        player3 = new MessagePlayer();
         int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         Server.pricipalityinitoneplayer(player3, regionDice, 2,  1);
 
@@ -277,6 +298,8 @@ public class CardApplyEffectApprovalTest {
                 else harald.applyEffect(player3, player3, i, j);
             }   
         } 
+        player3.messages.add(new String[]{nameChanged, "x", "1 0"});
+        player3.messages.add(new String[]{nameChanged, "1 0", "x"});
         String result = "";
         for (int i = 0; i < player3.messages.size(); i++){
             result = result + "\n" + player3.printPrincipality();
@@ -288,6 +311,49 @@ public class CardApplyEffectApprovalTest {
         }
 
         Approvals.verify(result, Approvals.NAMES.withParameters(nameChanged));
+
+    }
+
+
+    @Test
+    void testScout(){
+
+        Card scout = getCard("scout");
+        Card road = getCard("road");
+        Card settlement = getCard("Settlement");
+
+    //add messages
+    Vector<String[]> testmessages = new Vector();
+    testmessages.add(new String[]{"1", "0"});
+    testmessages.add(new String[]{"0", "1"});
+    testmessages.add(new String[]{null, "1"});
+    testmessages.add(new String[]{"0", null});
+    String result = "";
+
+    for (int i = 0; i < testmessages.size(); i++){
+        resetStack();
+        resetBasicCards();
+        player3 = new MessagePlayer();
+        int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
+        Server.pricipalityinitoneplayer(player3, regionDice, 2,  1);
+        player3.messages.add(testmessages.get(i));
+        result = result + "\n" + "===============================================";
+        result = result + "\n" + player3.printPrincipality();
+        road.applyEffect(player3, player3, 2, 0);
+        result = result + "\n" + player3.printPrincipality();
+        scout.applyEffect(player3, player3, 0, 0);
+        result = result + "\n" + player3.flags.toString();
+        result = result + "\n" + String.valueOf(settlement.applyEffect(player3, player3, 2, 0));
+        result = result + "\n" + player3.flags.toString();
+        result = result + "\n" + player3.printPrincipality();
+        result = result + "\n" + "===============================================";
+    }
+
+    Approvals.verify(result);
+
+        
+
+
 
     }
 
