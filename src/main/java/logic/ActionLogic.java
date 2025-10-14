@@ -7,8 +7,6 @@ public class ActionLogic implements  Logic{
     @Override
     public boolean applyEffect(Player active, Player other, int row, int col, Card card){
 
-            String nm = (card.name == null ? "" : card.name);
-            System.out.println("ApplyEffect: " + nm);
 
             if (card.name.equals("Merchant Caravan")) {
                 if (active.totalAllResources() < 2) {
