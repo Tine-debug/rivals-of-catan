@@ -1,4 +1,4 @@
-public class SettlementLogic extends Logic{
+public class SettlementLogic implements Logic{
 
     @Override
      public boolean applyEffect(Player active, Player other, int row, int col, Card card){
@@ -9,7 +9,7 @@ public class SettlementLogic extends Logic{
         }
         
         if (row != 2) {
-                active.sendMessage("Roads/Settlements/Cities must go in the center row(s).");
+                active.sendMessage("Settlements must go in the center row(s).");
                 return false;
             }
 

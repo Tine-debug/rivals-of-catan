@@ -1,14 +1,13 @@
 
 
-public class SettlementExpansionLogic extends Logic{
+public class SettlementExpansionLogic implements Logic{
     public SettlementExpansionLogic(){
     }
 
     @Override
     public boolean applyEffect(Player active, Player other, int row, int col, Card card){
-
-            String nm = (card.name == null ? "" : card.name);
-            System.out.println("ApplyEffect: " + nm + " at (" + row + "," + col + ")");
+                String nm = (card.name == null ? "" : card.name);
+            
 
             if (active.getCard(row, col) != null) {
             active.sendMessage("That space is occupied.");
@@ -17,7 +16,7 @@ public class SettlementExpansionLogic extends Logic{
 
 
             if (card.is_Valid_placement_extentions(active, row, col, nm)) return false;
-            System.out.println("Passed placement checks for " + nm);
+            System.out.println("Passed placement check");
 
             if ("Building".equalsIgnoreCase(card.type)) {
                 card.place_building(row, col, card, active);

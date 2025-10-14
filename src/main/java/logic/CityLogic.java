@@ -1,4 +1,4 @@
-public class CityLogic extends Logic{
+public class CityLogic implements Logic{
 
     public CityLogic() {
     }

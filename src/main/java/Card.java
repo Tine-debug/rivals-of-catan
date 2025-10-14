@@ -361,6 +361,8 @@ public class Card implements Comparable<Card> {
     // ---------- Main effect / placement entry ----------
     // Returns true if placed/applied; false if illegal placement
     public boolean applyEffect(Player active, Player other, int row, int col) {
+        String nm = (this.name == null ? "" : this.name);
+        System.out.println("ApplyEffect: " + nm + " at (" + row + "," + col + ")");
         return logic.applyEffect(active, other, row, col, this);
     }
 

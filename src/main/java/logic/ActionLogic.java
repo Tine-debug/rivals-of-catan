@@ -1,5 +1,5 @@
 
-public class ActionLogic extends Logic{
+public class ActionLogic implements  Logic{
      public ActionLogic() {}
 
 
