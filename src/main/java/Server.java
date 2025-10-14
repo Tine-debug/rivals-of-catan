@@ -765,7 +765,7 @@ public class Server {
                 if (x == null)
                     continue;
                 String t = x.type == null ? "" : x.type;
-                String pl = x.placement.placement == null ? "" : x.placement.placement;
+                String pl = x.placement == null ? "" : x.placement;
                 if (t.toLowerCase().contains("trade ship") ||
                         (pl.toLowerCase().contains("settlement/city") && x.name != null
                                 && x.name.toLowerCase().endsWith("ship"))) {

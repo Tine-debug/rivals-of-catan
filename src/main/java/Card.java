@@ -17,7 +17,9 @@ public class Card implements Comparable<Card> {
     public String name, theme, type, cost, oneOf;
     public String victoryPoints, CP, SP, FP, PP, LP, KP, cardText;
     public String germanName, Requires, protectionOrRemoval;
-    public Placement placement;
+    public String placement;
+
+    private Logic logic;
 
     // Regions track “stored” resources by rotating; here we model it as an int
     // (0..3)
@@ -50,7 +52,7 @@ public class Card implements Comparable<Card> {
         this.theme = theme;
         this.type = type;
         this.germanName = germanName;
-        this.placement = PlacementFactory.createPlacement(placement);
+        this.placement = placement;
         this.oneOf = oneOf;
         this.cost = cost;
         this.victoryPoints = victoryPoints;
@@ -63,6 +65,8 @@ public class Card implements Comparable<Card> {
         this.Requires = Requires;
         this.cardText = cardText;
         this.protectionOrRemoval = protectionOrRemoval;
+
+        this.logic = LogicFactory.createLogic(placement, name, type);
     }
 
     @Override
@@ -248,17 +252,17 @@ public class Card implements Comparable<Card> {
     public static boolean buildingBoostsRegion(String buildingName, String regionName) {
         if (buildingName == null || regionName == null)
             return false;
-        if (buildingName.equalsIgnoreCase("Iron Foundry") && regionName.equalsIgnoreCase("Mountain"))
+        else if (buildingName.equalsIgnoreCase("Iron Foundry") && regionName.equalsIgnoreCase("Mountain"))
             return true;
-        if (buildingName.equalsIgnoreCase("Grain Mill") && regionName.equalsIgnoreCase("Field"))
+        else if (buildingName.equalsIgnoreCase("Grain Mill") && regionName.equalsIgnoreCase("Field"))
             return true;
-        if (buildingName.equalsIgnoreCase("Lumber Camp") && regionName.equalsIgnoreCase("Forest"))
+        else if (buildingName.equalsIgnoreCase("Lumber Camp") && regionName.equalsIgnoreCase("Forest"))
             return true;
-        if (buildingName.equalsIgnoreCase("Brick Factory") && regionName.equalsIgnoreCase("Hill"))
+        else if (buildingName.equalsIgnoreCase("Brick Factory") && regionName.equalsIgnoreCase("Hill"))
             return true;
-        if (buildingName.equalsIgnoreCase("Weaver’s Shop") && regionName.equalsIgnoreCase("Pasture"))
+        else if (buildingName.equalsIgnoreCase("Weaver’s Shop") && regionName.equalsIgnoreCase("Pasture"))
             return true;
-        if (buildingName.equalsIgnoreCase("Weaver's Shop") && regionName.equalsIgnoreCase("Pasture"))
+        else if (buildingName.equalsIgnoreCase("Weaver's Shop") && regionName.equalsIgnoreCase("Pasture"))
             return true; // ascii
         return false;
     }
@@ -357,7 +361,7 @@ public class Card implements Comparable<Card> {
     // ---------- Main effect / placement entry ----------
     // Returns true if placed/applied; false if illegal placement
     public boolean applyEffect(Player active, Player other, int row, int col) {
-        return placement.applyEffect(active, other, row, col, this);
+        return logic.applyEffect(active, other, row, col, this);
     }
 
     public boolean is_Valid_placement_extentions(Player active, int row, int col, String nm) {
@@ -400,18 +404,7 @@ public class Card implements Comparable<Card> {
     public boolean isExpansionCard(Card c) {
         if (c == null)
             return false;
-        String pl = (c.placement.placement == null ? "" : c.placement.placement.toLowerCase());
+        String pl = (placement == null ? "" : placement.toLowerCase());
         return pl.contains("settlement/city");
-    }
-
-    public boolean place_city(int row, int col, Card card, Player player){
-         Card under = player.getCard(row, col);
-                if (under == null || !nmEquals(under.name, "Settlement")) {
-                    player.sendMessage("City must be placed on top of an existing Settlement (same slot).");
-                    return false;
-                }
-                player.placeCard(row, col, this);
-                player.victoryPoints += 1; // city is 2VP total; settlement vp ignored here, we just add +1
-                return true;
     }
 }

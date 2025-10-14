@@ -1,8 +1,7 @@
 
-public class RegionPlacement extends  Placement{
-    public RegionPlacement(){
-        this.placement = "Region";
-    }
+public class RegionLogic extends Logic{
+    public RegionLogic(){}
+    
 
     @Override
     public boolean applyEffect(Player active, Player other, int row, int col, Card card){

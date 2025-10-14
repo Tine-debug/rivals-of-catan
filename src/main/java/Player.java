@@ -280,7 +280,7 @@ public class Player {
 
         // Boosters: Foundry/Mill/Camp/Factory/Shop (hint text)
         if ("Building".equalsIgnoreCase(c.type) &&
-                "Settlement/City Expansions".equalsIgnoreCase(c.placement.placement)) {
+                "Settlement/City Expansions".equalsIgnoreCase(c.placement)) {
             if (nm.endsWith("Foundry"))
                 return "Boosts Ore x2 on match";
             if (nm.endsWith("Mill"))
@@ -307,7 +307,7 @@ public class Player {
             return pts;
 
         // Default: show placement/type short
-        String pl = c.placement.placement == null ? "" : c.placement.placement;
+        String pl = c.placement == null ? "" : c.placement;
         String tp = c.type == null ? "" : c.type;
         if (!pl.isEmpty() || !tp.isEmpty())
             return (pl + " " + tp).trim();

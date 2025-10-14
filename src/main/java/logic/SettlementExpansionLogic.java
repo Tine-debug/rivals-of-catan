@@ -1,8 +1,7 @@
 
 
-public class SettlementExpansionPlacement extends Placement{
-    public SettlementExpansionPlacement(){
-        this.placement = "Settlement/city";
+public class SettlementExpansionLogic extends Logic{
+    public SettlementExpansionLogic(){
     }
 
     @Override

@@ -1,16 +1,11 @@
 
 
 
-public class Placement{
-    public String placement;
+public class Logic{
 
-    public Placement(String placement) {
-        this.placement = placement;
-    }
-    public Placement(){}
+    public Logic(){}
 
     
-
    public boolean applyEffect(Player active, Player other, int row, int col, Card card) {
         String nm = (card.name == null ? "" : card.name);
         System.out.println("ApplyEffect: " + nm + " at (" + row + "," + col + ")");

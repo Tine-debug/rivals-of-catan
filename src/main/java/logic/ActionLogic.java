@@ -1,5 +1,7 @@
 
-public class ActionPlacement extends Placement{
+public class ActionLogic extends Logic{
+     public ActionLogic() {}
+
 
 
     @Override
@@ -29,19 +31,15 @@ public class ActionPlacement extends Placement{
             }
 
             if (card.name.equals("Scout")) {
-                // Only meaningful when used with a new settlement (Server stores
-                // lastSettlementRow/Col)
                 active.flags.add("SCOUT_NEXT_SETTLEMENT");
                 return true;
             }
 
             if (card.name.equals("Brigitta, the Wise Woman")) {
-                // Choose production die result before rolling; we store forced value in Server
                 active.flags.add("BRIGITTA");
                 return true;
             }
 
-            // Discard 3 gold and take any 2 resources of your choice in return.
             if (card.name.equals("Goldsmith")) {
                 if (!active.removeResource("Gold", 3)) {
                     active.sendMessage("Goldsmith: you need 3 Gold to play card.");
@@ -56,9 +54,7 @@ public class ActionPlacement extends Placement{
                 return true;
             }
 
-            // Swap 2 of your own Regions OR 2 of your own Expansion cards.
-            // Stored resources on Regions remain on the same cards; placement rules must
-            // hold.
+
             if (card.name.equals("Relocation")) {
                 active.sendMessage(
                         "PROMPT: Relocation - Type 'REGION' to swap two regions or 'EXP' to swap two expansions:");
@@ -70,7 +66,6 @@ public class ActionPlacement extends Placement{
                     return false;
                 }
 
-                // Read two coordinates
                 active.sendMessage("PROMPT: Enter first coordinate (row col):");
                 int r1 = 0, c1 = 0;
                 try {
@@ -104,22 +99,21 @@ public class ActionPlacement extends Placement{
                         active.sendMessage("Relocation (Region): both cards must be Regions.");
                         return false;
                     }
-                    // target slots must be valid region slots (i.e., not center)
+
                     if (r1 == 2 || r2 == 2) {
                         active.sendMessage("Relocation: regions must be outside center row.");
                         return false;
                     }
-                    // Swap without re-applying effects
+
                     active.placeCard(r1, c1, b);
                     active.placeCard(r2, c2, a);
                     active.sendMessage("Relocation done (Regions swapped).");
                     return true;
-                } else { // swapExp
+                } else { 
                     if (!card.isExpansionCard(a) || !card.isExpansionCard(b)) {
                         active.sendMessage("Relocation (Expansion): both cards must be expansions.");
                         return false;
                     }
-                    // Must still obey expansion placement for each target slot
                     if (!Card.isAboveOrBelowSettlementOrCity(active, r2, c2)
                             || !Card.isAboveOrBelowSettlementOrCity(active, r1, c1)) {
                         active.sendMessage("Relocation: target slot is not valid for an expansion.");
