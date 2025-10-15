@@ -85,13 +85,6 @@ public class Card implements Comparable<Card> {
         return a != null && a.equalsIgnoreCase(b);
     }
 
-    static boolean nmAt(Card c, String a, String b) {
-        if (c == null || c.name == null)
-            return false;
-        String n = c.name;
-        return n.equalsIgnoreCase(a) || n.equalsIgnoreCase(b);
-    }
-
 
     static String gs(JsonObject o, String k) {
         if (!o.has(k))
@@ -215,26 +208,6 @@ public class Card implements Comparable<Card> {
     }
 
 
-    // ---------- Placement validations (ugly but centralized) ----------
-    public static boolean isAboveOrBelowSettlementOrCity(Player p, int row, int col) {
-        // Inner ring: ±1 from center settlement/city
-        Card up1 = p.getCard(row - 1, col);
-        Card down1 = p.getCard(row + 1, col);
-        if (nmAt(up1, "Settlement", "City"))
-            return true;
-        if (nmAt(down1, "Settlement", "City"))
-            return true;
-
-        // Outer ring allowed *only* if the inner slot is already filled (fill inner
-        // first)
-        Card up2 = p.getCard(row - 2, col);
-        Card down2 = p.getCard(row + 2, col);
-        boolean outerOK = ((nmAt(up2, "City", "City") || nmAt(up2, "Settlement", "Settlement")) && up1 != null) ||
-                ((nmAt(down2, "City", "City") || nmAt(down2, "Settlement", "Settlement")) && down1 != null);
-
-        return outerOK;
-    }
-
     private static boolean isCenterSlot(int row) {
         return row == 2; 
     }
@@ -354,23 +327,10 @@ public class Card implements Comparable<Card> {
     public boolean applyEffect(Player active, Player other, int row, int col) {
         String nm = (this.name == null ? "" : this.name);
         System.out.println("ApplyEffect: " + nm + " at (" + row + "," + col + ")");
+
         return logic.applyEffect(active, other, row, col, this);
     }
 
-    public boolean is_Valid_placement_extentions(Player active, int row, int col, String nm) {
-        if (!isAboveOrBelowSettlementOrCity(active, row, col)) {
-            active.sendMessage("Expansion must be above/below a Settlement or City (fill inner ring first).");
-            return true;
-        }
-        // one-of check (simple)
-        if (oneOf != null && oneOf.trim().equalsIgnoreCase("1x")) {
-            if (active.hasInPrincipality(nm)) {
-                active.sendMessage("You may only have one '" + nm + "' in your principality.");
-                return true;
-            }
-        }
-        return false;
-    }
 
     public void place_building(int row,int col,Card card, Player player){
                     player.placeCard(row, col, this);

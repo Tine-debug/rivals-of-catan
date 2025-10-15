@@ -60,8 +60,8 @@ public boolean applyEffect(Player active, Player other, int row, int col, Card c
                         active.sendMessage("Relocation (Expansion): both cards must be expansions.");
                         return false;
                     }
-                    if (!Card.isAboveOrBelowSettlementOrCity(active, r2, c2)
-                            || !Card.isAboveOrBelowSettlementOrCity(active, r1, c1)) {
+                    if (!isAboveOrBelowSettlementOrCity(active, r2, c2)
+                            || !isAboveOrBelowSettlementOrCity(active, r1, c1)) {
                         active.sendMessage("Relocation: target slot is not valid for an expansion.");
                         return false;
                     }
@@ -82,5 +82,35 @@ public boolean applyEffect(Player active, Player other, int row, int col, Card c
         String pl = (c.placement == null ? "" : c.placement.toLowerCase());
         return pl.contains("settlement/city");
     }
+
+
+        // ---------- Placement validations (ugly but centralized) ----------
+    private boolean isAboveOrBelowSettlementOrCity(Player p, int row, int col) {
+        // Inner ring: ±1 from center settlement/city
+        Card up1 = p.getCard(row - 1, col);
+        Card down1 = p.getCard(row + 1, col);
+        if (nmAt(up1, "Settlement", "City"))
+            return true;
+        if (nmAt(down1, "Settlement", "City"))
+            return true;
+
+        // Outer ring allowed *only* if the inner slot is already filled (fill inner
+        // first)
+        Card up2 = p.getCard(row - 2, col);
+        Card down2 = p.getCard(row + 2, col);
+        boolean outerOK = ((nmAt(up2, "City", "City") || nmAt(up2, "Settlement", "Settlement")) && up1 != null) ||
+                ((nmAt(down2, "City", "City") || nmAt(down2, "Settlement", "Settlement")) && down1 != null);
+
+        return outerOK;
+    }
+
+    
+    private boolean nmAt(Card c, String a, String b) {
+        if (c == null || c.name == null)
+            return false;
+        String n = c.name;
+        return n.equalsIgnoreCase(a) || n.equalsIgnoreCase(b);
+    }
+
 
 }

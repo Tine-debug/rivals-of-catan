@@ -15,7 +15,7 @@ public class SettlementExpansionLogic implements Logic{
             }
 
 
-            if (card.is_Valid_placement_extentions(active, row, col, nm)) return false;
+            if (is_Valid_placement_extentions(active, row, col, nm, card.oneOf)) return false;
             System.out.println("Passed placement check");
 
             if ("Building".equalsIgnoreCase(card.type)) {
@@ -61,6 +61,47 @@ public class SettlementExpansionLogic implements Logic{
         } catch (Exception e) {
             return def;
         }
+    }
+
+    private boolean is_Valid_placement_extentions(Player active, int row, int col, String nm, String oneOf) {
+        if (!isAboveOrBelowSettlementOrCity(active, row, col)) {
+            active.sendMessage("Expansion must be above/below a Settlement or City (fill inner ring first).");
+            return true;
+        }
+        // one-of check (simple)
+        if (oneOf != null && oneOf.trim().equalsIgnoreCase("1x")) {
+            if (active.hasInPrincipality(nm)) {
+                active.sendMessage("You may only have one '" + nm + "' in your principality.");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isAboveOrBelowSettlementOrCity(Player p, int row, int col) {
+        // Inner ring: ±1 from center settlement/city
+        Card up1 = p.getCard(row - 1, col);
+        Card down1 = p.getCard(row + 1, col);
+        if (nmAt(up1, "Settlement", "City"))
+            return true;
+        if (nmAt(down1, "Settlement", "City"))
+            return true;
+
+        // Outer ring allowed *only* if the inner slot is already filled (fill inner
+        // first)
+        Card up2 = p.getCard(row - 2, col);
+        Card down2 = p.getCard(row + 2, col);
+        boolean outerOK = ((nmAt(up2, "City", "City") || nmAt(up2, "Settlement", "Settlement")) && up1 != null) ||
+                ((nmAt(down2, "City", "City") || nmAt(down2, "Settlement", "Settlement")) && down1 != null);
+
+        return outerOK;
+    }
+    
+    private boolean nmAt(Card c, String a, String b) {
+        if (c == null || c.name == null)
+            return false;
+        String n = c.name;
+        return n.equalsIgnoreCase(a) || n.equalsIgnoreCase(b);
     }
 
     
