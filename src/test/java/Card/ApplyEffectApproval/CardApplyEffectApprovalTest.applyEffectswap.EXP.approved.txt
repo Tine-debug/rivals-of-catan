@@ -284,20 +284,20 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
 Points: VP=2  CP=0  SP=4  FP=8  PP=0
 
 [EXP, 1 1, 3 1]
-false
+true
       Col 0               Col 1                      Col 2                 Col 3                      Col 4              
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | Settlement/city Building | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | [SP2 FP1]                | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -312,14 +312,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | Settlement/city Building | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | [SP2 FP1]                | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -334,14 +334,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | Settlement/city Building | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | [SP2 FP1]                | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -356,14 +356,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | Settlement/city Building | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | [SP2 FP1]                | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -372,20 +372,20 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
 Points: VP=2  CP=0  SP=4  FP=8  PP=0
 
 [EXP, 1 3, 3 3]
-false
+true
       Col 0               Col 1                      Col 2                 Col 3                      Col 4              
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -400,14 +400,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -422,14 +422,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -444,14 +444,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -466,14 +466,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -488,14 +488,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -510,14 +510,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -532,14 +532,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -554,14 +554,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -576,14 +576,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -598,14 +598,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -620,14 +620,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -642,14 +642,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -664,14 +664,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -686,14 +686,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -708,14 +708,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -730,14 +730,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -752,14 +752,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -774,14 +774,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -796,14 +796,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -818,14 +818,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -840,14 +840,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -862,14 +862,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -884,14 +884,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -906,14 +906,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -928,14 +928,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -950,14 +950,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -972,14 +972,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -994,14 +994,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -1016,14 +1016,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -1038,14 +1038,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -1060,14 +1060,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -1082,14 +1082,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -1104,14 +1104,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -1126,14 +1126,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -1148,14 +1148,14 @@ Points: VP=2  CP=0  SP=4  FP=8  PP=0
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |
@@ -1170,14 +1170,14 @@ false
  0  |                   |                          |                     |                          |                  |
     |                   |                          |                     |                          |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 1  | Forest (L):Lumber | Brick Factory            | Gold Field (A):Gold | Brick Factory            | Field (G):Grain  |
-    | d3  1/3           | Settlement/city Building | d4  0/3             | Settlement/city Building | d5  1/3          |
+ 1  | Forest (L):Lumber | Harald                   | Gold Field (A):Gold | Harald                   | Field (G):Grain  |
+    | d3  1/3           | [SP2 FP1]                | d4  0/3             | [SP2 FP1]                | d5  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  2  |                   | Settlement               | Road                | Settlement               |                  |
     |                   | Center                   | Center              | Center                   |                  |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
- 3  | Hill (B):Brick    | Harald                   | Pasture (W):Wool    | Harald                   | Mountain (O):Ore |
-    | d2  1/3           | [SP2 FP1]                | d1  1/3             | [SP2 FP1]                | d6  1/3          |
+ 3  | Hill (B):Brick    | Brick Factory            | Pasture (W):Wool    | Brick Factory            | Mountain (O):Ore |
+    | d2  1/3           | Settlement/city Building | d1  1/3             | Settlement/city Building | d6  1/3          |
     +-------------------+--------------------------+---------------------+--------------------------+------------------+
  4  |                   | Harald                   |                     | Harald                   |                  |
     |                   | [SP2 FP1]                |                     | [SP2 FP1]                |                  |

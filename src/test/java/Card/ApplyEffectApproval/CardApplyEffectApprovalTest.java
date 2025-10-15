@@ -308,6 +308,7 @@ public class CardApplyEffectApprovalTest {
             result = result + "\n" + player3.printPrincipality();
             result = result + "\n" + player3.flags.toString();
             result = result + "\n ====================================";
+            player3.flags.clear();
         }
 
         Approvals.verify(result, Approvals.NAMES.withParameters(nameChanged));

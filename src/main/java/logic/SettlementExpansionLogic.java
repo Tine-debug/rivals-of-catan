@@ -41,7 +41,7 @@ public class SettlementExpansionLogic implements Logic{
                 }
 
                 // Heroes: just add SP/FP/CP/etc.
-                int sp = Card.asInt(card.SP, 0), fp = Card.asInt(card.FP, 0), cp = Card.asInt(card.CP, 0), pp = Card.asInt(card.PP, 0), kp = Card.asInt(card.KP, 0);
+                int sp = asInt(card.SP, 0), fp = asInt(card.FP, 0), cp = asInt(card.CP, 0), pp = asInt(card.PP, 0), kp = asInt(card.KP, 0);
                 active.skillPoints += fp;
                 active.strengthPoints += sp;
                 active.commercePoints += cp;
@@ -53,4 +53,17 @@ public class SettlementExpansionLogic implements Logic{
 
     }
     
+    private int asInt(String s, int def) {
+        try {
+            if (s == null)
+                return def;
+            return Integer.parseInt(s.trim());
+        } catch (Exception e) {
+            return def;
+        }
+    }
+
+    
+
+
 }

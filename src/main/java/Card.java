@@ -92,15 +92,6 @@ public class Card implements Comparable<Card> {
         return n.equalsIgnoreCase(a) || n.equalsIgnoreCase(b);
     }
 
-    static int asInt(String s, int def) {
-        try {
-            if (s == null)
-                return def;
-            return Integer.parseInt(s.trim());
-        } catch (Exception e) {
-            return def;
-        }
-    }
 
     static String gs(JsonObject o, String k) {
         if (!o.has(k))
@@ -398,15 +389,4 @@ public class Card implements Comparable<Card> {
 
     }
 
-    // ----- tiny helpers used above -----
-    public boolean isRegionCard(Card c) {
-        return c != null && c.type != null && c.type.equalsIgnoreCase("Region");
-    }
-
-    public boolean isExpansionCard(Card c) {
-        if (c == null)
-            return false;
-        String pl = (placement == null ? "" : placement.toLowerCase());
-        return pl.contains("settlement/city");
-    }
 }

@@ -6,6 +6,7 @@ public class LogicFactory{
         if (name.equals("Settlement")) return new SettlementLogic();
         if (name.equals("Road")) return new RoadLogic();
         if (name.equals("Merchant Caravan")) return new MerchantCaravanLogic();
+        if (name.equals("Relocation")) return new RelocationLogic();
 
 
         if (type.equals("Region")) return new RegionLogic();
