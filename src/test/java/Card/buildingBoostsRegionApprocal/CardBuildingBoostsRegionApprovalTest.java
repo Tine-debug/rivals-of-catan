@@ -26,7 +26,7 @@ public class CardBuildingBoostsRegionApprovalTest{
         @ParameterizedTest(name = "[{index}]-{0},{1}buildingBoostsRegion")
         @MethodSource("RegionandBuldingNamesProvider")
         void testCardbuildingBoostsRegion (String buildingname, String regionname) {
-            String result = String.valueOf(Card.buildingBoostsRegion(buildingname, regionname));
+            String result = String.valueOf(Server.buildingBoostsRegion(buildingname, regionname));
             Approvals.verify(result, Approvals.NAMES.withParameters(buildingname, regionname));
         }
 }

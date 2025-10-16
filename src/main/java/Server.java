@@ -377,8 +377,27 @@ public class Server {
             return false;
         if (!"Building".equalsIgnoreCase(maybeBuilding.type))
             return false;
-        return Card.buildingBoostsRegion(maybeBuilding.name, region.name);
+        return buildingBoostsRegion(maybeBuilding.name, region.name);
     }
+
+    public static boolean buildingBoostsRegion(String buildingName, String regionName) {
+        if (buildingName == null || regionName == null)
+            return false;
+        else if (buildingName.equalsIgnoreCase("Iron Foundry") && regionName.equalsIgnoreCase("Mountain"))
+            return true;
+        else if (buildingName.equalsIgnoreCase("Grain Mill") && regionName.equalsIgnoreCase("Field"))
+            return true;
+        else if (buildingName.equalsIgnoreCase("Lumber Camp") && regionName.equalsIgnoreCase("Forest"))
+            return true;
+        else if (buildingName.equalsIgnoreCase("Brick Factory") && regionName.equalsIgnoreCase("Hill"))
+            return true;
+        else if (buildingName.equalsIgnoreCase("Weaver’s Shop") && regionName.equalsIgnoreCase("Pasture"))
+            return true;
+        else if (buildingName.equalsIgnoreCase("Weaver's Shop") && regionName.equalsIgnoreCase("Pasture"))
+            return true;
+        return false;
+    }
+
 
     private int countFaceRegions(Player p, int face) {
         int n = 0;

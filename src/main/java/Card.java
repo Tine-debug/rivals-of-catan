@@ -208,55 +208,13 @@ public class Card implements Comparable<Card> {
     }
 
 
-    // Determine if region name matches what a booster affects
-    public static boolean buildingBoostsRegion(String buildingName, String regionName) {
-        if (buildingName == null || regionName == null)
-            return false;
-        else if (buildingName.equalsIgnoreCase("Iron Foundry") && regionName.equalsIgnoreCase("Mountain"))
-            return true;
-        else if (buildingName.equalsIgnoreCase("Grain Mill") && regionName.equalsIgnoreCase("Field"))
-            return true;
-        else if (buildingName.equalsIgnoreCase("Lumber Camp") && regionName.equalsIgnoreCase("Forest"))
-            return true;
-        else if (buildingName.equalsIgnoreCase("Brick Factory") && regionName.equalsIgnoreCase("Hill"))
-            return true;
-        else if (buildingName.equalsIgnoreCase("Weaver’s Shop") && regionName.equalsIgnoreCase("Pasture"))
-            return true;
-        else if (buildingName.equalsIgnoreCase("Weaver's Shop") && regionName.equalsIgnoreCase("Pasture"))
-            return true; // ascii
-        return false;
-    }
-
-    // Place the two diagonal regions after a new settlement (ugly prompt kept here)
    
 
-
-
-    // ---------- Main effect / placement entry ----------
-    // Returns true if placed/applied; false if illegal placement
     public boolean applyEffect(Player active, Player other, int row, int col) {
         String nm = (this.name == null ? "" : this.name);
         System.out.println("ApplyEffect: " + nm + " at (" + row + "," + col + ")");
-
         return logic.applyEffect(active, other, row, col, this);
     }
 
-
-    public void place_building(int row,int col,Card card, Player player){
-                    player.placeCard(row, col, this);
-                System.out.println("Contained Building");
-                if (nmEquals(card.name, "Abbey")) {
-                    player.progressPoints += 1;
-                } else if (nmEquals(card.name, "Marketplace")) {
-                    player.flags.add("MARKETPLACE");
-                } else if (nmEquals(card.name, "Parish Hall")) {
-                    player.flags.add("PARISH");
-                } else if (nmEquals(card.name, "Storehouse")) {
-                    player.flags.add("STOREHOUSE@" + row + "," + col);
-                } else if (nmEquals(card.name, "Toll Bridge")) {
-                    player.flags.add("TOLLB");
-                }
-
-    }
 
 }

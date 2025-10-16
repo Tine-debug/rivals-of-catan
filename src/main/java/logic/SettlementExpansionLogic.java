@@ -104,7 +104,23 @@ public class SettlementExpansionLogic implements Logic{
         return n.equalsIgnoreCase(a) || n.equalsIgnoreCase(b);
     }
 
-    
+
+    public void place_building(int row,int col,Card card, Player player){
+                    player.placeCard(row, col, this);
+                System.out.println("Contained Building");
+                if (card.name.equals("Abbey")) {
+                    player.progressPoints += 1;
+                } else if (card.name.equals("Marketplace")) {
+                    player.flags.add("MARKETPLACE");
+                } else if (card.name.equals("Parish Hall")) {
+                    player.flags.add("PARISH");
+                } else if (card.name.equals("Storehouse")) {
+                    player.flags.add("STOREHOUSE@" + row + "," + col);
+                } else if (card.name.equals("Toll Bridge")) {
+                    player.flags.add("TOLLB");
+                }
+
+    }
 
 
 }
