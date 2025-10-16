@@ -162,27 +162,27 @@ public class Server {
     }
 
     public static void pricipalityinitoneplayer(Player p, int[][] regionDice, int center, int i){
-            p.placeCard(center, 1, Card.popCardByName(Cardstacks.settlements, "Settlement"));
-            p.placeCard(center, 2, Card.popCardByName(Cardstacks.roads, "Road"));
-            p.placeCard(center, 3, Card.popCardByName(Cardstacks.settlements, "Settlement"));
+            p.placeCard(center, 1, Cardstacks.popCardByName(Cardstacks.settlements, "Settlement"));
+            p.placeCard(center, 2, Cardstacks.popCardByName(Cardstacks.roads, "Road"));
+            p.placeCard(center, 3, Cardstacks.popCardByName(Cardstacks.settlements, "Settlement"));
 
             // Regions in rows 1 and 3 (above/below)
-            Card forest = Card.popCardByName(Cardstacks.regions, "Forest");
+            Card forest = Cardstacks.popCardByName(Cardstacks.regions, "Forest");
             forest.diceRoll = regionDice[i][0];
             forest.regionProduction = 1;
-            Card gold = Card.popCardByName(Cardstacks.regions, "Gold Field");
+            Card gold = Cardstacks.popCardByName(Cardstacks.regions, "Gold Field");
             gold.diceRoll = regionDice[i][1];
             gold.regionProduction = 0;
-            Card field = Card.popCardByName(Cardstacks.regions, "Field");
+            Card field = Cardstacks.popCardByName(Cardstacks.regions, "Field");
             field.diceRoll = regionDice[i][2];
             field.regionProduction = 1;
-            Card hill = Card.popCardByName(Cardstacks.regions, "Hill");
+            Card hill = Cardstacks.popCardByName(Cardstacks.regions, "Hill");
             hill.diceRoll = regionDice[i][3];
             hill.regionProduction = 1;
-            Card past = Card.popCardByName(Cardstacks.regions, "Pasture");
+            Card past = Cardstacks.popCardByName(Cardstacks.regions, "Pasture");
             past.diceRoll = regionDice[i][4];
             past.regionProduction = 1;
-            Card mount = Card.popCardByName(Cardstacks.regions, "Mountain");
+            Card mount = Cardstacks.popCardByName(Cardstacks.regions, "Mountain");
             mount.diceRoll = regionDice[i][5];
             mount.regionProduction = 1;
 

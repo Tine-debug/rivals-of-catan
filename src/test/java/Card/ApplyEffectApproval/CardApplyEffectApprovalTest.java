@@ -91,7 +91,7 @@ public class CardApplyEffectApprovalTest {
     
     Card getCard(String name){
         resetBasicCards();
-                Card res = Card.popCardByName(basicCards, name);
+                Card res = Cardstacks.popCardByName(basicCards, name);
         resetBasicCards();
         return res;
 

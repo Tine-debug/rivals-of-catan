@@ -2,10 +2,6 @@
 // Quick & dirty, Basic-set only, refactored to reduce duplication
 
 import java.io.IOException;
-import java.util.Vector;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 public class Card implements Comparable<Card> {
 
@@ -66,56 +62,7 @@ public class Card implements Comparable<Card> {
     public int compareTo(Card o) {
         return this.name.compareToIgnoreCase(o.name);
     }
-
-
-
-    static String gs(JsonObject o, String k) {
-        if (!o.has(k))
-            return null;
-        JsonElement e = o.get(k);
-        return (e == null || e.isJsonNull()) ? null : e.getAsString();
-    }
-
-    static int gi(JsonObject o, String k, int def) {
-        if (!o.has(k))
-            return def;
-        try {
-            return o.get(k).getAsInt();
-        } catch (Exception e) {
-            return def;
-        }
-    }
-
-    public static Card popCardByName(Vector<Card> cards, String name) {
-        if (cards == null || name == null)
-            return null;
-        String target = name.trim();
-        for (int i = 0; i < cards.size(); i++) {
-            Card c = cards.get(i);
-            if (c != null && c.name != null && c.name.trim().equalsIgnoreCase(target)) {
-                return cards.remove(i);
-            }
-        }
-        return null; 
-    }
-
-   
-    public static Vector<Card> extractCardsByAttribute(Vector<Card> cards, String attribute, String value) {
-        Vector<Card> out = new Vector<>();
-        try {
-            java.lang.reflect.Field f = Card.class.getField(attribute);
-            for (int i = cards.size() - 1; i >= 0; i--) {
-                Card c = cards.get(i);
-                Object v = f.get(c);
-                if (v != null && String.valueOf(v).equalsIgnoreCase(value)) {
-                    out.add(0, cards.remove(i));
-                }
-            }
-        } catch (Exception ignored) {
-        }
-        return out;
-    }
-
+    
     public static void loadBasicCards(String jsonPath) throws IOException {
         Cardstacks.loadBasicCards(jsonPath);      
     }
