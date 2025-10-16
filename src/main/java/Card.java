@@ -68,8 +68,6 @@ public class Card implements Comparable<Card> {
     }
 
 
-   
-
     public boolean applyEffect(Player active, Player other, int row, int col) {
         String nm = (this.name == null ? "" : this.name);
         System.out.println("ApplyEffect: " + nm + " at (" + row + "," + col + ")");
