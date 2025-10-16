@@ -19,7 +19,7 @@ public class SettlementExpansionLogic implements Logic{
             System.out.println("Passed placement check");
 
             if ("Building".equalsIgnoreCase(card.type)) {
-                card.place_building(row, col, card, active);
+                place_building(row, col, card, active);
                 return true;
             }
 
@@ -106,7 +106,7 @@ public class SettlementExpansionLogic implements Logic{
 
 
     public void place_building(int row,int col,Card card, Player player){
-                    player.placeCard(row, col, this);
+                    player.placeCard(row, col, card);
                 System.out.println("Contained Building");
                 if (card.name.equals("Abbey")) {
                     player.progressPoints += 1;
