@@ -7,7 +7,7 @@ public class Card implements Comparable<Card> {
 
     // ---------- Public fields (keep simple for the take-home) ----------
     public String name, theme, type, cost, oneOf;
-    public String victoryPoints, CP, SP, FP, PP, LP, KP, cardText;
+    public String cardText;
 
     public Points points;
 

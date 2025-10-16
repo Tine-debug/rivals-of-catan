@@ -47,7 +47,8 @@ public class PlayerApprovalTest {
         Card settlement = new Card();
         settlement.name = "Settlement";
         settlement.type = "Road";
-        settlement.victoryPoints = "2";
+        settlement.points = new Points();
+        settlement.points.victoryPoints = 2;
 
         player.placeCard(0, 0, forest);
         player.placeCard(1, 1, settlement);
@@ -56,7 +57,8 @@ public class PlayerApprovalTest {
         cardInHand.name = "Mill";
         cardInHand.type = "Building";
         cardInHand.cost = "2 Grain";
-        cardInHand.SP = "1";
+        cardInHand.points = new Points();
+        cardInHand.points.strengthPoints = 1;
         player.addToHand(cardInHand);
 
         Approvals.verify(player.printPrincipality() + "\n" + player.printHand());

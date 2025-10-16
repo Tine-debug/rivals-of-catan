@@ -312,30 +312,22 @@ public class Player {
 
     // SCORING helper: summarize points on a card like "[VP1 CP2 SP1 FP0 PP0]"
     private String summarizePoints(Card c) {
-        // Build a compact points summary like: "[VP1 CP2 SP1 FP0 PP0]"
-        int vp = parseIntSafe(c.victoryPoints);
-        int cp = parseIntSafe(c.CP);
-        int sp = parseIntSafe(c.SP);
-        int fp = parseIntSafe(c.FP);
-        int pp = parseIntSafe(c.PP);
-
         StringBuilder t = new StringBuilder();
-        if (vp > 0 || cp > 0 || sp > 0 || fp > 0 || pp > 0) {
             t.append("[");
-            if (vp > 0)
-                t.append("VP").append(vp).append(" ");
-            if (cp > 0)
-                t.append("CP").append(cp).append(" ");
-            if (sp > 0)
-                t.append("SP").append(sp).append(" ");
-            if (fp > 0)
-                t.append("FP").append(fp).append(" ");
-            if (pp > 0)
-                t.append("PP").append(pp).append(" ");
+            if (c.points.victoryPoints > 0)
+                t.append("VP").append(c.points.victoryPoints).append(" ");
+            if (c.points.commercePoints > 0)
+                t.append("CP").append(c.points.commercePoints).append(" ");
+            if (c.points.strengthPoints > 0)
+                t.append("SP").append(c.points.strengthPoints).append(" ");
+            if (c.points.skillPoints > 0)
+                t.append("FP").append(c.points.skillPoints).append(" ");
+            if (c.points.progressPoints> 0)
+                t.append("PP").append(c.points.progressPoints).append(" ");
             if (t.charAt(t.length() - 1) == ' ')
                 t.deleteCharAt(t.length() - 1);
             t.append("]");
-        }
+        
         return t.toString();
     }
 
