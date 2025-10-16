@@ -54,14 +54,14 @@ public class SettlementLogic implements Logic{
             first = pickRegionFromStackByNameOrIndex(s1);
             if (first == null) {
                 // fallback to top
-                first = Card.regions.isEmpty() ? null : Card.regions.remove(0);
+                first = Card.stacks.regions.isEmpty() ? null : Card.stacks.regions.remove(0);
             }
 
             active.sendMessage("PROMPT: SCOUT - Choose second region (name or index):");
             String s2 = active.receiveMessage();
             second = pickRegionFromStackByNameOrIndex(s2);
             if (second == null) {
-                second = Card.regions.isEmpty() ? null : Card.regions.remove(0);
+                second = Card.stacks.regions.isEmpty() ? null : Card.stacks.regions.remove(0);
             }
 
             if (first == null || second == null) {
@@ -72,12 +72,12 @@ public class SettlementLogic implements Logic{
             }
         } else {
             // normal: take top two
-            if (Card.regions.size() < 2) {
+            if (Card.stacks.regions.size() < 2) {
                 active.sendMessage("Region stack does not have two cards.");
                 return;
             }
-            first = Card.regions.remove(0);
-            second = Card.regions.remove(0);
+            first = Card.stacks.regions.remove(0);
+            second = Card.stacks.regions.remove(0);
         }
 
         // Tell the player which two we drew/selected
@@ -105,7 +105,7 @@ public class SettlementLogic implements Logic{
         active.flags.remove("SCOUT_NEXT_SETTLEMENT");
     }
 
-        // Helper: choose region by name or index from Card.regions
+        // Helper: choose region by name or index from Card.stacks.regions
     private Card pickRegionFromStackByNameOrIndex(String spec) {
         if (spec == null || spec.isBlank())
             return null;
@@ -113,16 +113,16 @@ public class SettlementLogic implements Logic{
         // try index
         try {
             int idx = Integer.parseInt(spec);
-            if (idx >= 0 && idx < Card.regions.size()) {
-                return Card.regions.remove(idx);
+            if (idx >= 0 && idx < Card.stacks.regions.size()) {
+                return Card.stacks.regions.remove(idx);
             }
         } catch (Exception ignored) {
         }
         // try by name (first match)
-        for (int i = 0; i < Card.regions.size(); i++) {
-            Card c = Card.regions.get(i);
+        for (int i = 0; i < Card.stacks.regions.size(); i++) {
+            Card c = Card.stacks.regions.get(i);
             if (c != null && c.name != null && c.name.equalsIgnoreCase(spec)) {
-                return Card.regions.remove(i);
+                return Card.stacks.regions.remove(i);
             }
         }
         return null;

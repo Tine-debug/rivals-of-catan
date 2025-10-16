@@ -38,7 +38,7 @@ public class CardApplyEffectApprovalTest {
 
     static void resetStack(){
         try {
-            Card.loadBasicCards("cards.json");
+            Cardstacks.loadBasicCards("cards.json");
             }    catch (Exception e) {
             System.err.println("Failed to load");
             }
@@ -46,7 +46,7 @@ public class CardApplyEffectApprovalTest {
 
     static void resetBasicCards(){
         try {
-            basicCards = Card.loadThemeCards("cards.json", "basic", false);
+            basicCards = Cardstacks.loadThemeCards("cards.json", "basic", false);
         } catch (Exception e) {
             System.err.println("Failed to load");
         }

@@ -13,7 +13,7 @@ public class PlayerApprovalTest {
     @BeforeAll
     static void setupall() {
         try {
-            Vector<Card> BasicCards = Card.loadThemeCards("cards.json", "basic", false);
+            Vector<Card> BasicCards = Cardstacks.loadThemeCards("cards.json", "basic", false);
         } catch (Exception e) {
         }
             System.err.println("Failed to load: ");

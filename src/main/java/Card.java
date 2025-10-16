@@ -1,15 +1,11 @@
 // Card.java
 // Quick & dirty, Basic-set only, refactored to reduce duplication
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Vector;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class Card implements Comparable<Card> {
 
@@ -28,15 +24,7 @@ public class Card implements Comparable<Card> {
     public int diceRoll = 0;
 
     // ---------- Global piles for the Basic set ----------
-    public static Vector<Card> regions = new Vector<>();
-    public static Vector<Card> roads = new Vector<>();
-    public static Vector<Card> settlements = new Vector<>();
-    public static Vector<Card> cities = new Vector<>();
-    public static Vector<Card> events = new Vector<>();
-    public static Vector<Card> drawStack1 = new Vector<>();
-    public static Vector<Card> drawStack2 = new Vector<>();
-    public static Vector<Card> drawStack3 = new Vector<>();
-    public static Vector<Card> drawStack4 = new Vector<>();
+    public static Cardstacks stacks = Cardstacks.getInstance();
 
     // ---------- Construction ----------
     public Card() {
@@ -79,11 +67,6 @@ public class Card implements Comparable<Card> {
         return this.name.compareToIgnoreCase(o.name);
     }
 
-    // ---------- Tiny helpers (kept local so the file stays self-contained)
-    // ----------
-    static boolean nmEquals(String a, String b) {
-        return a != null && a.equalsIgnoreCase(b);
-    }
 
 
     static String gs(JsonObject o, String k) {
@@ -103,9 +86,6 @@ public class Card implements Comparable<Card> {
         }
     }
 
-    // Pop first card by name (case-insensitive) from a vector
-    // BUG: when initializing principality we don't seem to remove the item so it
-    // overwrites...
     public static Card popCardByName(Vector<Card> cards, String name) {
         if (cards == null || name == null)
             return null;
@@ -113,15 +93,13 @@ public class Card implements Comparable<Card> {
         for (int i = 0; i < cards.size(); i++) {
             Card c = cards.get(i);
             if (c != null && c.name != null && c.name.trim().equalsIgnoreCase(target)) {
-                // Remove-by-index guarantees we return a unique instance and it’s gone from the
-                // deck
                 return cards.remove(i);
             }
         }
-        return null; // not found
+        return null; 
     }
 
-    // Extract all cards whose public String field `attribute` equals `value`
+   
     public static Vector<Card> extractCardsByAttribute(Vector<Card> cards, String attribute, String value) {
         Vector<Card> out = new Vector<>();
         try {
@@ -138,73 +116,8 @@ public class Card implements Comparable<Card> {
         return out;
     }
 
-    // ---------- Loading ONLY the Basic set into piles ----------
-    public static Vector<Card> loadThemeCards(String jsonPath, String desiredTheme, boolean loadmuliple) throws IOException {
-        Vector<Card> allBasic = new Vector<>();
-
-        try (FileReader fr = new FileReader(jsonPath)) {
-            JsonElement root = JsonParser.parseReader(fr);
-            if (!root.isJsonArray())
-                throw new IOException("cards.json: expected top-level array");
-            JsonArray arr = root.getAsJsonArray();
-
-            for (JsonElement el : arr) {
-                if (!el.isJsonObject())
-                    continue;
-                JsonObject o = el.getAsJsonObject();
-                String theme = gs(o, "theme");
-                if (theme == null || !theme.toLowerCase().contains(desiredTheme))
-                    continue; 
-                int number;
-                if (loadmuliple) number = gi(o, "number", 1);
-                else number = 1;
-                for (int i = 0; i < number; i++) {
-                    Card proto = new Card(
-                            gs(o, "name"), theme, gs(o, "type"),
-                            gs(o, "germanName"), gs(o, "placement"),
-                            gs(o, "oneOf"), gs(o, "cost"),
-                            gs(o, "victoryPoints"), gs(o, "CP"), gs(o, "SP"), gs(o, "FP"),
-                            gs(o, "PP"), gs(o, "LP"), gs(o, "KP"), gs(o, "Requires"),
-                            gs(o, "cardText"), gs(o, "protectionOrRemoval"));
-                    allBasic.add(proto);
-                }
-            }
-        }
-        return allBasic;
-    }
     public static void loadBasicCards(String jsonPath) throws IOException {
-        //Load Cards and split them into stacks
-
-        Vector<Card> allBasic = loadThemeCards(jsonPath, "basic", true);
-
-        // Split into piles we care about
-        // Center cards
-        roads = extractCardsByAttribute(allBasic, "name", "Road");
-        settlements = extractCardsByAttribute(allBasic, "name", "Settlement");
-        cities = extractCardsByAttribute(allBasic, "name", "City");
-
-        // Regions: "type" == "Region"
-        regions = extractCardsByAttribute(allBasic, "type", "Region");
-
-        // Events
-        events = extractCardsByAttribute(allBasic, "placement", "Event");
-        // Place Yule 4th from bottom per cheat sheet
-        Card yule = popCardByName(events, "Yule");
-        Collections.shuffle(events);
-        if (yule != null && events.size() >= 3) {
-            events.add(Math.max(0, events.size() - 3), yule);
-        }
-
-        // Remaining “draw stack” cards (action/expansion/units)
-        Collections.shuffle(allBasic);
-        int stackSize = 9; // Intro game
-        drawStack1 = new Vector<>(allBasic.subList(0, Math.min(stackSize, allBasic.size())));
-        drawStack2 = new Vector<>(allBasic.subList(Math.min(stackSize, allBasic.size()),
-                Math.min(2 * stackSize, allBasic.size())));
-        drawStack3 = new Vector<>(allBasic.subList(Math.min(2 * stackSize, allBasic.size()),
-                Math.min(3 * stackSize, allBasic.size())));
-        drawStack4 = new Vector<>(allBasic.subList(Math.min(3 * stackSize, allBasic.size()),
-                Math.min(4 * stackSize, allBasic.size())));
+        Cardstacks.loadBasicCards(jsonPath);      
     }
 
 

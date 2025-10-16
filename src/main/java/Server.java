@@ -158,31 +158,31 @@ public class Server {
         // Put remaining “fixed dice” regions back in region stack (as in your previous
         // code)
         addBackExtraFixedRegions();
-        Collections.shuffle(Card.regions);
+        Collections.shuffle(Cardstacks.regions);
     }
 
     public static void pricipalityinitoneplayer(Player p, int[][] regionDice, int center, int i){
-            p.placeCard(center, 1, Card.popCardByName(Card.settlements, "Settlement"));
-            p.placeCard(center, 2, Card.popCardByName(Card.roads, "Road"));
-            p.placeCard(center, 3, Card.popCardByName(Card.settlements, "Settlement"));
+            p.placeCard(center, 1, Card.popCardByName(Cardstacks.settlements, "Settlement"));
+            p.placeCard(center, 2, Card.popCardByName(Cardstacks.roads, "Road"));
+            p.placeCard(center, 3, Card.popCardByName(Cardstacks.settlements, "Settlement"));
 
             // Regions in rows 1 and 3 (above/below)
-            Card forest = Card.popCardByName(Card.regions, "Forest");
+            Card forest = Card.popCardByName(Cardstacks.regions, "Forest");
             forest.diceRoll = regionDice[i][0];
             forest.regionProduction = 1;
-            Card gold = Card.popCardByName(Card.regions, "Gold Field");
+            Card gold = Card.popCardByName(Cardstacks.regions, "Gold Field");
             gold.diceRoll = regionDice[i][1];
             gold.regionProduction = 0;
-            Card field = Card.popCardByName(Card.regions, "Field");
+            Card field = Card.popCardByName(Cardstacks.regions, "Field");
             field.diceRoll = regionDice[i][2];
             field.regionProduction = 1;
-            Card hill = Card.popCardByName(Card.regions, "Hill");
+            Card hill = Card.popCardByName(Cardstacks.regions, "Hill");
             hill.diceRoll = regionDice[i][3];
             hill.regionProduction = 1;
-            Card past = Card.popCardByName(Card.regions, "Pasture");
+            Card past = Card.popCardByName(Cardstacks.regions, "Pasture");
             past.diceRoll = regionDice[i][4];
             past.regionProduction = 1;
-            Card mount = Card.popCardByName(Card.regions, "Mountain");
+            Card mount = Card.popCardByName(Cardstacks.regions, "Mountain");
             mount.diceRoll = regionDice[i][5];
             mount.regionProduction = 1;
 
@@ -205,14 +205,14 @@ public class Server {
         setTwoUndiced("Gold Field", 3, 2);
 
         // After assigning dice to remaining cards, shuffle the deck
-        java.util.Collections.shuffle(Card.regions);
+        java.util.Collections.shuffle(Cardstacks.regions);
     }
 
     private void setTwoUndiced(String name, int d1, int d2) {
-        Card c1 = findUndicedByName(Card.regions, name);
+        Card c1 = findUndicedByName(Cardstacks.regions, name);
         if (c1 != null)
             c1.diceRoll = d1;
-        Card c2 = findUndicedByName(Card.regions, name);
+        Card c2 = findUndicedByName(Cardstacks.regions, name);
         if (c2 != null)
             c2.diceRoll = d2;
     }
@@ -473,11 +473,11 @@ public class Server {
             case EV_EVENT_A:
             case EV_EVENT_B: {
                 broadcast("[Event] Draw Event Card");
-                if (Card.events.isEmpty()) {
+                if (Cardstacks.events.isEmpty()) {
                     broadcast("Event deck empty.");
                     break;
                 }
-                Card top = Card.events.remove(0);
+                Card top = Cardstacks.events.remove(0);
                 broadcast("EVENT: " + (top.cardText != null ? top.cardText : top.name));
 
                 String nm = (top.name == null ? "" : top.name).toLowerCase();
@@ -496,7 +496,7 @@ public class Server {
                     resolveYearOfPlenty();
                 } else if (nm.equalsIgnoreCase("yule")) {
                     // Shuffle the event deck and immediately draw again
-                    java.util.Collections.shuffle(Card.events);
+                    java.util.Collections.shuffle(Cardstacks.events);
                     resolveEvent(EV_EVENT_A, active, other); // recurse one more draw
                 }
                 break;
@@ -761,7 +761,7 @@ public class Server {
         if (bld == null)
             return;
         // Super quick: push to bottom of drawStack1
-        Card.drawStack1.add(bld);
+        Cardstacks.drawStack1.add(bld);
     }
 
     private void markSkipReplenishOnce(Player p) {
@@ -924,16 +924,16 @@ public class Server {
 
             // Add Center card options that are actually available
             ArrayList<String> buildBits = new ArrayList<>();
-            if (!Card.roads.isEmpty()) {
-                String cost = Card.roads.get(0).cost == null ? "-" : Card.roads.get(0).cost;
+            if (!Cardstacks.roads.isEmpty()) {
+                String cost = Cardstacks.roads.get(0).cost == null ? "-" : Cardstacks.roads.get(0).cost;
                 buildBits.add("ROAD(" + cost + ")");
             }
-            if (!Card.settlements.isEmpty()) {
-                String cost = Card.settlements.get(0).cost == null ? "-" : Card.settlements.get(0).cost;
+            if (!Cardstacks.settlements.isEmpty()) {
+                String cost = Cardstacks.settlements.get(0).cost == null ? "-" : Cardstacks.settlements.get(0).cost;
                 buildBits.add("SETTLEMENT(" + cost + ")");
             }
-            if (!Card.cities.isEmpty()) {
-                String cost = Card.cities.get(0).cost == null ? "-" : Card.cities.get(0).cost;
+            if (!Cardstacks.cities.isEmpty()) {
+                String cost = Cardstacks.cities.get(0).cost == null ? "-" : Cardstacks.cities.get(0).cost;
                 buildBits.add("CITY(" + cost + ")");
             }
             play += String.join(", ", buildBits);
@@ -1003,11 +1003,11 @@ public class Server {
                         || spec.equalsIgnoreCase("City")) {
                     Vector<Card> pile = null;
                     if (spec.equalsIgnoreCase("Road"))
-                        pile = Card.roads;
+                        pile = Cardstacks.roads;
                     else if (spec.equalsIgnoreCase("Settlement"))
-                        pile = Card.settlements;
+                        pile = Cardstacks.settlements;
                     else if (spec.equalsIgnoreCase("City"))
-                        pile = Card.cities;
+                        pile = Cardstacks.cities;
 
                     if (pile == null || pile.isEmpty()) {
                         active.sendMessage("No " + spec + " cards left in the pile.");
@@ -1304,15 +1304,15 @@ public class Server {
     private Vector<Card> stackBy(int n) {
         switch (n) {
             case 1:
-                return Card.drawStack1;
+                return Card.stacks.drawStack1;
             case 2:
-                return Card.drawStack2;
+                return Card.stacks.drawStack2;
             case 3:
-                return Card.drawStack3;
+                return Card.stacks.drawStack3;
             case 4:
-                return Card.drawStack4;
+                return Card.stacks.drawStack4;
         }
-        return Card.drawStack1;
+        return Card.stacks.drawStack1;
     }
 
     private int readInt(String s, int def) {
