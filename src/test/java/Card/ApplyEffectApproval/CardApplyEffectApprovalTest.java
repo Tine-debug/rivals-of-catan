@@ -102,10 +102,10 @@ public class CardApplyEffectApprovalTest {
     void setupPlayer1(){
         resetStack();
         player1 = new StubPlayer();
-        player1.commercePoints = 3;
-        player1.progressPoints = 3;
-        player1.skillPoints = 3;
-        player1.strengthPoints = 3;
+        player1.points.commercePoints = 3;
+        player1.points.progressPoints = 3;
+        player1.points.skillPoints = 3;
+        player1.points.strengthPoints = 3;
         int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         Server.pricipalityinitoneplayer(player1, regionDice, 2,  1);
         player1.gainResource("Gold");

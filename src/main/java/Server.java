@@ -430,7 +430,7 @@ public class Server {
                 // Player with Trade Advantage (>=3 commerce) gains 1 resource of choice from
                 // bank
                 for (Player p : players) {
-                    if (p.commercePoints >= 3) {
+                    if (p.points.commercePoints >= 3) {
                         p.sendMessage(
                                 "PROMPT: Trade Advantage - gain 1 resource of your choice [Brick|Grain|Lumber|Wool|Ore|Gold]:");
                         p.gainResource(p.receiveMessage());
@@ -440,8 +440,8 @@ public class Server {
 
             case EV_CELEB:
                 broadcast("[Event] Celebration");
-                int aSP = players.get(0).skillPoints;
-                int bSP = players.get(1).skillPoints;
+                int aSP = players.get(0).points.skillPoints;
+                int bSP = players.get(1).points.skillPoints;
                 if (aSP == bSP) {
                     for (Player p : players) {
                         p.sendMessage(
@@ -744,7 +744,7 @@ public class Server {
 
     private void resolveInvention() {
         for (Player p : players) {
-            int times = Math.min(2, Math.max(0, p.progressPoints));
+            int times = Math.min(2, Math.max(0, p.points.progressPoints));
             if (times == 0) {
                 p.sendMessage("Invention: you have no progress point buildings (max 2).");
                 continue;
@@ -772,7 +772,7 @@ public class Server {
 
     private boolean hasStrengthAdvantage(Player a, Player b) {
         // Simple: >=3 Strength and strictly more than opponent
-        return a.strengthPoints >= 3 && a.strengthPoints > b.strengthPoints;
+        return a.points.strengthPoints >= 3 && a.points.strengthPoints > b.points.strengthPoints;
     }
 
     private int countTradeShips(Player p) {
@@ -1278,7 +1278,7 @@ public class Server {
             p.sendMessage("You cannot replenish your hand this turn (Fraternal Feuds).");
             return;
         } else {
-            int handTarget = 3 + p.progressPoints;
+            int handTarget = 3 + p.points.progressPoints;
             while (p.handSize() < handTarget) {
                 p.sendMessage("PROMPT: Replenish - choose draw stack [1-4]:");
                 int which = readInt(p.receiveMessage(), 1);
@@ -1325,7 +1325,7 @@ public class Server {
 
     // ---------- Exchange (with Parish Hall discount) ----------
     private void exchangePhase(Player p) {
-        int limit = 3 + p.progressPoints;
+        int limit = 3 + p.points.progressPoints;
         if (p.handSize() < limit) {
             broadcast("Exchange: hand below limit; skipping.");
             return;

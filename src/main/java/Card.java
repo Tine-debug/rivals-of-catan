@@ -8,7 +8,9 @@ public class Card implements Comparable<Card> {
     // ---------- Public fields (keep simple for the take-home) ----------
     public String name, theme, type, cost, oneOf;
     public String victoryPoints, CP, SP, FP, PP, LP, KP, cardText;
-    public String germanName, Requires, protectionOrRemoval;
+
+    public Points points;
+
     public String placement;
 
     private Logic logic;
@@ -35,20 +37,12 @@ public class Card implements Comparable<Card> {
         this.name = name;
         this.theme = theme;
         this.type = type;
-        this.germanName = germanName;
         this.placement = placement;
         this.oneOf = oneOf;
         this.cost = cost;
-        this.victoryPoints = victoryPoints;
-        this.CP = CP;
-        this.SP = SP;
-        this.FP = FP;
-        this.PP = PP;
-        this.LP = LP;
-        this.KP = KP;
-        this.Requires = Requires;
+        this.points = new Points(victoryPoints, CP, SP, FP, PP, LP, KP);
         this.cardText = cardText;
-        this.protectionOrRemoval = protectionOrRemoval;
+
 
         this.logic = LogicFactory.createLogic(placement, name, type);
     }

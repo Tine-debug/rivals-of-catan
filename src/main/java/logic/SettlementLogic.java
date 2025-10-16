@@ -22,7 +22,7 @@ public class SettlementLogic implements Logic{
                     return false;
                 }
                 active.placeCard(row, col, card);
-                active.victoryPoints += 1;
+                active.points.victoryPoints += 1;
 
                 // Expand and capture the updated column
                 col = active.expandAfterEdgeBuild(col);

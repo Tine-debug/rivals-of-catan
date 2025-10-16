@@ -88,13 +88,13 @@ public class PlayerApprovalTest {
     @Test
     void scoreAndTokens() {
         Player opp = new Player();
-        player.victoryPoints = 3;
-        player.commercePoints = 5;
-        player.strengthPoints = 2;
+        player.points.victoryPoints = 3;
+        player.points.commercePoints = 5;
+        player.points.strengthPoints = 2;
 
-        opp.victoryPoints = 2;
-        opp.commercePoints = 1;
-        opp.strengthPoints = 0;
+        opp.points.victoryPoints = 2;
+        opp.points.commercePoints = 1;
+        opp.points.strengthPoints = 0;
 
         String scoreReport = "Player score vs opponent: " + player.currentScoreAgainst(opp) +
                 "\nHas trade token: " + player.hasTradeTokenAgainst(opp) +

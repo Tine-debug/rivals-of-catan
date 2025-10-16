@@ -41,11 +41,7 @@ public class SettlementExpansionLogic implements Logic{
                 }
 
                 // Heroes: just add SP/FP/CP/etc.
-                int sp = asInt(card.SP, 0), fp = asInt(card.FP, 0), cp = asInt(card.CP, 0), pp = asInt(card.PP, 0), kp = asInt(card.KP, 0);
-                active.skillPoints += fp;
-                active.strengthPoints += sp;
-                active.commercePoints += cp;
-                active.progressPoints += pp;
+                active.points = Points.addPoints(active.points, card.points);
                 active.placeCard(row, col, card);
                 return true;
             }
@@ -53,16 +49,6 @@ public class SettlementExpansionLogic implements Logic{
 
     }
     
-    private int asInt(String s, int def) {
-        try {
-            if (s == null)
-                return def;
-            return Integer.parseInt(s.trim());
-        } catch (Exception e) {
-            return def;
-        }
-    }
-
     private boolean is_Valid_placement_extentions(Player active, int row, int col, String nm, String oneOf) {
         if (!isAboveOrBelowSettlementOrCity(active, row, col)) {
             active.sendMessage("Expansion must be above/below a Settlement or City (fill inner ring first).");
@@ -109,7 +95,7 @@ public class SettlementExpansionLogic implements Logic{
                     player.placeCard(row, col, card);
                 System.out.println("Contained Building");
                 if (card.name.equals("Abbey")) {
-                    player.progressPoints += 1;
+                    player.points.progressPoints += 1;
                 } else if (card.name.equals("Marketplace")) {
                     player.flags.add("MARKETPLACE");
                 } else if (card.name.equals("Parish Hall")) {

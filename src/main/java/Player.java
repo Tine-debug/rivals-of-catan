@@ -11,11 +11,7 @@ import java.util.Set;
 
 public class Player {
     // --- “Public on purpose” for the exam ---
-    public int victoryPoints = 2;
-    public int progressPoints = 0;
-    public int skillPoints = 0;
-    public int commercePoints = 0;
-    public int strengthPoints = 0;
+    public Points points = new Points("2", null, null, null, null, null, null);
 
     public int tradeRate = 3; // default 3:1 with bank
     public boolean isBot = false;
@@ -185,11 +181,11 @@ public class Player {
 
         // Points line
         sb.append("\nPoints: ")
-                .append("VP=").append(victoryPoints)
-                .append("  CP=").append(commercePoints)
-                .append("  SP=").append(skillPoints)
-                .append("  FP=").append(strengthPoints)
-                .append("  PP=").append(progressPoints)
+                .append("VP=").append(points.victoryPoints)
+                .append("  CP=").append(points.commercePoints)
+                .append("  SP=").append(points.skillPoints)
+                .append("  FP=").append(points.strengthPoints)
+                .append("  PP=").append(points.progressPoints)
                 .append("\n");
 
         return sb.toString();
@@ -345,17 +341,17 @@ public class Player {
 
     // Advantage tokens depend on being >= 3 ahead of the opponent.
     public boolean hasTradeTokenAgainst(Player opp) {
-        return (this.commercePoints - (opp == null ? 0 : opp.commercePoints)) >= 3;
+        return (this.points.commercePoints - (opp == null ? 0 : opp.points.commercePoints)) >= 3;
     }
 
     public boolean hasStrengthTokenAgainst(Player opp) {
-        return (this.strengthPoints - (opp == null ? 0 : opp.strengthPoints)) >= 3;
+        return (this.points.strengthPoints - (opp == null ? 0 : opp.points.strengthPoints)) >= 3;
     }
 
     // Final score used for win check: base VP + 1 per advantage token against
     // opponent
     public int currentScoreAgainst(Player opp) {
-        int score = this.victoryPoints;
+        int score = this.points.victoryPoints;
         if (hasTradeTokenAgainst(opp))
             score += 1;
         if (hasStrengthTokenAgainst(opp))

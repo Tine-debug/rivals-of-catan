@@ -25,9 +25,9 @@ public Points(String victoryPoints, String CP, String SP, String FP, String PP, 
 
 
 
-public Points addPoints(Points points1, Points points2){
+public static Points addPoints(Points points1, Points points2){
     Points result = new Points();
-    
+
     result.victoryPoints = points1.victoryPoints + points2.victoryPoints;
     result.commercePoints = points1.commercePoints + points2.commercePoints;
     result.strengthPoints = points1.strengthPoints + points2.strengthPoints;
