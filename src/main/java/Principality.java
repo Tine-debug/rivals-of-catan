@@ -4,6 +4,16 @@ import java.util.List;
 
 public class Principality{
 
+    public Principality() {
+        principality = new java.util.ArrayList<>();
+        for (int r = 0; r < 5; r++) {
+            java.util.List<Card> row = new java.util.ArrayList<>();
+            for (int c = 0; c < 5; c++)
+                row.add(null);
+            principality.add(row);
+        }
+    }
+
 
 
     public List<List<Card>> principality = new ArrayList<>();
@@ -184,7 +194,7 @@ public Card getCard(int r, int c) {
         if ("City".equalsIgnoreCase(nm))
             return "Center";
 
-        String pts = summarizePoints(c);
+        String pts = c.summarizePoints();
         if (!pts.isEmpty())
             return pts;
 
@@ -193,28 +203,6 @@ public Card getCard(int r, int c) {
         if (!pl.isEmpty() || !tp.isEmpty())
             return (pl + " " + tp).trim();
         return "";
-    }
-
-    private String summarizePoints(Card c) {
-        StringBuilder t = new StringBuilder();
-            if (c.points.victoryPoints > 0 || c.points.commercePoints > 0 || c.points.progressPoints > 0 || c.points.strengthPoints > 0 ||
-            c.points.skillPoints >0){
-            t.append("[");
-            if (c.points.victoryPoints > 0)
-                t.append("VP").append(c.points.victoryPoints).append(" ");
-            if (c.points.commercePoints > 0)
-                t.append("CP").append(c.points.commercePoints).append(" ");
-            if (c.points.strengthPoints > 0)
-                t.append("SP").append(c.points.strengthPoints).append(" ");
-            if (c.points.skillPoints > 0)
-                t.append("FP").append(c.points.skillPoints).append(" ");
-            if (c.points.progressPoints> 0)
-                t.append("PP").append(c.points.progressPoints).append(" ");
-            if (t.charAt(t.length() - 1) == ' ')
-                t.deleteCharAt(t.length() - 1);
-            t.append("]");
-            }
-        return t.toString();
     }
 
     private String buildSep(int[] w) {
@@ -244,5 +232,43 @@ public Card getCard(int r, int c) {
         return toks.length == 0 ? "" : toks[0];
     }
 
+
+    public java.util.List<Card> findRegions(String regionName) {
+        java.util.List<Card> list = new java.util.ArrayList<>();
+        if (regionName == null)
+            return list;
+        for (int r = 0; r < principality.size(); r++) {
+            java.util.List<Card> row = principality.get(r);
+            if (row == null)
+                continue;
+            for (int c = 0; c < row.size(); c++) {
+                Card x = row.get(c);
+                if (x != null &&
+                        "Region".equalsIgnoreCase(x.type) &&
+                        x.name != null &&
+                        x.name.equalsIgnoreCase(regionName)) {
+                    list.add(x);
+                }
+            }
+        }
+        return list;
+    }
+
+
+    public int totalAllResources() {
+        int sum = 0;
+        for (int r = 0; r < principality.size(); r++) {
+            java.util.List<Card> row = principality.get(r);
+            if (row == null)
+                continue;
+            for (int c = 0; c < row.size(); c++) {
+                Card x = row.get(c);
+                if (x != null && "Region".equalsIgnoreCase(x.type)) {
+                    sum += Math.max(0, Math.min(3, x.regionProduction));
+                }
+            }
+        }
+        return sum;
+    }
 
 }

@@ -329,8 +329,8 @@ public class Server {
             int pMatches = countFaceRegions(p, face);
             int oppMatches = countFaceRegions(opponentOf(p), face);
 
-            for (int r = 0; r < p.principality.size(); r++) {
-                List<Card> row = p.principality.get(r);
+            for (int r = 0; r < p.principality.principality.size(); r++) {
+                List<Card> row = p.principality.principality.get(r);
                 for (int c = 0; c < row.size(); c++) {
                     Card card = row.get(c);
                     if (card == null || !"Region".equalsIgnoreCase(card.type))
@@ -401,7 +401,7 @@ public class Server {
 
     private int countFaceRegions(Player p, int face) {
         int n = 0;
-        for (List<Card> row : p.principality)
+        for (List<Card> row : p.principality.principality)
             for (Card c : row)
                 if (c != null && "Region".equalsIgnoreCase(c.type) && c.diceRoll == face)
                     n++;
@@ -521,8 +521,8 @@ public class Server {
 
         // Collect opponent buildings (type == "Building")
         java.util.List<int[]> buildings = new java.util.ArrayList<>();
-        for (int r = 0; r < opp.principality.size(); r++) {
-            var row = opp.principality.get(r);
+        for (int r = 0; r < opp.principality.principality.size(); r++) {
+            var row = opp.principality.principality.get(r);
             for (int c = 0; c < row.size(); c++) {
                 Card x = row.get(c);
                 if (x != null && x.type != null && x.type.equalsIgnoreCase("Building")) {
@@ -599,7 +599,7 @@ public class Server {
         if (choice < 0 || choice >= picked.size())
             choice = 0;
         int rr = picked.get(choice)[0], cc = picked.get(choice)[1];
-        Card removed = opp.principality.get(rr).set(cc, null);
+        Card removed = opp.principality.principality.get(rr).set(cc, null);
         broadcast("Feud: removed " + (removed == null ? "unknown" : removed.name) + " from opponent at (" + rr + ","
                 + cc + ").");
         returnBuildingToBottom(removed);
@@ -722,8 +722,8 @@ public class Server {
     private void resolveYearOfPlenty() {
         for (Player p : players) {
             int added = 0;
-            for (int r = 0; r < p.principality.size(); r++) {
-                var row = p.principality.get(r);
+            for (int r = 0; r < p.principality.principality.size(); r++) {
+                var row = p.principality.principality.get(r);
                 for (int c = 0; c < row.size(); c++) {
                     Card reg = row.get(c);
                     if (reg == null || !"Region".equalsIgnoreCase(reg.type))
@@ -777,8 +777,8 @@ public class Server {
 
     private int countTradeShips(Player p) {
         int count = 0;
-        for (int r = 0; r < p.principality.size(); r++) {
-            var row = p.principality.get(r);
+        for (int r = 0; r < p.principality.principality.size(); r++) {
+            var row = p.principality.principality.get(r);
             for (int c = 0; c < row.size(); c++) {
                 Card x = row.get(c);
                 if (x == null)
@@ -799,8 +799,8 @@ public class Server {
     private int countGoldAndWool(Player p, boolean excludeStorehouseAdj) {
         int total = 0;
         Set<String> excluded = excludeStorehouseAdj ? storehouseExcludedKeys(p) : Set.of();
-        for (int r = 0; r < p.principality.size(); r++) {
-            java.util.List<Card> row = p.principality.get(r);
+        for (int r = 0; r < p.principality.principality.size(); r++) {
+            java.util.List<Card> row = p.principality.principality.get(r);
             if (row == null)
                 continue;
             for (int c = 0; c < row.size(); c++) {
@@ -835,8 +835,8 @@ public class Server {
 
     private int grantGoldIfSpace(Player p, int want) {
         int given = 0;
-        for (int r = 0; r < p.principality.size(); r++) {
-            java.util.List<Card> row = p.principality.get(r);
+        for (int r = 0; r < p.principality.principality.size(); r++) {
+            java.util.List<Card> row = p.principality.principality.get(r);
             if (row == null)
                 continue;
             for (int c = 0; c < row.size(); c++) {
@@ -860,8 +860,8 @@ public class Server {
     // side of center)
     private Set<String> storehouseExcludedKeys(Player p) {
         Set<String> out = new HashSet<>();
-        for (int r = 0; r < p.principality.size(); r++) {
-            List<Card> row = p.principality.get(r);
+        for (int r = 0; r < p.principality.principality.size(); r++) {
+            List<Card> row = p.principality.principality.get(r);
             for (int c = 0; c < row.size(); c++) {
                 Card x = row.get(c);
                 if (x != null && x.name != null && x.name.equalsIgnoreCase("Storehouse")) {
@@ -889,8 +889,8 @@ public class Server {
     }
 
     private void forEachRegion(Player p, RegionVisitor v) {
-        for (int r = 0; r < p.principality.size(); r++) {
-            List<Card> row = p.principality.get(r);
+        for (int r = 0; r < p.principality.principality.size(); r++) {
+            List<Card> row = p.principality.principality.get(r);
             for (int c = 0; c < row.size(); c++) {
                 Card card = row.get(c);
                 if (card != null && "Region".equalsIgnoreCase(card.type))

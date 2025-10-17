@@ -69,4 +69,27 @@ public class Card implements Comparable<Card> {
     }
 
 
+    public String summarizePoints() {
+        StringBuilder t = new StringBuilder();
+            if (points.victoryPoints > 0 || points.commercePoints > 0 || points.progressPoints > 0 || points.strengthPoints > 0 ||
+            points.skillPoints >0){
+            t.append("[");
+            if (points.victoryPoints > 0)
+                t.append("VP").append(points.victoryPoints).append(" ");
+            if (points.commercePoints > 0)
+                t.append("CP").append(points.commercePoints).append(" ");
+            if (points.strengthPoints > 0)
+                t.append("SP").append(points.strengthPoints).append(" ");
+            if (points.skillPoints > 0)
+                t.append("FP").append(points.skillPoints).append(" ");
+            if (points.progressPoints> 0)
+                t.append("PP").append(points.progressPoints).append(" ");
+            if (t.charAt(t.length() - 1) == ' ')
+                t.deleteCharAt(t.length() - 1);
+            t.append("]");
+            }
+        return t.toString();
+    }
+
+
 }
