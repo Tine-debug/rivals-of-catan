@@ -219,10 +219,8 @@ public class Server {
         return null;
     }
 
-    // ---------- Main loop ----------
     public void run() {
-        int current = Math.random() < 0.5 ? 0 : 1; // random start
-        // print the players principality and hand
+        int current = Math.random() < 0.5 ? 0 : 1; 
         for (int i = 0; i < players.size(); i++) {
             players.get(i).sendMessage("Opponent's starting board:");
             players.get(i).sendMessage(
@@ -289,10 +287,7 @@ public class Server {
         return false;
     }
 
-    // ---------- Dice ----------
     protected int rollEventDie(Player active) {
-        // Brigitta lets the player fix production die, not event die — but we keep the
-        // hook simple
         int face = 1 + rng.nextInt(6);
         broadcast("[EventDie] -> " + face);
         return face;
@@ -314,11 +309,8 @@ public class Server {
         return face;
     }
 
-    // ---------- Production ----------
     private void applyProduction(int face) {
         for (Player p : players) {
-            // Marketplace extra check: if opponent has more regions matching face, p gets
-            // +1 of matching type (your rule text)
             boolean hasMarketplace = p.flags.contains("MARKETPLACE");
             int pMatches = countFaceRegions(p, face);
             int oppMatches = countFaceRegions(opponentOf(p), face);
@@ -331,11 +323,7 @@ public class Server {
                         continue;
                     if (card.diceRoll != face)
                         continue;
-
-                    // Base increase = 1
                     int inc = 1;
-                    // Booster buildings adjacent (same row, at c-1 or c+1) add +1 (the “double”
-                    // effect)
                     if (hasAdjacentBoosterForRegion(p, r, c))
                         inc += 1;
 
@@ -343,8 +331,6 @@ public class Server {
                 }
             }
 
-            // Marketplace: if opponent has strictly more face-regions than p, p may gain +1
-            // of one of those face resources
             if (hasMarketplace && oppMatches > pMatches) {
                 p.sendMessage("PROMPT: Marketplace - choose one resource produced on face " + face
                         + " to gain (e.g., Grain/Gold/Lumber):");
@@ -399,17 +385,13 @@ public class Server {
         return n;
     }
 
-    // ---------- Events ----------
     private void resolveEvent(int face, Player active, Player other) {
         switch (face) {
             case EV_BRIGAND:
                 broadcast("[Event] Brigand Attack");
-                // Count total of Gold+Wool across regions, excluding regions adjacent to
-                // storehouse
                 for (Player p : players) {
                     int total = countGoldAndWool(p, true);
                     if (total > 7) {
-                        // zero out Gold+Wool production for impacted regions (except excluded)
                         zeroGoldAndWool(p, true);
                         p.sendMessage("Brigands! You lose all Gold & Wool in affected regions.");
                     }
@@ -418,8 +400,6 @@ public class Server {
 
             case EV_TRADE:
                 broadcast("[Event] Trade");
-                // Player with Trade Advantage (>=3 commerce) gains 1 resource of choice from
-                // bank
                 for (Player p : players) {
                     if (p.points.commercePoints >= 3) {
                         p.sendMessage(
@@ -452,7 +432,6 @@ public class Server {
                 for (Player p : players) {
                     p.sendMessage("PROMPT: Plentiful Harvest - choose a resource [Brick|Grain|Lumber|Wool|Ore|Gold]:");
                     p.gainResource(p.receiveMessage());
-                    // Toll Bridge: +2 Gold if you can store it (any gold field with <3)
                     if (p.flags.contains("TOLLB")) {
                         int add = grantGoldIfSpace(p, 2);
                         if (add > 0)
@@ -486,9 +465,8 @@ public class Server {
                 } else if (nm.equalsIgnoreCase("year of plenty")) {
                     resolveYearOfPlenty();
                 } else if (nm.equalsIgnoreCase("yule")) {
-                    // Shuffle the event deck and immediately draw again
                     java.util.Collections.shuffle(Cardstacks.events);
-                    resolveEvent(EV_EVENT_A, active, other); // recurse one more draw
+                    resolveEvent(EV_EVENT_A, active, other);
                 }
                 break;
             }
@@ -498,7 +476,6 @@ public class Server {
     }
 
     private void resolveFeud(Player active, Player other) {
-        // Decide who (if any) has strength advantage
         Player adv = hasStrengthAdvantage(players.get(0), players.get(1)) ? players.get(0)
                 : hasStrengthAdvantage(players.get(1), players.get(0)) ? players.get(1)
                         : null;
@@ -510,7 +487,6 @@ public class Server {
 
         Player opp = (adv == players.get(0)) ? players.get(1) : players.get(0);
 
-        // Collect opponent buildings (type == "Building")
         java.util.List<int[]> buildings = new java.util.ArrayList<>();
         for (int r = 0; r < opp.principality.principality.size(); r++) {
             var row = opp.principality.principality.get(r);
@@ -525,9 +501,6 @@ public class Server {
             broadcast("Feud: opponent has no buildings.");
             return;
         }
-
-        // Ask advantage player to pick up to 3 targets (r c;r c;r c). Keep it
-        // ugly/simple.
         adv.sendMessage(
                 "PROMPT: Feud - select up to 3 opponent building coordinates as 'r c;r c;r c'. Opponent board:\n"
                         + opp.printPrincipality());
@@ -552,11 +525,9 @@ public class Server {
         } catch (Exception ignored) {
         }
 
-        // If invalid or too few, auto-fill from discovered buildings
         int k = 0;
         while (picked.size() < 3 && k < buildings.size()) {
             int[] bc = buildings.get(k++);
-            // avoid duplicates
             boolean dup = false;
             for (int[] pc : picked)
                 if (pc[0] == bc[0] && pc[1] == bc[1]) {
@@ -571,7 +542,6 @@ public class Server {
             return;
         }
 
-        // Opponent chooses which ONE to remove
         StringBuilder opts = new StringBuilder("PROMPT: Feud - choose which to remove (index 0..")
                 .append(picked.size() - 1)
                 .append("):\n");
@@ -596,7 +566,7 @@ public class Server {
         returnBuildingToBottom(removed);
     }
 
-    private void resolveFraternalFeuds(Player active, Player other) {
+    public void resolveFraternalFeuds(Player active, Player other) {
         Player adv = hasStrengthAdvantage(players.get(0), players.get(1)) ? players.get(0)
                 : hasStrengthAdvantage(players.get(1), players.get(0)) ? players.get(1)
                         : null;
@@ -1091,31 +1061,6 @@ public class Server {
         }
     }
 
-    private Card findCardInHand(Player p, String spec) {
-        if (spec == null)
-            return null;
-        spec = spec.trim();
-
-        try {
-            int idx = Integer.parseInt(spec);
-            if (idx >= 0 && idx < p.hand.hand.size())
-                return p.hand.hand.get(idx);
-        } catch (NumberFormatException ignored) {
-        }
-
-        for (Card c : p.hand.hand) {
-            if (c != null && c.name != null && c.name.equalsIgnoreCase(spec))
-                return c;
-        }
-
-        String lower = spec.toLowerCase();
-        for (Card c : p.hand.hand) {
-            if (c != null && c.name != null && c.name.toLowerCase().startsWith(lower))
-                return c;
-        }
-        return null;
-    }
-
     private boolean payCost(Player p, String cost) {
         if (cost == null || cost.isBlank())
             return true;
@@ -1252,7 +1197,7 @@ public class Server {
     }
 
     // ---------- Replenish ----------
-    private void replenish(Player p) {
+    public void replenish(Player p) {
         if (p.flags != null && p.flags.remove("NO_REPLENISH_ONCE")) {
             p.sendMessage("You cannot replenish your hand this turn (Fraternal Feuds).");
             return;

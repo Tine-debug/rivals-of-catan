@@ -1,0 +1,29 @@
+
+Hand (3):
+  [0] Abbey   {cost: BGO} 
+	Progress is not the only thing here; you also get red wine and lots of dark beer.
+  [1] Abbey   {cost: BGO} 
+	Progress is not the only thing here; you also get red wine and lots of dark beer.
+  [2] Austin   {cost: GO} [SP1 FP2]
+	If you hit my left cheek, don’t even think you’ll have time to hit the right one too.
+
+Hand (3):
+  [0] Brick Factory   {cost: BO} 
+	Doubles the brick production of the neighboring hills.
+  [1] Brick Ship   {cost: LW} [CP1]
+	During your turn, you may trade 2 brick for any 1 other resource as often as you wish.
+  [2] Brigitta, the Wise Woman   {cost: -} 
+	Play this card before rolling the dice. Choose the result of the production die roll.
+
+Hand (1):
+  [0] Abbey   {cost: BGO} 
+	Progress is not the only thing here; you also get red wine and lots of dark beer.
+
+Hand (3):
+  [0] Brick Factory   {cost: BO} 
+	Doubles the brick production of the neighboring hills.
+  [1] Brick Ship   {cost: LW} [CP1]
+	During your turn, you may trade 2 brick for any 1 other resource as often as you wish.
+  [2] Brigitta, the Wise Woman   {cost: -} 
+	Play this card before rolling the dice. Choose the result of the production die roll.
+
