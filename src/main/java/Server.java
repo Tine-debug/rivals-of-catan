@@ -240,7 +240,7 @@ public class Server {
 
 
     public int resolveOneTurn(int current){
-                    Player active = players.get(current);
+            Player active = players.get(current);
             Player other = players.get((current + 1) % players.size());
 
 
@@ -290,7 +290,7 @@ public class Server {
     }
 
     // ---------- Dice ----------
-    private int rollEventDie(Player active) {
+    protected int rollEventDie(Player active) {
         // Brigitta lets the player fix production die, not event die — but we keep the
         // hook simple
         int face = 1 + rng.nextInt(6);
@@ -298,7 +298,7 @@ public class Server {
         return face;
     }
 
-    private int rollProductionDie(Player active) {
+    protected int rollProductionDie(Player active) {
         int face = 1 + rng.nextInt(6);
         if (active.flags.contains("BRIGITTA")) {
             active.sendMessage("PROMPT: Brigitta active -  choose production die [1-6]:");

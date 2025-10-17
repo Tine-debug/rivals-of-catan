@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class CardApplyEffectApprovalTest {
 
-    static class StubPlayer extends Player {
+    /*static class MockPlayer extends Player {
     @Override
     public void sendMessage(Object msg) {}
 
@@ -27,13 +27,13 @@ public class CardApplyEffectApprovalTest {
     public String receiveMessage() { return "Brick"; }
 
 }
-
+*/
 
 
     static Vector<Card> basicCards;
-    StubPlayer player1;
-    StubPlayer player2;
-    MessagePlayer player3;
+    MockPlayer player1;
+    MockPlayer player2;
+    MockPlayer player3;
     static Vector<int[]> interestingFields = new Vector<>();
 
     static void resetStack(){
@@ -101,7 +101,7 @@ public class CardApplyEffectApprovalTest {
 
     void setupPlayer1(){
         resetStack();
-        player1 = new StubPlayer();
+        player1 = new MockPlayer();
         player1.points.commercePoints = 3;
         player1.points.progressPoints = 3;
         player1.points.skillPoints = 3;
@@ -118,7 +118,7 @@ public class CardApplyEffectApprovalTest {
      void setupPlayer2 (){
 
             resetStack();
-                player2 = new StubPlayer();
+                player2 = new MockPlayer();
                 int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
                 Server.pricipalityinitoneplayer(player2, regionDice, 2,  1);
 
@@ -255,12 +255,13 @@ public class CardApplyEffectApprovalTest {
         }
 
 
-    static class MessagePlayer extends StubPlayer{
+    static class MockPlayer extends Player{
         public Vector<String[]> messages = new Vector();
         public int messagenumber = 0;
         public int messageblock = 0;
         @Override
         public String receiveMessage() { 
+            if (messages.size() == 0) return "Brick";
             String message = "";
             try {
                 message = messages.get(messageblock)[messagenumber];
@@ -282,7 +283,7 @@ public class CardApplyEffectApprovalTest {
     @ValueSource(strings = {"Region", "EXP"})
     void applyEffectswap(String nameChanged){
         resetStack();
-        player3 = new MessagePlayer();
+        player3 = new MockPlayer();
         int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         Server.pricipalityinitoneplayer(player3, regionDice, 2,  1);
 
@@ -334,7 +335,7 @@ public class CardApplyEffectApprovalTest {
     for (int i = 0; i < testmessages.size(); i++){
         resetStack();
         resetBasicCards();
-        player3 = new MessagePlayer();
+        player3 = new MockPlayer();
         int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         Server.pricipalityinitoneplayer(player3, regionDice, 2,  1);
         player3.messages.add(testmessages.get(i));
