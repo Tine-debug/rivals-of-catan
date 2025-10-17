@@ -313,6 +313,8 @@ public class Player {
     // SCORING helper: summarize points on a card like "[VP1 CP2 SP1 FP0 PP0]"
     private String summarizePoints(Card c) {
         StringBuilder t = new StringBuilder();
+            if (c.points.victoryPoints > 0 || c.points.commercePoints > 0 || c.points.progressPoints > 0 || c.points.strengthPoints > 0 ||
+            c.points.skillPoints >0){
             t.append("[");
             if (c.points.victoryPoints > 0)
                 t.append("VP").append(c.points.victoryPoints).append(" ");
@@ -327,7 +329,7 @@ public class Player {
             if (t.charAt(t.length() - 1) == ' ')
                 t.deleteCharAt(t.length() - 1);
             t.append("]");
-        
+            }
         return t.toString();
     }
 
