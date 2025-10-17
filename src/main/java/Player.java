@@ -1,5 +1,3 @@
-// Player.java
-// Public fields kept for “quick & dirty”; helpers centralized to reduce clutter.
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,26 +8,20 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Player {
-    // --- “Public on purpose” for the exam ---
+
     public Points points = new Points("2", null, null, null, null, null, null);
 
     public int tradeRate = 3; // default 3:1 with bank
     public boolean isBot = false;
 
-    // “Flags” for quick state (MARKETPLACE, PARISH, TOLLB, LTS@r,c, 2FOR1_WOOL,
-    // STOREHOUSE@r,c, BRIGITTA, SCOUT_NEXT_SETTLEMENT)
     public Set<String> flags = new HashSet<>();
 
-    // Resource pools (coarse, not per region)
     public Map<String, Integer> resources = new HashMap<>();
 
-    // Hand (now real cards)
     public List<Card> hand = new ArrayList<>();
 
-    // Principality: dynamic 2D grid of cards (null = empty)
     public List<List<Card>> principality = new ArrayList<>();
 
-    // Last settlement (for Scout)
     public int lastSettlementRow = -1, lastSettlementCol = -1;
 
     private final Scanner in = new Scanner(System.in);
@@ -37,20 +29,17 @@ public class Player {
     public Player() {
         String[] all = { "Brick", "Grain", "Lumber", "Wool", "Ore", "Gold", "Any" };
         principality = new java.util.ArrayList<>();
-        // Start with a 5×5 empty grid (grows as needed)
         for (int r = 0; r < 5; r++) {
             java.util.List<Card> row = new java.util.ArrayList<>();
             for (int c = 0; c < 5; c++)
                 row.add(null);
             principality.add(row);
         }
-        // (init other maps as new HashMap each; no static/shared refs)
         resources = new java.util.HashMap<>();
         for (String r : all)
             resources.put(r, 0);
     }
 
-    // ------------- I/O (console) -------------
     public void sendMessage(Object m) {
         System.out.println(m);
     }
@@ -60,7 +49,6 @@ public class Player {
         return in.nextLine();
     }
 
-    // ------------- Grid helpers -------------
     public Card getCard(int r, int c) {
         if (r < 0 || c < 0)
             return null;
@@ -77,25 +65,20 @@ public class Player {
         principality.get(r).set(c, card);
     }
 
-    // Returns the (possibly updated) column where the just-built center card now
-    // sits
+
     public int expandAfterEdgeBuild(int col) {
         int cols = principality.get(0).size();
-        // if placed in first column, insert a new column at the far left
         if (col == 0) {
             for (java.util.List<Card> row : principality) {
                 row.add(0, null);
             }
-            // all existing cards (including the one we just placed) shifted +1
             col += 1;
             if (lastSettlementCol >= 0)
                 lastSettlementCol += 1;
         } else if (col == cols - 1) {
-            // placed in last column, so append a new rightmost column
             for (java.util.List<Card> row : principality) {
                 row.add(null);
             }
-            // col stays the same
         }
         return col;
     }
@@ -103,7 +86,6 @@ public class Player {
     private void ensureSize(int r, int c) {
         while (principality.size() <= r) {
             ArrayList<Card> row = new ArrayList<>();
-            // match width
             int cols = principality.isEmpty() ? 5 : principality.get(0).size();
             for (int i = 0; i < cols; i++)
                 row.add(null);
@@ -123,15 +105,13 @@ public class Player {
         return false;
     }
 
-    // Nicely prints the principality with coordinates, plus hand & point summary.
     public String printPrincipality() {
         StringBuilder sb = new StringBuilder();
         int rows = principality.size();
         int cols = principality.isEmpty() ? 0 : principality.get(0).size();
 
-        // Compute column widths based on both title and info lines
         int[] w = new int[cols];
-        int minW = 10; // a reasonable minimum so headers fit
+        int minW = 10; 
         for (int c = 0; c < cols; c++) {
             int m = minW;
             for (int r = 0; r < rows; r++) {
@@ -144,21 +124,17 @@ public class Player {
             w[c] = m;
         }
 
-        // Top header for columns (outside the grid for clarity)
-        sb.append("      "); // space for row index column
+        sb.append("      "); 
         for (int c = 0; c < cols; c++) {
             String hdr = "Col " + c;
-            sb.append(padRight(hdr, w[c] + 3)); // +3 because inside grid we put spaces and | around content
+            sb.append(padRight(hdr, w[c] + 3));
         }
         sb.append("\n");
 
-        // Top border
         sb.append("    ").append(buildSep(w)).append("\n");
 
-        // Each board row => 2 text lines inside the grid
         for (int r = 0; r < rows; r++) {
-            // Title line
-            sb.append(String.format("%2d  ", r)); // row index + two spaces
+            sb.append(String.format("%2d  ", r)); 
             sb.append("|");
             for (int c = 0; c < cols; c++) {
                 String title = cellTitle(getCard(r, c));
@@ -166,8 +142,7 @@ public class Player {
             }
             sb.append("\n");
 
-            // Info line
-            sb.append("    "); // aligns with the top border (no row index on the 2nd line)
+            sb.append("    ");
             sb.append("|");
             for (int c = 0; c < cols; c++) {
                 String info = cellInfo(getCard(r, c));
@@ -175,11 +150,9 @@ public class Player {
             }
             sb.append("\n");
 
-            // Row separator
             sb.append("    ").append(buildSep(w)).append("\n");
         }
 
-        // Points line
         sb.append("\nPoints: ")
                 .append("VP=").append(points.victoryPoints)
                 .append("  CP=").append(points.commercePoints)
@@ -191,9 +164,7 @@ public class Player {
         return sb.toString();
     }
 
-    /**
-     * Pretty-print this player's hand with index, cost, and any point values.
-     */
+
     public String printHand() {
         StringBuilder sb = new StringBuilder();
         sb.append("Hand (").append(hand.size()).append("):\n");
@@ -202,7 +173,7 @@ public class Player {
             if (c == null)
                 continue;
             String cost = (c.cost == null || c.cost.isBlank()) ? "-" : c.cost;
-            String pts = summarizePoints(c); // same helper you already use in printPrincipality
+            String pts = summarizePoints(c);
             sb.append("  [").append(i).append("] ")
                     .append(c.name == null ? "Unknown" : c.name)
                     .append("   {cost: ").append(cost).append("} ")
@@ -212,18 +183,18 @@ public class Player {
         return sb.toString();
     }
 
-    // Build a separator like: +-----------+--------------+---+
+  
     private String buildSep(int[] w) {
         StringBuilder sep = new StringBuilder();
         sep.append("+");
         for (int c = 0; c < w.length; c++) {
-            sep.append("-".repeat(w[c] + 2)); // +2 for side spaces inside cells
+            sep.append("-".repeat(w[c] + 2)); 
             sep.append("+");
         }
         return sep.toString();
     }
 
-    // Left-pad to fixed width (for stable '|' alignment)
+    
     private String padRight(String s, int w) {
         if (s == null)
             s = "";
@@ -255,15 +226,13 @@ public class Player {
 
     private String cellInfo(Card c) {
         if (c == null)
-            return ""; // EMPTY
-        // Regions: show dice + stored (0..3)
+            return "";
         if ("Region".equalsIgnoreCase(c.type)) {
             String die = (c.diceRoll <= 0 ? "-" : String.valueOf(c.diceRoll));
             int stored = Math.max(0, Math.min(3, c.regionProduction));
             return "d" + die + "  " + stored + "/3";
         }
 
-        // Common trade ships: "2:1 <Res>"
         String nm = c.name == null ? "" : c.name;
         if (c.type != null && c.type.toLowerCase().contains("trade ship")) {
             if (!nm.equalsIgnoreCase("Large Trade Ship") && nm.endsWith("Ship")) {
@@ -274,7 +243,6 @@ public class Player {
             }
         }
 
-        // Boosters: Foundry/Mill/Camp/Factory/Shop (hint text)
         if ("Building".equalsIgnoreCase(c.type) &&
                 "Settlement/City Expansions".equalsIgnoreCase(c.placement)) {
             if (nm.endsWith("Foundry"))
@@ -289,7 +257,6 @@ public class Player {
                 return "Boosts Wool x2 on match";
         }
 
-        // Center cards quick hints
         if ("Road".equalsIgnoreCase(nm))
             return "Center";
         if ("Settlement".equalsIgnoreCase(nm))
@@ -297,12 +264,10 @@ public class Player {
         if ("City".equalsIgnoreCase(nm))
             return "Center";
 
-        // Heroes / others: summarize points if any
         String pts = summarizePoints(c);
         if (!pts.isEmpty())
             return pts;
 
-        // Default: show placement/type short
         String pl = c.placement == null ? "" : c.placement;
         String tp = c.type == null ? "" : c.type;
         if (!pl.isEmpty() || !tp.isEmpty())
