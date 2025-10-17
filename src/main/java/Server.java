@@ -351,8 +351,6 @@ public class Server {
                 String res = p.receiveMessage();
                 p.gainResource(res);
             }
-
-            // Toll Bridge: on Plentiful Harvest handled in event, not here
         }
     }
 
@@ -360,7 +358,6 @@ public class Server {
         Card region = p.getCard(rr, cc);
         if (region == null)
             return false;
-        // Check building at (rr, cc-1) and (rr, cc+1)
         Card left = p.getCard(rr, cc - 1);
         Card right = p.getCard(rr, cc + 1);
         return isBoosting(left, region) || isBoosting(right, region);
@@ -1038,7 +1035,7 @@ public class Server {
                     continue;
                 }
 
-                Card c = findCardInHand(active, spec);
+                Card c = active.hand.findCardInHand(active, spec);
                 if (c == null) {
                     active.sendMessage("No such card in hand: " + spec);
                     continue;
