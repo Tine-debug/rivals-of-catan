@@ -47,18 +47,18 @@ public class Hand{
 
         try {
             int idx = Integer.parseInt(spec);
-            if (idx >= 0 && idx < p.hand.size())
-                return p.hand.get(idx);
+            if (idx >= 0 && idx < hand.size())
+                return hand.get(idx);
         } catch (NumberFormatException ignored) {
         }
 
-        for (Card c : p.hand) {
+        for (Card c : hand) {
             if (c != null && c.name != null && c.name.equalsIgnoreCase(spec))
                 return c;
         }
         
         String lower = spec.toLowerCase();
-        for (Card c : p.hand) {
+        for (Card c : hand) {
             if (c != null && c.name != null && c.name.toLowerCase().startsWith(lower))
                 return c;
         }

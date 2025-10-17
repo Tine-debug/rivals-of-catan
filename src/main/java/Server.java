@@ -616,7 +616,7 @@ public class Server {
         }
         Player opp = (adv == players.get(0)) ? players.get(1) : players.get(0);
 
-        if (opp.hand.isEmpty()) {
+        if (opp.hand.hand.isEmpty()) {
             broadcast("Fraternal Feuds: opponent hand empty.");
             return;
         }
@@ -627,7 +627,7 @@ public class Server {
         try {
             for (String tok : sel.trim().split("\\s+")) {
                 int i = Integer.parseInt(tok);
-                if (i >= 0 && i < opp.hand.size())
+                if (i >= 0 && i < opp.hand.hand.size())
                     idxs.add(i);
                 if (idxs.size() == 2)
                     break;
@@ -638,7 +638,7 @@ public class Server {
         // If insufficient/invalid, take first one or two
         if (idxs.isEmpty()) {
             idxs.add(0);
-            if (opp.hand.size() > 1)
+            if (opp.hand.handSize() > 1)
                 idxs.add(1);
         }
 
@@ -646,7 +646,7 @@ public class Server {
         java.util.List<Integer> order = new java.util.ArrayList<>(idxs);
         java.util.Collections.sort(order, java.util.Collections.reverseOrder());
         for (int i : order) {
-            Card rem = opp.hand.remove(i);
+            Card rem = opp.hand.hand.remove(i);
             returnBuildingToBottom(rem);
             broadcast("Fraternal Feuds: returned '" + rem.name + "' to bottom of a draw stack.");
         }
@@ -1066,7 +1066,7 @@ public class Server {
                         continue;
                     }
 
-                    active.hand.remove(c);
+                    active.hand.hand.remove(c);
                     broadcast("Current player played action " + c.name);
                 } else {
                     // Non-action: needs placement
@@ -1089,7 +1089,7 @@ public class Server {
                         continue;
                     }
 
-                    active.hand.remove(c);
+                    active.hand.hand.remove(c);
                     broadcast("Current player played " + c.name + " at (" + row + "," + col + ")");
                 }
             } else if (up.startsWith("END")) {
@@ -1107,18 +1107,18 @@ public class Server {
 
         try {
             int idx = Integer.parseInt(spec);
-            if (idx >= 0 && idx < p.hand.size())
-                return p.hand.get(idx);
+            if (idx >= 0 && idx < p.hand.hand.size())
+                return p.hand.hand.get(idx);
         } catch (NumberFormatException ignored) {
         }
 
-        for (Card c : p.hand) {
+        for (Card c : p.hand.hand) {
             if (c != null && c.name != null && c.name.equalsIgnoreCase(spec))
                 return c;
         }
-        
+
         String lower = spec.toLowerCase();
-        for (Card c : p.hand) {
+        for (Card c : p.hand.hand) {
             if (c != null && c.name != null && c.name.toLowerCase().startsWith(lower))
                 return c;
         }

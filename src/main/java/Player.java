@@ -18,7 +18,7 @@ public class Player {
 
     public Map<String, Integer> resources = new HashMap<>();
 
-    public List<Card> hand = new ArrayList<>();
+    public Hand hand = new Hand();
 
     public Principality principality;
 
@@ -67,21 +67,7 @@ public class Player {
 
 
     public String printHand() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Hand (").append(hand.size()).append("):\n");
-        for (int i = 0; i < hand.size(); i++) {
-            Card c = hand.get(i);
-            if (c == null)
-                continue;
-            String cost = (c.cost == null || c.cost.isBlank()) ? "-" : c.cost;
-            String pts = c.summarizePoints();
-            sb.append("  [").append(i).append("] ")
-                    .append(c.name == null ? "Unknown" : c.name)
-                    .append("   {cost: ").append(cost).append("} ")
-                    .append(pts.isEmpty() ? "" : pts)
-                    .append("\n").append(c.cardText == null ? "" : "\t" + c.cardText + "\n");
-        }
-        return sb.toString();
+        return hand.printHand();
     }
 
   
@@ -196,21 +182,15 @@ public class Player {
 
     // ------------- Hand -------------
     public int handSize() {
-        return hand.size();
+        return hand.handSize();
     }
 
     public void addToHand(Card c) {
-        hand.add(c);
+        hand.addToHand(c);
     }
 
     public Card removeFromHandByName(String nm) {
-        for (int i = 0; i < hand.size(); i++) {
-            Card c = hand.get(i);
-            if (c != null && c.name != null && c.name.equalsIgnoreCase(nm)) {
-                return hand.remove(i);
-            }
-        }
-        return null;
+        return hand.removeFromHandByName(nm);
     }
 
     // ------------- Cheap prompts used by Server -------------
