@@ -85,15 +85,16 @@ public class Player {
     }
 
   
-    // SCORING helper: summarize points on a card like "[VP1 CP2 SP1 FP0 PP0]"
-
-    // Advantage tokens depend on being >= 3 ahead of the opponent.
     public boolean hasTradeTokenAgainst(Player opp) {
-        return (this.points.commercePoints - (opp == null ? 0 : opp.points.commercePoints)) >= 3;
+        if (this.points.commercePoints < 3) return false;
+        if (opp == null) return true;
+        return (this.points.commercePoints > opp.points.commercePoints);
     }
 
     public boolean hasStrengthTokenAgainst(Player opp) {
-        return (this.points.strengthPoints - (opp == null ? 0 : opp.points.strengthPoints)) >= 3;
+        if (this.points.strengthPoints < 3) return false;
+        if (opp == null) return true;
+        return (this.points.strengthPoints > opp.points.strengthPoints);
     }
 
     // Final score used for win check: base VP + 1 per advantage token against
@@ -143,16 +144,7 @@ public class Player {
 
     // Count stored resources of a specific resource type across the board
     public int getResourceCount(String type) {
-        String regionName = resourceToRegion(type);
-        if (regionName == null)
-            return 0;
-        if ("Any".equals(regionName))
-            return totalAllResources();
-        int sum = 0;
-        for (Card r : principality.findRegions(regionName)) {
-            sum += Math.max(0, Math.min(3, r.regionProduction));
-        }
-        return sum;
+        return principality.getResourceCount(type);
     }
 
     // Gain 1 resource of a type: add to the matching region with the LOWEST stock
@@ -176,7 +168,6 @@ public class Player {
             return;
         }
 
-        // pick lowest stored (<3); tie -> first in board order
         Card best = null;
         int bestVal = Integer.MAX_VALUE;
         for (Card r : regs) {
@@ -188,9 +179,6 @@ public class Player {
         }
         if (best != null && best.regionProduction < 3) {
             best.regionProduction += 1;
-            // Optional: feedback
-            // sendMessage("Gained 1 " + t + " on " + regionName + " (" +
-            // (best.regionProduction) + "/3)");
         } else {
             sendMessage("No storage space on any " + regionName + " (already 3/3).");
         }
@@ -203,64 +191,7 @@ public class Player {
 
 
     public void setResourceCount(String type, int n) {
-        String regionName = resourceToRegion(type);
-        if (regionName == null || "Any".equals(regionName))
-            return;
-
-        java.util.List<Card> regs = principality.findRegions(regionName);
-        if (regs.isEmpty())
-            return;
-
-        // clamp desired total between 0 and regions*3
-        int maxTotal = regs.size() * 3;
-        int want = Math.max(0, Math.min(maxTotal, n));
-
-        // current total
-        int cur = 0;
-        for (Card r : regs) {
-            r.regionProduction = Math.max(0, Math.min(3, r.regionProduction)); // sanitize
-            cur += r.regionProduction;
-        }
-        if (cur == want)
-            return;
-
-        if (cur < want) {
-            // add (want - cur) by filling lowest first
-            int need = want - cur;
-            while (need > 0) {
-                Card best = null;
-                int bestVal = Integer.MAX_VALUE;
-                for (Card r : regs) {
-                    int v = r.regionProduction;
-                    if (v < 3 && v < bestVal) {
-                        bestVal = v;
-                        best = r;
-                    }
-                }
-                if (best == null || best.regionProduction >= 3)
-                    break;
-                best.regionProduction += 1;
-                need--;
-            }
-        } else {
-            // remove (cur - want) by draining highest first
-            int drop = cur - want;
-            while (drop > 0) {
-                Card best = null;
-                int bestVal = -1;
-                for (Card r : regs) {
-                    int v = r.regionProduction;
-                    if (v > bestVal) {
-                        bestVal = v;
-                        best = r;
-                    }
-                }
-                if (best == null || best.regionProduction <= 0)
-                    break;
-                best.regionProduction -= 1;
-                drop--;
-            }
-        }
+        principality.setResourceCount(type, n);
     }
 
     // ------------- Hand -------------

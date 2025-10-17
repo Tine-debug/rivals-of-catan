@@ -327,4 +327,74 @@ public Card getCard(int r, int c) {
         }
     }
 
+    public int getResourceCount(String type) {
+        String regionName = resourceToRegion(type);
+        if (regionName == null)
+            return 0;
+        if ("Any".equals(regionName))
+            return totalAllResources();
+        int sum = 0;
+        for (Card r : findRegions(regionName)) {
+            sum += Math.max(0, Math.min(3, r.regionProduction));
+        }
+        return sum;
+    }
+
+public void setResourceCount(String type, int n) {
+        String regionName = resourceToRegion(type);
+        if (regionName == null || "Any".equals(regionName))
+            return;
+
+        java.util.List<Card> regs = findRegions(regionName);
+        if (regs.isEmpty())
+            return;
+
+        int maxTotal = regs.size() * 3;
+        int want = Math.max(0, Math.min(maxTotal, n));
+
+        int cur = 0;
+        for (Card r : regs) {
+            r.regionProduction = Math.max(0, Math.min(3, r.regionProduction)); 
+            cur += r.regionProduction;
+        }
+        if (cur == want)
+            return;
+
+        if (cur < want) {
+            int need = want - cur;
+            while (need > 0) {
+                Card best = null;
+                int bestVal = Integer.MAX_VALUE;
+                for (Card r : regs) {
+                    int v = r.regionProduction;
+                    if (v < 3 && v < bestVal) {
+                        bestVal = v;
+                        best = r;
+                    }
+                }
+                if (best == null || best.regionProduction >= 3)
+                    break;
+                best.regionProduction += 1;
+                need--;
+            }
+        } else {
+            int drop = cur - want;
+            while (drop > 0) {
+                Card best = null;
+                int bestVal = -1;
+                for (Card r : regs) {
+                    int v = r.regionProduction;
+                    if (v > bestVal) {
+                        bestVal = v;
+                        best = r;
+                    }
+                }
+                if (best == null || best.regionProduction <= 0)
+                    break;
+                best.regionProduction -= 1;
+                drop--;
+            }
+        }
+    }
+
 }
