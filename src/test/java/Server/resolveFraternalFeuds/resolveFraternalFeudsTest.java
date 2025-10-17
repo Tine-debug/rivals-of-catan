@@ -53,9 +53,8 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         player2 = new MockPlayer();
         player2.points = new Points("4","4","4","4","4","4","4");
         server.players.add(player1);
-        server.replenish(player1);
         server.players.add(player2);
-        server.replenish(player2);
+
         server.pricipalityinitoneplayer(player1, regionDice, center, 0);
         server.pricipalityinitoneplayer(player2, regionDice, center, 1);
         player2.messages.add(new String[]{"1 2"});
@@ -64,7 +63,39 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
     @Test
     public void fraternalFreudsTest(){
         setupPlayers();
+        server.replenish(player1);
+        server.replenish(player2);
         String result = "\n";
+        result += player1.hand.printHand() + "\n";
+        result += player2.hand.printHand() + "\n";
+        server.resolveFraternalFeuds(player1, player2);
+        result += player1.hand.printHand() + "\n";
+        result += player2.hand.printHand() + "\n";
+
+        Approvals.verify(result);
+
+    }
+    @Test
+    public void fraternalFreudsemptyhandTest(){
+        setupPlayers();
+        String result = "\n";
+        result += player1.hand.printHand() + "\n";
+        result += player2.hand.printHand() + "\n";
+        server.resolveFraternalFeuds(player1, player2);
+        result += player1.hand.printHand() + "\n";
+        result += player2.hand.printHand() + "\n";
+
+        Approvals.verify(result);
+
+    }
+
+    @Test
+    public void fraternalFreudsemptyNoAdvantageTest(){
+        setupPlayers();
+        String result = "\n";
+        server.replenish(player1);
+        server.replenish(player2);
+        player2.points = new Points();
         result += player1.hand.printHand() + "\n";
         result += player2.hand.printHand() + "\n";
         server.resolveFraternalFeuds(player1, player2);
