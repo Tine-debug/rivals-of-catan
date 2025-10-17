@@ -233,7 +233,7 @@ public class Server {
             players.get(i).sendMessage(players.get(i).printHand());
         }
         while (true) {
-            if (current>3) break;
+            if (current==3) break;
             current = resolveOneTurn(current);
         }
     }
@@ -243,19 +243,18 @@ public class Server {
                     Player active = players.get(current);
             Player other = players.get((current + 1) % players.size());
 
-            // -------- Part 1: Roll Dice --------
+
             int eventFace = rollEventDie(active);
             int prodFace = rollProductionDie(active);
 
-            if (eventFace == EV_BRIGAND) { // Brigand first, then production
+            if (eventFace == EV_BRIGAND) {
                 resolveEvent(eventFace, active, other);
-                applyProduction(prodFace); // regions + boosters (cap 3)
-            } else { // production first, then event
-                applyProduction(prodFace); // regions + boosters (cap 3)
+                applyProduction(prodFace); 
+            } else { 
+                applyProduction(prodFace); 
                 resolveEvent(eventFace, active, other);
             }
 
-            // print the players principality and hand
             for (int i = 0; i < players.size(); i++) {
                 players.get(i).sendMessage("Opponent's board:");
                 players.get(i).sendMessage(
@@ -266,18 +265,13 @@ public class Server {
                 players.get(i).sendMessage(players.get(i).printHand());
             }
 
-            // -------- Part 2: Action Phase (very small) --------
             actionPhase(active, other);
-
-            // -------- Part 3: Replenish Hand --------
+ 
             replenish(active);
 
-            // -------- Part 4: Exchange (simplified) --------
             exchangePhase(active);
-
-            // -------- Part 5: Scoring & Win Check --------
             if (checkWinEndOfTurn(active, other))
-                return 19;
+                return 3;
 
             current = (current + 1) % players.size();
 

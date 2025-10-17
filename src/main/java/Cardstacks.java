@@ -35,10 +35,8 @@ public static Cardstacks getInstance(){
     }
 
 
-    public static void loadBasicCards(String jsonPath) throws IOException {
-        //Load Cards and split them into stacks
-
-        Vector<Card> allBasic = loadThemeCards(jsonPath, "basic", true);
+    public static void loadBasicCardsoptionalshuffle(boolean shuffle, String jsonPath) throws IOException{
+         Vector<Card> allBasic = loadThemeCards(jsonPath, "basic", true);
 
         // Split into piles we care about
         // Center cards
@@ -59,8 +57,8 @@ public static Cardstacks getInstance(){
         }
 
         // Remaining “draw stack” cards (action/expansion/units)
-        Collections.shuffle(allBasic);
-        int stackSize = 9; // Intro game
+        if (shuffle) Collections.shuffle(allBasic);
+        int stackSize = 9; 
         drawStack1 = new Vector<>(allBasic.subList(0, Math.min(stackSize, allBasic.size())));
         drawStack2 = new Vector<>(allBasic.subList(Math.min(stackSize, allBasic.size()),
                 Math.min(2 * stackSize, allBasic.size())));
@@ -68,6 +66,11 @@ public static Cardstacks getInstance(){
                 Math.min(3 * stackSize, allBasic.size())));
         drawStack4 = new Vector<>(allBasic.subList(Math.min(3 * stackSize, allBasic.size()),
                 Math.min(4 * stackSize, allBasic.size())));
+    }
+
+
+    public static void loadBasicCards(String jsonPath) throws IOException {
+        loadBasicCardsoptionalshuffle(false, jsonPath);
     }
 
     public static Vector<Card> loadThemeCards(String jsonPath, String desiredTheme, boolean loadmuliple) throws IOException {
