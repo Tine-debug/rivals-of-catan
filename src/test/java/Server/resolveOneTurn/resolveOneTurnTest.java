@@ -45,7 +45,7 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
     MockPlayer player1;
     MockPlayer player2;
 
-    public void setupPlayers(){
+    public void setupPlayers(String[] MessageP1, String[] MessageP2 ){
         try {
                 stacks.loadBasicCardsoptionalshuffle(false, "cards.json");
         } catch (Exception e) {
@@ -55,8 +55,8 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         player2.points = new Points("4","4","4","4","4","4","4");
         server.players.add(player1);
         server.players.add(player2);
-        player1.messages.add(new String []{"PLAY 0", "END", "END","END","END","END","END"});
-        player2.messages.add(new String []{"PLAY 0", "END", "END","END","END","END","END"});
+        player1.messages.add(MessageP1);
+        player2.messages.add(MessageP2);
         server.pricipalityinitoneplayer(player1, regionDice, center, 0);
         server.pricipalityinitoneplayer(player2, regionDice, center, 1);
     }
@@ -76,7 +76,7 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
     @Test
     public void resolveOneTurn(){
         String result = "";
-            setupPlayers();
+            setupPlayers(new String []{"PLAY 0", "END"},new String []{"PLAY 0", "END"});
             server.resolveOneTurn(0);
             result += player1.printPrincipality() + "/n" + player2.printPrincipality();
         Approvals.verify(result);
