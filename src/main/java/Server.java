@@ -233,7 +233,14 @@ public class Server {
             players.get(i).sendMessage(players.get(i).printHand());
         }
         while (true) {
-            Player active = players.get(current);
+            if (current>3) break;
+            current = resolveOneTurn(current);
+        }
+    }
+
+
+    public int resolveOneTurn(int current){
+                    Player active = players.get(current);
             Player other = players.get((current + 1) % players.size());
 
             // -------- Part 1: Roll Dice --------
@@ -270,10 +277,12 @@ public class Server {
 
             // -------- Part 5: Scoring & Win Check --------
             if (checkWinEndOfTurn(active, other))
-                break;
+                return 19;
 
             current = (current + 1) % players.size();
-        }
+
+            return current;
+
     }
 
     private boolean checkWinEndOfTurn(Player active, Player other) {
@@ -910,10 +919,8 @@ public class Server {
                     "  TRADE2 <get> <Res>      — if you have a 2:1 ship for <Res> ([Brick|Grain|Lumber|Wool|Ore|Gold])");
             active.sendMessage(
                     "  LTS <L|R> <2from> <1to> — Large Trade Ship adjacent trade (left/right side) ([Brick|Grain|Lumber|Wool|Ore|Gold])");
-            // Allow PLAY to play cards from hand or center cards
             String play = "  PLAY <cardName> | <id>  — play a card from hand / play center card: ";
 
-            // Add Center card options that are actually available
             ArrayList<String> buildBits = new ArrayList<>();
             if (!Cardstacks.roads.isEmpty()) {
                 String cost = Cardstacks.roads.get(0).cost == null ? "-" : Cardstacks.roads.get(0).cost;
@@ -950,7 +957,6 @@ public class Server {
                 } else
                     active.sendMessage("Usage: TRADE3 <get> <give> ([Brick|Grain|Lumber|Wool|Ore|Gold])");
             } else if (up.startsWith("TRADE2")) {
-                // Requires a flag 2FOR1_<RES>
                 String[] parts = cmd.trim().split("\\s+");
                 if (parts.length >= 3) {
                     String get = parts[1];
@@ -967,7 +973,6 @@ public class Server {
                 } else
                     active.sendMessage("Usage: TRADE2 <get> <give> ([Brick|Grain|Lumber|Wool|Ore|Gold])");
             } else if (up.startsWith("LTS")) {
-                // LTS <L|R> <two-from> <one-to>
                 String[] parts = cmd.trim().split("\\s+");
                 if (parts.length >= 4) {
                     String side = parts[1].toUpperCase(); // L or R
@@ -981,7 +986,6 @@ public class Server {
                 } else
                     active.sendMessage("Usage: LTS <L|R> <2from> <1to> ([Brick|Grain|Lumber|Wool|Ore|Gold])");
             } else if (up.startsWith("PLAY")) {
-                // PLAY <cardName>|<id>
                 String[] parts = cmd.trim().split("\\s+", 2);
                 if (parts.length < 2) {
                     active.sendMessage("Usage: PLAY <cardName> | <id>");
@@ -1040,15 +1044,11 @@ public class Server {
                     continue;
                 }
 
-                // ---------- 2) Cards from the player's HAND ----------
-                // Resolve by index or name
                 Card c = findCardInHand(active, spec);
                 if (c == null) {
                     active.sendMessage("No such card in hand: " + spec);
                     continue;
                 }
-
-                // Check & pay cost (only now)
                 if (!payCost(active, c.cost)) {
                     active.sendMessage("Can't afford cost: " + (c.cost == null ? "-" : c.cost));
                     continue;
@@ -1058,14 +1058,14 @@ public class Server {
                 boolean ok;
 
                 if (isAction) {
-                    // Action cards: no placement
+
                     ok = c.applyEffect(active, other, -1, -1);
                     if (!ok) {
                         active.sendMessage("Action could not be resolved; refunding cost.");
                         refundCost(active, c.cost);
                         continue;
                     }
-                    // Success → remove the specific instance from hand
+
                     active.hand.remove(c);
                     broadcast("Current player played action " + c.name);
                 } else {
@@ -1089,7 +1089,6 @@ public class Server {
                         continue;
                     }
 
-                    // Success → remove the specific instance from hand
                     active.hand.remove(c);
                     broadcast("Current player played " + c.name + " at (" + row + "," + col + ")");
                 }
@@ -1106,7 +1105,6 @@ public class Server {
             return null;
         spec = spec.trim();
 
-        // Numeric index?
         try {
             int idx = Integer.parseInt(spec);
             if (idx >= 0 && idx < p.hand.size())
@@ -1114,12 +1112,11 @@ public class Server {
         } catch (NumberFormatException ignored) {
         }
 
-        // Exact name match
         for (Card c : p.hand) {
             if (c != null && c.name != null && c.name.equalsIgnoreCase(spec))
                 return c;
         }
-        // Prefix fallback
+        
         String lower = spec.toLowerCase();
         for (Card c : p.hand) {
             if (c != null && c.name != null && c.name.toLowerCase().startsWith(lower))
