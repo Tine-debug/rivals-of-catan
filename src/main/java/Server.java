@@ -46,12 +46,12 @@ public class Server {
         try {
             if ((args.length == 0 || (args.length > 0 && args[0].equalsIgnoreCase("bot")))) {
                 Card.loadBasicCards("cards.json");
-                s.start(args.length == 0 ? false : true); // with bot
+                s.start(args.length == 0 ? false : true);
                 s.run();
                 return;
             } else if (args.length > 0 && args[0].equalsIgnoreCase("online")) {
                 s.runClient();
-                return; // run client mode
+                return; 
             } else {
                 System.out.println("Usage: java Server [optional: bot|online]");
                 return;
@@ -77,16 +77,14 @@ public class Server {
             Socket sock = serverSocket.accept();
             ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
-            // Use your existing OnlinePlayer class for remote players:
             OnlinePlayer op = new OnlinePlayer();
-            // Then wire up its socket streams directly:
             op.setConnection(sock, in, out);
             players.add(op);
             System.out.println("Connected Online Player ");
             op.sendMessage("WELCOME Online Player ");
         }
         initPrincipality();
-        // Initial replenish (3 cards each)
+
         for (int i = 0; i < players.size(); i++) {
             replenish(players.get(i));
         }
@@ -139,24 +137,17 @@ public class Server {
         }
     }
 
-    // ---------- Initial setup (your original layout preserved) ----------
     private void initPrincipality() {
-        // Center row index = 2 in a 5x5
-        int center = 2;
 
-        // Two players’ starting diceRoll sets (Forest, Gold Field, Field, Hill,
-        // Pasture, Mountain)
+        int center = 2;
         int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
 
         for (int i = 0; i < players.size(); i++) {
             Player p = players.get(i);
-            // center basics
             pricipalityinitoneplayer(p, regionDice, center, i);
 
         }
 
-        // Put remaining “fixed dice” regions back in region stack (as in your previous
-        // code)
         addBackExtraFixedRegions();
         Collections.shuffle(Cardstacks.regions);
     }
