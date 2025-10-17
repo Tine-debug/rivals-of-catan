@@ -107,22 +107,6 @@ public class Player {
         return score;
     }
 
-    private String firstWord(String s) {
-        if (s == null)
-            return "";
-        String[] toks = s.trim().split("\\s+");
-        return toks.length == 0 ? "" : toks[0];
-    }
-
-    private int parseIntSafe(String s) {
-        if (s == null || s.isBlank())
-            return 0;
-        try {
-            return Integer.parseInt(s.trim());
-        } catch (Exception e) {
-            return 0;
-        }
-    }
 
     // ------------- Resources (per-region, not pooled) -------------
 
@@ -212,44 +196,12 @@ public class Player {
         }
     }
 
-    // Remove N resources of a type: repeatedly remove from the region with the
-    // HIGHEST stock (>0)
-    // Returns true if all could be removed, false otherwise (removes as many as
-    // possible).
+ 
     public boolean removeResource(String type, int n) {
-        if (n <= 0)
-            return true;
-        String regionName = resourceToRegion(type);
-        if (regionName == null || "Any".equals(regionName))
-            return false;
-
-        java.util.List<Card> regs = principality.findRegions(regionName);
-        if (regs.isEmpty())
-            return false;
-
-        int removed = 0;
-        while (removed < n) {
-            // find highest stocked region (>0)
-            Card best = null;
-            int bestVal = -1;
-            for (Card r : regs) {
-                int v = Math.max(0, Math.min(3, r.regionProduction));
-                if (v > bestVal) {
-                    bestVal = v;
-                    best = r;
-                }
-            }
-            if (best == null || bestVal <= 0)
-                break; // no more to remove
-            best.regionProduction -= 1;
-            removed++;
-        }
-        return removed == n;
+        return principality.removeResource(type, n);
     }
 
-    // Set total stored resources for a type by redistributing across its regions.
-    // If n <= 0, zero all matching regions.
-    // If increasing, fill lowest first; if decreasing, remove from highest first.
+
     public void setResourceCount(String type, int n) {
         String regionName = resourceToRegion(type);
         if (regionName == null || "Any".equals(regionName))
