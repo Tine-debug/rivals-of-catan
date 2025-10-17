@@ -51,7 +51,7 @@ public static Cardstacks getInstance(){
         events = extractCardsByAttribute(allBasic, "placement", "Event");
         // Place Yule 4th from bottom per cheat sheet
         Card yule = popCardByName(events, "Yule");
-        Collections.shuffle(events);
+        if (shuffle) Collections.shuffle(events);
         if (yule != null && events.size() >= 3) {
             events.add(Math.max(0, events.size() - 3), yule);
         }
