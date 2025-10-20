@@ -1,3 +1,7 @@
+package Turns.Cardevents;
+
+import Player.Player;
+
 
 public class defaultEvent implements CardEvent {
 

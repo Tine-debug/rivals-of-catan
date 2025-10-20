@@ -6,6 +6,14 @@ import java.util.List;
 import java.util.Vector;
 import java.util.stream.Stream;
 
+import Card.*;
+import Card.logic.*;
+import Player.*;
+import Turns.*;
+import Turns.Cardevents.*;
+import Turns.Phases.*;
+import Points.*;
+
 import org.approvaltests.Approvals;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -42,7 +50,7 @@ public class resolveOneTurnTest {
     int center = 2;
     int[][] regionDice = {{2, 1, 6, 3, 4, 5}, {3, 4, 5, 2, 1, 6}};
 
-    Server server = new MockServer();
+    Server server = new Server();
     MockPlayer player1;
     MockPlayer player2;
 

@@ -1,3 +1,10 @@
+package Turns.Phases;
+
+import Card.Cardstacks;
+import Player.Player;
+import Player.Broadcast;
+import Card.Card;
+
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -5,8 +12,8 @@ import java.util.Map;
 
 public class actionphase {
 
-    private static Cardstacks stacks = Cardstacks.getInstance();
-    private static Broadcast broadcast = Broadcast.getInstance();
+    private final static Cardstacks stacks = Cardstacks.getInstance();
+    private final static Broadcast broadcast = Broadcast.getInstance();
 
     private static final Map<String, String> REGION_TO_RESOURCE = Map.of(
             "Forest", "Lumber",
@@ -140,12 +147,12 @@ public class actionphase {
                 } else {
                     // Non-action: needs placement
                     active.sendMessage("PROMPT: Enter placement coordinates as: ROW COL");
-                    int row = -1, col = -1;
+                    int row, col;
                     try {
                         String[] rc = active.receiveMessage().trim().split("\\s+");
                         row = Integer.parseInt(rc[0]);
                         col = Integer.parseInt(rc[1]);
-                    } catch (Exception e) {
+                    } catch (NumberFormatException e) {
                         active.sendMessage("Invalid coordinates. Use: ROW COL (e.g., 2 3)");
                         active.refundCost(c.cost);
                         continue;
@@ -178,7 +185,7 @@ public class actionphase {
                 try {
                     ltsRow = Integer.parseInt(rc[0]);
                     ltsCol = Integer.parseInt(rc[1]);
-                } catch (Exception ignored) {
+                } catch (NumberFormatException ignored) {
                 }
                 break;
             }
@@ -217,14 +224,6 @@ public class actionphase {
             p.gainResource(oneTo);
         }
         return true;
-    }
-
-    private int readInt(String s, int def) {
-        try {
-            return Integer.parseInt(s.trim());
-        } catch (Exception e) {
-            return def;
-        }
     }
 
 }

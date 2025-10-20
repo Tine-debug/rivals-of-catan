@@ -16,6 +16,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import Card.*;
+import Card.logic.*;
+import Player.*;
+import Turns.*;
+import Turns.Cardevents.*;
+import Turns.Phases.*;
+import Points.*;
+
 public class CardApplyEffectApprovalTest {
 
     private static Cardstacks stacks = Cardstacks.getInstance();

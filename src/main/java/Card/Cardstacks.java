@@ -1,3 +1,6 @@
+package Card;
+
+import Player.Player;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -103,7 +106,7 @@ public class Cardstacks {
                     out.add(0, cards.remove(i));
                 }
             }
-        } catch (Exception ignored) {
+        } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException ignored) {
         }
         return out;
     }

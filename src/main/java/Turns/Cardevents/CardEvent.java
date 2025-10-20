@@ -1,3 +1,6 @@
+package Turns.Cardevents;
+
+import Player.Player;
 
 public interface CardEvent {
 

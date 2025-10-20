@@ -1,3 +1,9 @@
+package Turns.Cardevents;
+
+import Player.Player;
+import Player.Broadcast;
+import Card.Card;
+
 
 public class tradeShipRaceEvent implements CardEvent {
 

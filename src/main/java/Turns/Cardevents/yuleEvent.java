@@ -1,3 +1,10 @@
+package Turns.Cardevents;
+
+import Player.Player;
+import Card.Cardstacks;
+import Card.Card;
+import Player.Broadcast;
+
 
 public class yuleEvent implements CardEvent {
 

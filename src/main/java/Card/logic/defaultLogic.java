@@ -1,3 +1,7 @@
+package Card.logic;
+
+import Player.Player;
+import Card.Card;
 
 public class defaultLogic implements Logic {
 

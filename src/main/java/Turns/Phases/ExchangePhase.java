@@ -1,3 +1,9 @@
+package Turns.Phases;
+
+import Card.Cardstacks;
+import Player.Player;
+import Player.Broadcast;
+import Card.Card;
 
 public class ExchangePhase {
 
@@ -55,7 +61,7 @@ public class ExchangePhase {
     private static int readInt(String s, int def) {
         try {
             return Integer.parseInt(s.trim());
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return def;
         }
     }

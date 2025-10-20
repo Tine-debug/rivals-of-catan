@@ -1,9 +1,13 @@
+package Player;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+
+import Points.Points;
+import Card.Card;
 
 public class Player {
 
@@ -265,6 +269,11 @@ public class Player {
             default:
                 return null; // unknown / ignore
         }
+    }
+
+
+    public boolean hasStrengthAdvantage(Player other) {
+        return this.points.strengthPoints >= 3 && this.points.strengthPoints > other.points.strengthPoints;
     }
 
 }

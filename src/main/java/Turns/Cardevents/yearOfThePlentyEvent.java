@@ -1,3 +1,7 @@
+package Turns.Cardevents;
+
+import Player.Player;
+import Card.Card;
 
 public class yearOfThePlentyEvent implements CardEvent {
 

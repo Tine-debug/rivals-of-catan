@@ -1,7 +1,12 @@
+package Card.logic;
+
+import Player.Player;
+import Card.Card;
 
 public class RelocationLogic implements Logic {
 
     @Override
+    @SuppressWarnings("UseSpecificCatch")
     public boolean applyEffect(Player active, Player other, int row, int col, Card card) {
         active.sendMessage(
                 "PROMPT: Relocation - Type 'REGION' to swap two regions or 'EXP' to swap two expansions:");
@@ -14,7 +19,7 @@ public class RelocationLogic implements Logic {
         }
 
         active.sendMessage("PROMPT: Enter first coordinate (row col):");
-        int r1 = 0, c1 = 0;
+        int r1, c1 ;
         try {
             String[] t = active.receiveMessage().trim().split("\\s+");
             r1 = Integer.parseInt(t[0]);
@@ -24,7 +29,7 @@ public class RelocationLogic implements Logic {
             return false;
         }
         active.sendMessage("PROMPT: Enter second coordinate (row col):");
-        int r2 = 0, c2 = 0;
+        int r2, c2;
         try {
             String[] t = active.receiveMessage().trim().split("\\s+");
             r2 = Integer.parseInt(t[0]);

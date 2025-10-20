@@ -1,59 +1,43 @@
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import java.util.Scanner;
+
+import Card.Cardstacks;
+import Player.Player;
+import Player.OnlinePlayer;
+import Player.Broadcast;
+import Card.Card;
+import Turns.Turns;
 
 
 public class Server {
 
     public final List<Player> players = new ArrayList<>();
     public ServerSocket serverSocket;
-    private final Random rng = new Random();
+    static final private Cardstacks stacks = Cardstacks.getInstance();
 
-    static private Cardstacks stacks = Cardstacks.getInstance();
 
-    // Production helpers
-    private static final Map<String, String> REGION_TO_RESOURCE = Map.of(
-            "Forest", "Lumber",
-            "Field", "Grain",
-            "Pasture", "Wool",
-            "Hill", "Brick",
-            "Mountain", "Ore",
-            "Gold Field", "Gold");
 
-    // Event die faces
-    private static final int EV_BRIGAND = 1;
-    private static final int EV_TRADE = 2;
-    private static final int EV_CELEB = 3;
-    private static final int EV_PLENTY = 4;
-    private static final int EV_EVENT_A = 5;
-    private static final int EV_EVENT_B = 6;
-
-    // ---------- Bootstrap ----------
     public static void main(String[] args) {
         Server s = new Server();
         try {
             if ((args.length == 0 || (args.length > 0 && args[0].equalsIgnoreCase("bot")))) {
                 Card.loadBasicCards("cards.json");
-                s.start(args.length == 0 ? false : true);
+                s.start((args.length != 0));
                 s.run();
-                return;
             } else if (args.length > 0 && args[0].equalsIgnoreCase("online")) {
                 s.runClient();
-                return;
             } else {
                 System.out.println("Usage: java Server [optional: bot|online]");
-                return;
             }
         } catch (Exception e) {
             System.err.println("Failed to start: " + e.getMessage());
-            return;
         }
     }
 
@@ -129,7 +113,7 @@ public class Server {
                 inFromServer.close();
                 outToServer.close();
                 socket.close();
-            } catch (Exception ignored) {
+            } catch (IOException ignored) {
             }
         }
     }
@@ -199,12 +183,6 @@ public class Server {
     }
     
 
-    
-
-    public static boolean hasStrengthAdvantage(Player a, Player b) {
-        return a.points.strengthPoints >= 3 && a.points.strengthPoints > b.points.strengthPoints;
-    }
-
 
     public void replenish(Player p) {
         if (p.flags != null && p.flags.remove("NO_REPLENISH_ONCE")) {
@@ -223,7 +201,7 @@ public class Server {
     private int readInt(String s, int def) {
         try {
             return Integer.parseInt(s.trim());
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return def;
         }
     }

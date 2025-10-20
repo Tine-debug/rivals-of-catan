@@ -1,4 +1,11 @@
+package Turns;
 
+import Player.Player;
+import Player.Broadcast;
+import Card.Cardstacks;
+import Card.Card;
+
+import Turns.Phases.*;
 
 import java.util.List;
 import java.util.Random;
@@ -25,7 +32,7 @@ public class Turns {
             eventFace = rollEventDie(active);
             prodFace = rollProductionDie(active);
         } else {
-            eventFace = getNonRandomEventDie(active);
+            eventFace = getNonRandomEventDie();
             prodFace = getNonRandomProductionDie(active);
         }
 
@@ -78,7 +85,7 @@ public class Turns {
                 if (forced >= 1 && forced <= 6) {
                     face = forced;
                 }
-            } catch (Exception ignored) {
+            } catch (NumberFormatException ignored) {
             }
             active.flags.remove("BRIGITTA");
         }
@@ -172,7 +179,7 @@ public class Turns {
     private int readInt(String s, int def) {
         try {
             return Integer.parseInt(s.trim());
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return def;
         }
     }
@@ -209,7 +216,7 @@ public class Turns {
     int nonrandeventdie = 0;
     int nonrandproductiondie = 0;
 
-    private int getNonRandomEventDie(Player active) {
+    private int getNonRandomEventDie() {
         nonrandeventdie = (nonrandeventdie + 1) % 6;
         return nonrandeventdie + 1;
     }
@@ -224,7 +231,7 @@ public class Turns {
                 if (forced >= 1 && forced <= 6) {
                     face = forced;
                 }
-            } catch (Exception ignored) {
+            } catch (NumberFormatException ignored) {
             }
             active.flags.remove("BRIGITTA");
         }

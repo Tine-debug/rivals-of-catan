@@ -1,6 +1,8 @@
+package Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import Card.Card;
 
 public class Hand {
 

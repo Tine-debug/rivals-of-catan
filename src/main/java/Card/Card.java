@@ -1,7 +1,9 @@
-// Card.java
-// Quick & dirty, Basic-set only, refactored to reduce duplication
+package Card;
 
 import java.io.IOException;
+import Card.logic.*;
+import Points.Points;
+import Player.Player;
 
 public class Card implements Comparable<Card> {
 

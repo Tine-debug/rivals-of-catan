@@ -1,5 +1,10 @@
 import java.util.Vector;
 
+import Card.*;
+import Player.*;
+import Turns.*;
+import Points.*;
+
 import org.approvaltests.Approvals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

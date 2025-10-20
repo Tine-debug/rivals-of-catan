@@ -1,3 +1,10 @@
+package Turns.Cardevents;
+
+import Player.Player;
+import Player.Broadcast;
+import Card.Cardstacks;
+import Card.Card;
+
 
 public class fraternalfeudsEvent implements CardEvent {
 
@@ -6,8 +13,8 @@ public class fraternalfeudsEvent implements CardEvent {
 
     @Override
     public void resolve(Player other, Player active) {
-        Player adv = Server.hasStrengthAdvantage(active, other) ? active
-                : Server.hasStrengthAdvantage(other, active) ? other
+        Player adv = active.hasStrengthAdvantage(other) ? active
+                : other.hasStrengthAdvantage(active) ? other
                 : null;
 
         if (adv == null) {
@@ -34,7 +41,7 @@ public class fraternalfeudsEvent implements CardEvent {
                     break;
                 }
             }
-        } catch (Exception ignored) {
+        } catch (NumberFormatException ignored) {
         }
 
         // If insufficient/invalid, take first one or two

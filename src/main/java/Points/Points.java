@@ -1,3 +1,5 @@
+package Points;
+
 
 public class Points {
 
@@ -44,7 +46,7 @@ public class Points {
                 return def;
             }
             return Integer.parseInt(s.trim());
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return def;
         }
     }

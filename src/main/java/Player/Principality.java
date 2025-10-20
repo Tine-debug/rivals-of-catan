@@ -1,4 +1,6 @@
+package Player;
 
+import Card.Card;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,19 +141,29 @@ public Card getCard(int r, int c) {
         if (c == null)
             return "";
         String title = c.name;
-        if (title.equals("Forest"))
-            title += " (L):Lumber";
-        else if (title.equals("Hill"))
-            title += " (B):Brick";
-        else if (title.equals("Field"))
-            title += " (G):Grain";
-        else if (title.equals("Pasture"))
-            title += " (W):Wool";
-        else if (title.equals("Mountain"))
-            title += " (O):Ore";
-        else if (title.equals("Gold Field"))
-            title += " (A):Gold";
-        return title == null ? "Unknown" : title;
+        switch (title) {
+            case "Forest":
+                title += " (L):Lumber";
+                break;
+            case "Hill":
+                title += " (B):Brick";
+                break;
+            case "Field":
+                title += " (G):Grain";
+                break;
+            case "Pasture":
+                title += " (W):Wool";
+                break;
+            case "Mountain":
+                title += " (O):Ore";
+                break;
+            case "Gold Field":
+                title += " (A):Gold";
+                break;
+            default:
+                break;
+        }
+        return title;
     }
 
     private String cellInfo(Card c) {

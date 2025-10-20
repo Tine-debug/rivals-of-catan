@@ -1,3 +1,8 @@
+package Card.logic;
+
+import Player.Player;
+import Card.Card;
+import Points.Points;
 
 public class SettlementExpansionLogic implements Logic {
 
@@ -96,16 +101,24 @@ public class SettlementExpansionLogic implements Logic {
     public void place_building(int row, int col, Card card, Player player) {
         player.placeCard(row, col, card);
         System.out.println("Contained Building");
-        if (card.name.equals("Abbey")) {
-            player.points.progressPoints += 1;
-        } else if (card.name.equals("Marketplace")) {
-            player.flags.add("MARKETPLACE");
-        } else if (card.name.equals("Parish Hall")) {
-            player.flags.add("PARISH");
-        } else if (card.name.equals("Storehouse")) {
-            player.flags.add("STOREHOUSE@" + row + "," + col);
-        } else if (card.name.equals("Toll Bridge")) {
-            player.flags.add("TOLLB");
+        switch (card.name) {
+            case "Abbey":
+                player.points.progressPoints += 1;
+                break;
+            case "Marketplace":
+                player.flags.add("MARKETPLACE");
+                break;
+            case "Parish Hall":
+                player.flags.add("PARISH");
+                break;
+            case "Storehouse":
+                player.flags.add("STOREHOUSE@" + row + "," + col);
+                break;
+            case "Toll Bridge":
+                player.flags.add("TOLLB");
+                break;
+            default:
+                break;
         }
 
     }

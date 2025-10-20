@@ -1,3 +1,7 @@
+package Turns.Cardevents;
+
+import Player.Player;
+
 
 public class travelingMerchantEvent implements CardEvent {
 
@@ -16,7 +20,7 @@ public class travelingMerchantEvent implements CardEvent {
             int k = 0;
             try {
                 k = Integer.parseInt(p.receiveMessage().trim());
-            } catch (Exception ignored) {
+            } catch (NumberFormatException ignored) {
             }
             if (k < 0) {
                 k = 0;

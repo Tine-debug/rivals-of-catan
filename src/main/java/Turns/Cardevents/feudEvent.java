@@ -1,3 +1,9 @@
+package Turns.Cardevents;
+
+import Player.Player;
+import Player.Broadcast;
+import Card.Cardstacks;
+import Card.Card;
 
 public class feudEvent implements CardEvent {
 
@@ -6,8 +12,8 @@ public class feudEvent implements CardEvent {
 
     @Override
     public void resolve(Player active, Player other) {
-        Player adv = Server.hasStrengthAdvantage(active, other) ? active
-                : Server.hasStrengthAdvantage(other, active) ? other
+        Player adv = active.hasStrengthAdvantage(other) ? active
+                : other.hasStrengthAdvantage(active) ? other
                 : null;
 
         if (adv == null) {
@@ -54,7 +60,7 @@ public class feudEvent implements CardEvent {
                     }
                 }
             }
-        } catch (Exception ignored) {
+        } catch (NumberFormatException ignored) {
         }
 
         int k = 0;
@@ -89,7 +95,7 @@ public class feudEvent implements CardEvent {
         int choice = 0;
         try {
             choice = Integer.parseInt(opp.receiveMessage().trim());
-        } catch (Exception ignored) {
+        } catch (NumberFormatException ignored) {
         }
         if (choice < 0 || choice >= picked.size()) {
             choice = 0;

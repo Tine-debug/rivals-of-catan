@@ -1,7 +1,12 @@
+package Card.logic;
+
+import Player.Player;
+import Card.Card;
+import Card.Cardstacks;
 
 public class SettlementLogic implements Logic {
 
-    private Cardstacks stacks = Cardstacks.getInstance();
+    private final Cardstacks stacks = Cardstacks.getInstance();
 
     @Override
     public boolean applyEffect(Player active, Player other, int row, int col, Card card) {
