@@ -46,7 +46,7 @@ public class SettlementExpansionLogic implements Logic {
             }
 
             // Heroes: just add SP/FP/CP/etc.
-            active.points = Points.addPoints(active.points, card.points);
+            active.points = Points.addPoints(active.points, card.getPoints());
             active.placeCard(row, col, card);
             return true;
         }

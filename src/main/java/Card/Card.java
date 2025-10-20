@@ -12,7 +12,7 @@ public class Card implements Comparable<Card> {
     private boolean oneOf;
     private  String cardText;
 
-    public Points points;
+    private Points points;
 
     private String placement;
 
@@ -82,6 +82,15 @@ public class Card implements Comparable<Card> {
 
     public String getPlacement(){
         return placement;
+    }
+
+    public Points getPoints(){
+        return points;
+    }
+
+    public void updatePoints(Points newPoints){
+        points = newPoints;
+        
     }
 
     @Override
