@@ -43,7 +43,6 @@ public class Card implements Comparable<Card> {
         this.points = new Points(victoryPoints, CP, SP, FP, PP, LP, KP);
         this.cardText = cardText;
 
-
         this.logic = LogicFactory.createLogic(placement, name, type);
     }
 
@@ -56,11 +55,10 @@ public class Card implements Comparable<Card> {
     public int compareTo(Card o) {
         return this.name.compareToIgnoreCase(o.name);
     }
-    
-    public static void loadBasicCards(String jsonPath) throws IOException {
-        Cardstacks.loadBasicCards(jsonPath);      
-    }
 
+    public static void loadBasicCards(String jsonPath) throws IOException {
+        Cardstacks.loadBasicCards(jsonPath);
+    }
 
     public boolean applyEffect(Player active, Player other, int row, int col) {
         String nm = (this.name == null ? "" : this.name);
@@ -68,28 +66,8 @@ public class Card implements Comparable<Card> {
         return logic.applyEffect(active, other, row, col, this);
     }
 
-
-    public String summarizePoints() {
-        StringBuilder t = new StringBuilder();
-            if (points.victoryPoints > 0 || points.commercePoints > 0 || points.progressPoints > 0 || points.strengthPoints > 0 ||
-            points.skillPoints >0){
-            t.append("[");
-            if (points.victoryPoints > 0)
-                t.append("VP").append(points.victoryPoints).append(" ");
-            if (points.commercePoints > 0)
-                t.append("CP").append(points.commercePoints).append(" ");
-            if (points.strengthPoints > 0)
-                t.append("SP").append(points.strengthPoints).append(" ");
-            if (points.skillPoints > 0)
-                t.append("FP").append(points.skillPoints).append(" ");
-            if (points.progressPoints> 0)
-                t.append("PP").append(points.progressPoints).append(" ");
-            if (t.charAt(t.length() - 1) == ' ')
-                t.deleteCharAt(t.length() - 1);
-            t.append("]");
-            }
-        return t.toString();
+    public String summarizePoints(){
+        return points.summarizePoints();
     }
-
 
 }

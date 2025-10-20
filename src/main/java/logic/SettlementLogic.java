@@ -1,5 +1,7 @@
 public class SettlementLogic implements Logic{
 
+    private Cardstacks stacks = Cardstacks.getInstance();
+
     @Override
      public boolean applyEffect(Player active, Player other, int row, int col, Card card){
 
@@ -51,17 +53,17 @@ public class SettlementLogic implements Logic{
             // index
             active.sendMessage("PROMPT: SCOUT - Choose first region (name or index):");
             String s1 = active.receiveMessage();
-            first = pickRegionFromStackByNameOrIndex(s1);
+            first = stacks.pickRegionFromStackByNameOrIndex(s1);
             if (first == null) {
                 // fallback to top
-                first = Cardstacks.regions.isEmpty() ? null : Cardstacks.regions.remove(0);
+                first = stacks.drawregionCard();
             }
 
             active.sendMessage("PROMPT: SCOUT - Choose second region (name or index):");
             String s2 = active.receiveMessage();
-            second = pickRegionFromStackByNameOrIndex(s2);
+            second = stacks.pickRegionFromStackByNameOrIndex(s2);
             if (second == null) {
-                second = Cardstacks.regions.isEmpty() ? null : Cardstacks.regions.remove(0);
+                second = stacks.drawregionCard();
             }
 
             if (first == null || second == null) {
@@ -72,12 +74,12 @@ public class SettlementLogic implements Logic{
             }
         } else {
             // normal: take top two
-            if (Cardstacks.regions.size() < 2) {
+            if (stacks.getRegionstackSize() < 2) {
                 active.sendMessage("Region stack does not have two cards.");
                 return;
             }
-            first = Cardstacks.regions.remove(0);
-            second = Cardstacks.regions.remove(0);
+            first = stacks.drawregionCard();
+            second = stacks.drawregionCard();
         }
 
         // Tell the player which two we drew/selected
@@ -106,27 +108,7 @@ public class SettlementLogic implements Logic{
     }
 
         // Helper: choose region by name or index from Cardstacks.regions
-    private Card pickRegionFromStackByNameOrIndex(String spec) {
-        if (spec == null || spec.isBlank())
-            return null;
-        spec = spec.trim();
-        // try index
-        try {
-            int idx = Integer.parseInt(spec);
-            if (idx >= 0 && idx < Cardstacks.regions.size()) {
-                return Cardstacks.regions.remove(idx);
-            }
-        } catch (Exception ignored) {
-        }
-        // try by name (first match)
-        for (int i = 0; i < Cardstacks.regions.size(); i++) {
-            Card c = Cardstacks.regions.get(i);
-            if (c != null && c.name != null && c.name.equalsIgnoreCase(spec)) {
-                return Cardstacks.regions.remove(i);
-            }
-        }
-        return null;
-    }
+
 
 
 }
