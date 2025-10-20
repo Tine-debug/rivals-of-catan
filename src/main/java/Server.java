@@ -157,7 +157,6 @@ public class Server {
     public static void pricipalityinitoneplayer(Player p, int[][] regionDice, int center, int i) {
         stacks.inizializePrincipiality(p, regionDice, center, i);
 
-
     }
 
     private void addBackExtraFixedRegions() {
@@ -185,8 +184,6 @@ public class Server {
     }
 
     // Returns a card with diceRoll == 0, matching name, but DOES NOT remove it.
-
-
     public void run() {
         int current = Math.random() < 0.5 ? 0 : 1;
         for (int i = 0; i < players.size(); i++) {
@@ -335,18 +332,18 @@ public class Server {
 
     public static boolean buildingBoostsRegion(String buildingName, String regionName) {
         if (buildingName == null || regionName == null) {
-            return false; 
-        }else if (buildingName.equalsIgnoreCase("Iron Foundry") && regionName.equalsIgnoreCase("Mountain")) {
-            return true; 
-        }else if (buildingName.equalsIgnoreCase("Grain Mill") && regionName.equalsIgnoreCase("Field")) {
-            return true; 
-        }else if (buildingName.equalsIgnoreCase("Lumber Camp") && regionName.equalsIgnoreCase("Forest")) {
-            return true; 
-        }else if (buildingName.equalsIgnoreCase("Brick Factory") && regionName.equalsIgnoreCase("Hill")) {
-            return true; 
-        }else if (buildingName.equalsIgnoreCase("Weaver’s Shop") && regionName.equalsIgnoreCase("Pasture")) {
-            return true; 
-        }else if (buildingName.equalsIgnoreCase("Weaver's Shop") && regionName.equalsIgnoreCase("Pasture")) {
+            return false;
+        } else if (buildingName.equalsIgnoreCase("Iron Foundry") && regionName.equalsIgnoreCase("Mountain")) {
+            return true;
+        } else if (buildingName.equalsIgnoreCase("Grain Mill") && regionName.equalsIgnoreCase("Field")) {
+            return true;
+        } else if (buildingName.equalsIgnoreCase("Lumber Camp") && regionName.equalsIgnoreCase("Forest")) {
+            return true;
+        } else if (buildingName.equalsIgnoreCase("Brick Factory") && regionName.equalsIgnoreCase("Hill")) {
+            return true;
+        } else if (buildingName.equalsIgnoreCase("Weaver’s Shop") && regionName.equalsIgnoreCase("Pasture")) {
+            return true;
+        } else if (buildingName.equalsIgnoreCase("Weaver's Shop") && regionName.equalsIgnoreCase("Pasture")) {
             return true;
         }
         return false;
@@ -423,31 +420,19 @@ public class Server {
             case EV_EVENT_A:
             case EV_EVENT_B: {
                 broadcast("[Event] Draw Event Card");
-                if (Cardstacks.events.isEmpty()) {
+
+                Card top = stacks.drawEventCard();
+                if (top == null) {
                     broadcast("Event deck empty.");
                     break;
                 }
-                Card top = Cardstacks.events.remove(0);
                 broadcast("EVENT: " + (top.cardText != null ? top.cardText : top.name));
 
                 String nm = (top.name == null ? "" : top.name).toLowerCase();
 
-                if (nm.equalsIgnoreCase("feud")) {
-                    resolveFeud(active, other);
-                } else if (nm.equalsIgnoreCase("fraternal feuds")) {
-                    resolveFraternalFeuds(active, other);
-                } else if (nm.equalsIgnoreCase("invention")) {
-                    resolveInvention();
-                } else if (nm.equalsIgnoreCase("trade ships race")) {
-                    resolveTradeShipsRace();
-                } else if (nm.equalsIgnoreCase("traveling merchant")) {
-                    resolveTravelingMerchant();
-                } else if (nm.equalsIgnoreCase("year of plenty")) {
-                    resolveYearOfPlenty();
-                } else if (nm.equalsIgnoreCase("yule")) {
-                    java.util.Collections.shuffle(Cardstacks.events);
-                    resolveEvent(EV_EVENT_A, active, other);
-                }
+                Event event = EventFactory.createEvent(nm);
+                event.resolve(active, other);
+
                 break;
             }
             default:
@@ -455,299 +440,9 @@ public class Server {
         }
     }
 
-    private void resolveFeud(Player active, Player other) {
-        Player adv = hasStrengthAdvantage(players.get(0), players.get(1)) ? players.get(0)
-                : hasStrengthAdvantage(players.get(1), players.get(0)) ? players.get(1)
-                : null;
-
-        if (adv == null) {
-            broadcast("Feud: no strength advantage; nothing happens.");
-            return;
-        }
-
-        Player opp = (adv == players.get(0)) ? players.get(1) : players.get(0);
-
-        java.util.List<int[]> buildings = new java.util.ArrayList<>();
-        for (int r = 0; r < opp.principality.principality.size(); r++) {
-            var row = opp.principality.principality.get(r);
-            for (int c = 0; c < row.size(); c++) {
-                Card x = row.get(c);
-                if (x != null && x.type != null && x.type.equalsIgnoreCase("Building")) {
-                    buildings.add(new int[]{r, c});
-                }
-            }
-        }
-        if (buildings.isEmpty()) {
-            broadcast("Feud: opponent has no buildings.");
-            return;
-        }
-        adv.sendMessage(
-                "PROMPT: Feud - select up to 3 opponent building coordinates as 'r c;r c;r c'. Opponent board:\n"
-                + opp.printPrincipality());
-        String line = adv.receiveMessage();
-        java.util.List<int[]> picked = new java.util.ArrayList<>();
-        try {
-            for (String pair : line.split(";")) {
-                String s = pair.trim();
-                if (s.isEmpty()) {
-                    continue;
-                }
-                String[] rc = s.split("\\s+");
-                int r = Integer.parseInt(rc[0]);
-                int c = Integer.parseInt(rc[1]);
-                // validate it's a building
-                Card x = getSafe(opp, r, c);
-                if (x != null && x.type != null && x.type.equalsIgnoreCase("Building")) {
-                    picked.add(new int[]{r, c});
-                    if (picked.size() == 3) {
-                        break;
-                    }
-                }
-            }
-        } catch (Exception ignored) {
-        }
-
-        int k = 0;
-        while (picked.size() < 3 && k < buildings.size()) {
-            int[] bc = buildings.get(k++);
-            boolean dup = false;
-            for (int[] pc : picked) {
-                if (pc[0] == bc[0] && pc[1] == bc[1]) {
-                    dup = true;
-                    break;
-                }
-            }
-            if (!dup) {
-                picked.add(bc);
-            }
-        }
-        if (picked.isEmpty()) {
-            broadcast("Feud: no valid targets selected/found.");
-            return;
-        }
-
-        StringBuilder opts = new StringBuilder("PROMPT: Feud - choose which to remove (index 0..")
-                .append(picked.size() - 1)
-                .append("):\n");
-        for (int i = 0; i < picked.size(); i++) {
-            int r = picked.get(i)[0], c = picked.get(i)[1];
-            Card x = getSafe(opp, r, c);
-            opts.append("  [").append(i).append("] (").append(r).append(",").append(c).append(") ").append(x)
-                    .append("\n");
-        }
-        opp.sendMessage(opts.toString());
-        int choice = 0;
-        try {
-            choice = Integer.parseInt(opp.receiveMessage().trim());
-        } catch (Exception ignored) {
-        }
-        if (choice < 0 || choice >= picked.size()) {
-            choice = 0;
-        }
-        int rr = picked.get(choice)[0], cc = picked.get(choice)[1];
-        Card removed = opp.principality.principality.get(rr).set(cc, null);
-        broadcast("Feud: removed " + (removed == null ? "unknown" : removed.name) + " from opponent at (" + rr + ","
-                + cc + ").");
-        returnBuildingToBottom(removed);
-    }
-
-    public void resolveFraternalFeuds(Player active, Player other) {
-        Player adv = hasStrengthAdvantage(players.get(0), players.get(1)) ? players.get(0)
-                : hasStrengthAdvantage(players.get(1), players.get(0)) ? players.get(1)
-                : null;
-
-        if (adv == null) {
-            broadcast("Fraternal Feuds: no strength advantage; nothing happens.");
-            return;
-        }
-        Player opp = (adv == players.get(0)) ? players.get(1) : players.get(0);
-
-        if (opp.hand.hand.isEmpty()) {
-            broadcast("Fraternal Feuds: opponent hand empty.");
-            return;
-        }
-
-        adv.sendMessage("PROMPT: Opponent hand:\n" + opp.printHand() + "Choose up to two indices (e.g., '2 5'):");
-        String sel = adv.receiveMessage();
-        java.util.Set<Integer> idxs = new java.util.HashSet<>();
-        try {
-            for (String tok : sel.trim().split("\\s+")) {
-                int i = Integer.parseInt(tok);
-                if (i >= 0 && i < opp.hand.hand.size()) {
-                    idxs.add(i);
-                }
-                if (idxs.size() == 2) {
-                    break;
-                }
-            }
-        } catch (Exception ignored) {
-        }
-
-        // If insufficient/invalid, take first one or two
-        if (idxs.isEmpty()) {
-            idxs.add(0);
-            if (opp.hand.handSize() > 1) {
-                idxs.add(1);
-            }
-        }
-
-        // Remove in descending order so indices stay valid
-        java.util.List<Integer> order = new java.util.ArrayList<>(idxs);
-        java.util.Collections.sort(order, java.util.Collections.reverseOrder());
-        for (int i : order) {
-            Card rem = opp.hand.hand.remove(i);
-            returnBuildingToBottom(rem);
-            broadcast("Fraternal Feuds: returned '" + rem.name + "' to bottom of a draw stack.");
-        }
-
-        markSkipReplenishOnce(opp);
-        broadcast("Fraternal Feuds: opponent cannot replenish hand at the end of the next turn.");
-    }
-
-    private void resolveTradeShipsRace() {
-        int c0 = countTradeShips(players.get(0));
-        int c1 = countTradeShips(players.get(1));
-
-        if (c0 == 0 && c1 == 0) {
-            broadcast("Trade Ships Race: no one owns trade ships.");
-            return;
-        }
-        if (c0 > c1) {
-            Player p = players.get(0);
-            p.sendMessage(
-                    "PROMPT: Trade Ships Race - you have the most trade ships. Choose 1 resource [Brick|Grain|Lumber|Wool|Ore|Gold]:");
-            p.gainResource(p.receiveMessage());
-        } else if (c1 > c0) {
-            Player p = players.get(1);
-            p.sendMessage(
-                    "PROMPT: Trade Ships Race - you have the most trade ships. Choose 1 resource [Brick|Grain|Lumber|Wool|Ore|Gold]:");
-            p.gainResource(p.receiveMessage());
-        } else { // tie
-            if (c0 >= 1 && c1 >= 1) {
-                for (Player p : players) {
-                    p.sendMessage(
-                            "PROMPT: Trade Ships Race (tie) - choose 1 resource [Brick|Grain|Lumber|Wool|Ore|Gold]:");
-                    p.gainResource(p.receiveMessage());
-                }
-            } else {
-                broadcast("Trade Ships Race: tie without both having ≥1 ship; no one receives a resource.");
-            }
-        }
-    }
-
-    private void resolveTravelingMerchant() {
-        for (Player p : players) {
-            int max = Math.min(2, p.getResourceCount("Gold"));
-            if (max <= 0) {
-                p.sendMessage("Traveling Merchant: not enough Gold to trade (need 1 per resource).");
-                continue;
-            }
-            p.sendMessage(
-                    "PROMPT: Traveling Merchant - you may take up to " + max + " resources (1 Gold each). How many (0.."
-                    + max + ")?");
-            int k = 0;
-            try {
-                k = Integer.parseInt(p.receiveMessage().trim());
-            } catch (Exception ignored) {
-            }
-            if (k < 0) {
-                k = 0;
-            }
-            if (k > max) {
-                k = max;
-            }
-
-            for (int i = 0; i < k; i++) {
-                p.sendMessage("PROMPT: Pick resource #" + (i + 1) + ":");
-                String res = p.receiveMessage();
-                if (p.removeResource("Gold", 1)) {
-                    p.gainResource(res);
-                } else {
-                    p.sendMessage("No more Gold; stopping.");
-                    break;
-                }
-            }
-        }
-    }
-
-    private void resolveYearOfPlenty() {
-        for (Player p : players) {
-            int added = 0;
-            for (int r = 0; r < p.principality.principality.size(); r++) {
-                var row = p.principality.principality.get(r);
-                for (int c = 0; c < row.size(); c++) {
-                    Card reg = row.get(c);
-                    if (reg == null || !"Region".equalsIgnoreCase(reg.type)) {
-                        continue;
-                    }
-
-                    int adj = countAdjStorehouseAbbey(p, r, c);
-                    while (adj-- > 0) {
-                        if (reg.regionProduction < 3) {
-                            reg.regionProduction++;
-                            added++;
-                        }
-                    }
-                }
-            }
-            p.sendMessage("Year of Plenty: resources were added to your regions where adjacent to Storehouse/Abbey.");
-        }
-    }
-
-    private void resolveInvention() {
-        for (Player p : players) {
-            int times = Math.min(2, Math.max(0, p.points.progressPoints));
-            if (times == 0) {
-                p.sendMessage("Invention: you have no progress point buildings (max 2).");
-                continue;
-            }
-            for (int i = 0; i < times; i++) {
-                p.sendMessage("PROMPT: Invention - gain resource #" + (i + 1) + " of your choice:");
-                String res = p.receiveMessage();
-                p.gainResource(res);
-            }
-        }
-    }
-
-    private void returnBuildingToBottom(Card bld) {
-        if (bld == null) {
-            return;
-        }
-        // Super quick: push to bottom of drawStack1
-        Cardstacks.drawStack1.add(bld);
-    }
-
-    private void markSkipReplenishOnce(Player p) {
-        if (p.flags == null) {
-            p.flags = new java.util.HashSet<>();
-        }
-        p.flags.add("NO_REPLENISH_ONCE");
-    }
-
-    private boolean hasStrengthAdvantage(Player a, Player b) {
+    public static boolean hasStrengthAdvantage(Player a, Player b) {
         // Simple: >=3 Strength and strictly more than opponent
         return a.points.strengthPoints >= 3 && a.points.strengthPoints > b.points.strengthPoints;
-    }
-
-    private int countTradeShips(Player p) {
-        int count = 0;
-        for (int r = 0; r < p.principality.principality.size(); r++) {
-            var row = p.principality.principality.get(r);
-            for (int c = 0; c < row.size(); c++) {
-                Card x = row.get(c);
-                if (x == null) {
-                    continue;
-                }
-                String t = x.type == null ? "" : x.type;
-                String pl = x.placement == null ? "" : x.placement;
-                if (t.toLowerCase().contains("trade ship")
-                        || (pl.toLowerCase().contains("settlement/city") && x.name != null
-                        && x.name.toLowerCase().endsWith("ship"))) {
-                    count++;
-                }
-            }
-        }
-        return count;
     }
 
     // Helpers for Brigand / Toll Bridge
@@ -804,7 +499,8 @@ public class Server {
                 if (given >= want) {
                     break; // stop if already satisfied
 
-                                }Card card = row.get(c);
+                }
+                Card card = row.get(c);
                 if (card != null && "Gold Field".equalsIgnoreCase(card.name)) {
                     int can = Math.max(0, 3 - card.regionProduction);
                     int add = Math.min(can, want - given);
@@ -887,7 +583,6 @@ public class Server {
             String play = "  PLAY <cardName> | <id>  — play a card from hand / play center card: ";
 
             ArrayList<String> buildBits = stacks.getCenterbuildingCost();
-            
 
             play += String.join(", ", buildBits);
             active.sendMessage(play);
@@ -941,8 +636,8 @@ public class Server {
                     String oneTo = parts[3];
                     if (applyLTS(active, side, twoFrom, oneTo)) {
                         broadcast("LTS: traded 2 " + twoFrom + " for 1 " + oneTo + " on the "
-                                + (side.startsWith("L") ? "LEFT" : "RIGHT")); 
-                    }else {
+                                + (side.startsWith("L") ? "LEFT" : "RIGHT"));
+                    } else {
                         active.sendMessage("LTS trade invalid here.");
                     }
                 } else {
@@ -960,10 +655,10 @@ public class Server {
                 if (spec.equalsIgnoreCase("Road") || spec.equalsIgnoreCase("Settlement")
                         || spec.equalsIgnoreCase("City")) {
                     int[] coordinatesplaced = stacks.placeCenterCard(active, other, spec);
-                    if (coordinatesplaced[0] != -1 && coordinatesplaced[1] != -1){
+                    if (coordinatesplaced[0] != -1 && coordinatesplaced[1] != -1) {
                         broadcast("Built " + spec + " at (" + coordinatesplaced[0] + "," + coordinatesplaced[1] + ")");
                         continue;
-                    } 
+                    }
                     continue;
                 }
 
@@ -1052,6 +747,7 @@ public class Server {
                 return null; // unknown / ignore
         }
     }
+
     // Large Trade Ship trade: side L/R relative to a placed LTS@row,col
     private boolean applyLTS(Player p, String side, String twoFrom, String oneTo) {
         // Find any LTS flag; for simplicity use the first one
@@ -1105,27 +801,6 @@ public class Server {
 
     private Card getSafe(Player p, int r, int c) {
         return p.getCard(r, c);
-    }
-
-    // Very simple adjacency for YOP: count Storehouse/Abbey directly above/below
-    // same column
-    private int countAdjStorehouseAbbey(Player p, int rr, int cc) {
-        int cnt = 0;
-        Card up = getSafe(p, rr - 1, cc);
-        Card down = getSafe(p, rr + 1, cc);
-        if (up != null && up.name != null) {
-            String n = up.name.toLowerCase();
-            if (n.equals("storehouse") || n.equals("abbey")) {
-                cnt++;
-            }
-        }
-        if (down != null && down.name != null) {
-            String n = down.name.toLowerCase();
-            if (n.equals("storehouse") || n.equals("abbey")) {
-                cnt++;
-            }
-        }
-        return cnt;
     }
 
     // ---------- Replenish ----------

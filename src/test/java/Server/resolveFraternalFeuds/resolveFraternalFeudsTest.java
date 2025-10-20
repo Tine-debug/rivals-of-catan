@@ -22,6 +22,7 @@ public class resolveFraternalFeudsTest{
     Cardstacks stacks = Cardstacks.getInstance();
     static private PrintStream originalOut;
     static private PrintStream originalErr;
+    static Event event = new fraternalfeudsEvent();
 
     @BeforeAll
     static void suppressOutput() {
@@ -68,7 +69,7 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         String result = "\n";
         result += player1.hand.printHand() + "\n";
         result += player2.hand.printHand() + "\n";
-        server.resolveFraternalFeuds(player1, player2);
+        event.resolve(player1, player2);
         result += player1.hand.printHand() + "\n";
         result += player2.hand.printHand() + "\n";
 
@@ -81,7 +82,7 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         String result = "\n";
         result += player1.hand.printHand() + "\n";
         result += player2.hand.printHand() + "\n";
-        server.resolveFraternalFeuds(player1, player2);
+        event.resolve(player1, player2);
         result += player1.hand.printHand() + "\n";
         result += player2.hand.printHand() + "\n";
 
@@ -98,7 +99,7 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         player2.points = new Points();
         result += player1.hand.printHand() + "\n";
         result += player2.hand.printHand() + "\n";
-        server.resolveFraternalFeuds(player1, player2);
+        event.resolve(player1, player2);
         result += player1.hand.printHand() + "\n";
         result += player2.hand.printHand() + "\n";
 

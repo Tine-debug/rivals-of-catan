@@ -16,7 +16,8 @@ public class Cardstacks {
     private static Vector<Card> roads = new Vector<>();
     private static Vector<Card> settlements = new Vector<>();
     private static Vector<Card> cities = new Vector<>();
-    public static Vector<Card> events = new Vector<>();
+    private static Vector<Card> events = new Vector<>();
+    private static Vector<Card> resolvedevents = new Vector<>();
     public static Vector<Card> drawStack1 = new Vector<>();
     public static Vector<Card> drawStack2 = new Vector<>();
     public static Vector<Card> drawStack3 = new Vector<>();
@@ -310,6 +311,42 @@ public class Cardstacks {
         // Success → remove from pile now
         pile.remove(0);
         return new int[] {row, col};
+
+    }
+
+    public void resetEventstack(){
+        int numresolvedevents = resolvedevents.size();
+        for (int i = 0; i < numresolvedevents; i++){
+            events.add(resolvedevents.get(0));
+            resolvedevents.remove(0);
+        }
+
+        Card yule = popCardByName(events, "Yule");
+        Collections.shuffle(events);
+        if (yule != null && events.size() >= 3) {
+            events.add(Math.max(0, events.size() - 3), yule);
+        }
+
+    }
+
+    public Card drawEventCard(){
+        if (events.isEmpty()) return null;
+        resolvedevents.add(events.get(0));
+        return events.remove(0);
+    }
+
+    public void returnBuildingToBottom(Card bld, int numberStack) {
+        if (bld == null) {
+            return;
+        }
+        switch (numberStack){
+            case 1: drawStack1.add(bld); break;
+            case 2: drawStack2.add(bld); break;
+            case 3: drawStack3.add(bld); break;
+            case 4: drawStack4.add(bld); break;
+            default: drawStack1.add(bld); break;
+
+        }
 
     }
 
