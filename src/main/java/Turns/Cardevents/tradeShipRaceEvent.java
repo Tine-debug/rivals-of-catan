@@ -51,11 +51,11 @@ public class tradeShipRaceEvent implements CardEvent {
                 if (x == null) {
                     continue;
                 }
-                String t = x.type == null ? "" : x.type;
-                String pl = x.placement == null ? "" : x.placement;
+                String t = x.getType() == null ? "" : x.getType();
+                String pl = x.getPlacement() == null ? "" : x.getPlacement();
                 if (t.toLowerCase().contains("trade ship")
-                        || (pl.toLowerCase().contains("settlement/city") && x.name != null
-                        && x.name.toLowerCase().endsWith("ship"))) {
+                        || (pl.toLowerCase().contains("settlement/city") && x.getName() != null
+                        && x.getName().toLowerCase().endsWith("ship"))) {
                     count++;
                 }
             }

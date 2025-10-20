@@ -11,28 +11,28 @@ public class SettlementExpansionLogic implements Logic {
 
     @Override
     public boolean applyEffect(Player active, Player other, int row, int col, Card card) {
-        String nm = (card.name == null ? "" : card.name);
+        String nm = (card.getName() == null ? "" : card.getName());
 
         if (active.getCard(row, col) != null) {
             active.sendMessage("That space is occupied.");
             return false;
         }
 
-        if (is_Valid_placement_extentions(active, row, col, nm, card.oneOf)) {
+        if (is_Valid_placement_extentions(active, row, col, nm, card.getOneOf())) {
             return false;
         }
         System.out.println("Passed placement check");
 
-        if ("Building".equalsIgnoreCase(card.type)) {
+        if ("Building".equalsIgnoreCase(card.getType())) {
             place_building(row, col, card, active);
             return true;
         }
 
         // Units
-        if (card.type.contains("Unit")) {
+        if (card.getType().contains("Unit")) {
             System.out.println("Contained UNIT!!!!!");
             // Large Trade Ship: adjacency 2-for-1 between L/R regions (handled in Server)
-            if (card.name.equals("Large Trade Ship")) {
+            if (card.getName().equals("Large Trade Ship")) {
                 active.placeCard(row, col, card);
                 active.flags.add("LTS@" + row + "," + col);
                 return true;
@@ -91,17 +91,17 @@ public class SettlementExpansionLogic implements Logic {
     }
 
     private boolean nmAt(Card c, String a, String b) {
-        if (c == null || c.name == null) {
+        if (c == null || c.getName() == null) {
             return false;
         }
-        String n = c.name;
+        String n = c.getName();
         return n.equalsIgnoreCase(a) || n.equalsIgnoreCase(b);
     }
 
     private void place_building(int row, int col, Card card, Player player) {
         player.placeCard(row, col, card);
         System.out.println("Contained Building");
-        switch (card.name) {
+        switch (card.getName()) {
             case "Abbey":
                 player.points.progressPoints += 1;
                 break;

@@ -26,7 +26,7 @@ import Points.*;
 
 public class CardApplyEffectApprovalTest {
 
-    private static Cardstacks stacks = Cardstacks.getInstance();
+    private final static Cardstacks stacks = Cardstacks.getInstance();
 
     static Vector<Card> basicCards;
     MockPlayer player1;
@@ -122,7 +122,7 @@ public class CardApplyEffectApprovalTest {
         List<Arguments> args = new ArrayList<>();
         for (int i = 0; i < basicCards.size(); i++) {
             Card card = basicCards.get(i);
-            args.add(Arguments.of(card.name, i, card));
+            args.add(Arguments.of(card.toString(), i, card));
 
         }
         return args.stream();

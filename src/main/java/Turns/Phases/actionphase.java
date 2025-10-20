@@ -125,12 +125,12 @@ public class actionphase {
                     active.sendMessage("No such card in hand: " + spec);
                     continue;
                 }
-                if (!active.payCost(c.cost)) {
-                    active.sendMessage("Can't afford cost: " + (c.cost == null ? "-" : c.cost));
+                if (!active.payCost(c.getCost())) {
+                    active.sendMessage("Can't afford cost: " + (c.getCost() == null ? "-" : c.getCost()));
                     continue;
                 }
 
-                boolean isAction = (c.type != null && c.type.toLowerCase().contains("action"));
+                boolean isAction = (c.getType() != null && c.getType().toLowerCase().contains("action"));
                 boolean ok;
 
                 if (isAction) {
@@ -138,12 +138,12 @@ public class actionphase {
                     ok = c.applyEffect(active, other, -1, -1);
                     if (!ok) {
                         active.sendMessage("Action could not be resolved; refunding cost.");
-                        active.refundCost(c.cost);
+                        active.refundCost(c.getCost());
                         continue;
                     }
 
                     active.hand.hand.remove(c);
-                    broadcast.broadcast("Current player played action " + c.name);
+                    broadcast.broadcast("Current player played action " + c.toString());
                 } else {
                     // Non-action: needs placement
                     active.sendMessage("PROMPT: Enter placement coordinates as: ROW COL");
@@ -154,19 +154,19 @@ public class actionphase {
                         col = Integer.parseInt(rc[1]);
                     } catch (NumberFormatException e) {
                         active.sendMessage("Invalid coordinates. Use: ROW COL (e.g., 2 3)");
-                        active.refundCost(c.cost);
+                        active.refundCost(c.getCost());
                         continue;
                     }
 
                     ok = c.applyEffect(active, other, row, col);
                     if (!ok) {
                         active.sendMessage("Illegal placement/effect; refunding cost.");
-                        active.refundCost(c.cost);
+                        active.refundCost(c.getCost());
                         continue;
                     }
 
                     active.hand.hand.remove(c);
-                    broadcast.broadcast("Current player played " + c.name + " at (" + row + "," + col + ")");
+                    broadcast.broadcast("Current player played " + c.toString() + " at (" + row + "," + col + ")");
                 }
             } else if (up.startsWith("END")) {
                 done = true;
@@ -207,7 +207,7 @@ public class actionphase {
         // trade if fromRegion’s
         // produced resource type matches `twoFrom` and has at least 2; grant +1 to
         // `oneTo` by increasing toRegion
-        String fromType = REGION_TO_RESOURCE.getOrDefault(fromRegion.name, "");
+        String fromType = REGION_TO_RESOURCE.getOrDefault(fromRegion.toString(), "");
         if (!fromType.equalsIgnoreCase(twoFrom)) {
             return false;
         }
@@ -217,7 +217,7 @@ public class actionphase {
 
         fromRegion.regionProduction -= 2;
         // Grant the “oneTo”: if it matches toRegion’s type, store there; else bank
-        String toType = REGION_TO_RESOURCE.getOrDefault(toRegion.name, "");
+        String toType = REGION_TO_RESOURCE.getOrDefault(toRegion.toString(), "");
         if (toType.equalsIgnoreCase(oneTo)) {
             toRegion.regionProduction = Math.min(3, toRegion.regionProduction + 1);
         } else {

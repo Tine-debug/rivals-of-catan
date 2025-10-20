@@ -15,7 +15,7 @@ public class yearOfThePlentyEvent implements CardEvent {
                 var row = p.principality.principality.get(r);
                 for (int c = 0; c < row.size(); c++) {
                     Card reg = row.get(c);
-                    if (reg == null || !"Region".equalsIgnoreCase(reg.type)) {
+                    if (reg == null || !"Region".equalsIgnoreCase(reg.getType())) {
                         continue;
                     }
 
@@ -36,14 +36,14 @@ public class yearOfThePlentyEvent implements CardEvent {
         int cnt = 0;
         Card up = p.getCard(rr - 1, cc);
         Card down = p.getCard(rr + 1, cc);
-        if (up != null && up.name != null) {
-            String n = up.name.toLowerCase();
+        if (up != null && up.toString() != null) {
+            String n = up.toString().toLowerCase();
             if (n.equals("storehouse") || n.equals("abbey")) {
                 cnt++;
             }
         }
-        if (down != null && down.name != null) {
-            String n = down.name.toLowerCase();
+        if (down != null && down.toString() != null) {
+            String n = down.toString().toLowerCase();
             if (n.equals("storehouse") || n.equals("abbey")) {
                 cnt++;
             }

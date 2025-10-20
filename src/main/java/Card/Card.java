@@ -8,13 +8,13 @@ import Player.Player;
 public class Card implements Comparable<Card> {
 
     // ---------- Public fields (keep simple for the take-home) ----------
-    public String name, theme, type, cost;
-    public boolean oneOf;
-    public String cardText;
+    private String name, theme, type, cost;
+    private boolean oneOf;
+    private  String cardText;
 
     public Points points;
 
-    public String placement;
+    private String placement;
 
     private Logic logic;
 
@@ -50,9 +50,44 @@ public class Card implements Comparable<Card> {
         this.logic = LogicFactory.createLogic(placement, name, type);
     }
 
+    public Card(String name, String type, String cost){
+        this.name = name;
+        this.type = type;
+        this.cost = cost;
+    }
+
+    public String getTheme(){
+        return theme;
+    }
+
+    public String getType(){
+        return type;
+    }
+
+    public String getCost(){
+        return cost;
+    }
+
+    public boolean getOneOf(){
+        return oneOf;
+    }
+
+    public String getCardText(){
+        return cardText;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public String getPlacement(){
+        return placement;
+    }
+
     @Override
     public String toString() {
-        return name;
+        if (name != null) return name;
+        return "?";
     }
 
     @Override

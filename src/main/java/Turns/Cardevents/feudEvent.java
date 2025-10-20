@@ -28,7 +28,7 @@ public class feudEvent implements CardEvent {
             var row = opp.principality.principality.get(r);
             for (int c = 0; c < row.size(); c++) {
                 Card x = row.get(c);
-                if (x != null && x.type != null && x.type.equalsIgnoreCase("Building")) {
+                if (x != null && x.getType() != null && x.getType().equalsIgnoreCase("Building")) {
                     buildings.add(new int[]{r, c});
                 }
             }
@@ -53,7 +53,7 @@ public class feudEvent implements CardEvent {
                 int c = Integer.parseInt(rc[1]);
                 // validate it's a building
                 Card x = opp.getCard(r, c);
-                if (x != null && x.type != null && x.type.equalsIgnoreCase("Building")) {
+                if (x != null && x.getType() != null && x.getType().equalsIgnoreCase("Building")) {
                     picked.add(new int[]{r, c});
                     if (picked.size() == 3) {
                         break;
@@ -102,7 +102,7 @@ public class feudEvent implements CardEvent {
         }
         int rr = picked.get(choice)[0], cc = picked.get(choice)[1];
         Card removed = opp.principality.principality.get(rr).set(cc, null);
-        broadcast.broadcast("Feud: removed " + (removed == null ? "unknown" : removed.name) + " from opponent at (" + rr + ","
+        broadcast.broadcast("Feud: removed " + (removed == null ? "unknown" : removed.toString()) + " from opponent at (" + rr + ","
                 + cc + ").");
         stacks.placeCardBottomStack(removed, 1);
     }

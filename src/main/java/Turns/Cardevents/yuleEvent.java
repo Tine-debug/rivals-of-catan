@@ -19,9 +19,9 @@ public class yuleEvent implements CardEvent {
             broadcast.broadcast("Event deck empty.");
             return;
         }
-        broadcast.broadcast("EVENT: " + (top.cardText != null ? top.cardText : top.name));
+        broadcast.broadcast("EVENT: " + (top.getCardText() != null ? top.getCardText() : top.toString()));
 
-        String nm = (top.name == null ? "" : top.name).toLowerCase();
+        String nm = (top.toString() == null ? "" : top.toString()).toLowerCase();
 
         CardEvent event = CardEventFactory.createCardEvent(nm);
         event.resolve(active, other);

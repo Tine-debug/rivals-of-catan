@@ -46,23 +46,16 @@ public class PlayerApprovalTest {
 
     @Test
     void addMultipleCardsAndHand() {
-        Card forest = new Card();
-        forest.name = "Forest";
-        forest.type = "Region";
+        Card forest = new Card("Forest", "Region", null);
         forest.regionProduction = 2;
-        Card settlement = new Card();
-        settlement.name = "Settlement";
-        settlement.type = "Road";
+        Card settlement = new Card("Settlement", "Road", null);
         settlement.points = new Points();
         settlement.points.victoryPoints = 2;
 
         player.placeCard(0, 0, forest);
         player.placeCard(1, 1, settlement);
 
-        Card cardInHand = new Card();
-        cardInHand.name = "Mill";
-        cardInHand.type = "Building";
-        cardInHand.cost = "2 Grain";
+        Card cardInHand = new Card("Mill", "Building", "2 Grain");
         cardInHand.points = new Points();
         cardInHand.points.strengthPoints = 1;
         player.addToHand(cardInHand);
@@ -72,13 +65,9 @@ public class PlayerApprovalTest {
 
     @Test
     void resourceManipulation() {
-        Card forest1 = new Card();
-        forest1.name = "Forest";
-        forest1.type = "Region";
+        Card forest1 = new Card("Forest", "Region", null);
         forest1.regionProduction = 0;
-        Card forest2 = new Card();
-        forest2.name = "Forest";
-        forest2.type = "Region";
+        Card forest2 = new Card("Forest", "Region", null);
         forest2.regionProduction = 1;
 
         player.placeCard(0,0,forest1);
@@ -113,8 +102,7 @@ public class PlayerApprovalTest {
 
     @Test
     void expandAfterEdgeBuild() {
-        Card c = new Card();
-        c.name = "Forest";
+        Card c = new Card("Forest", null, null);
         player.placeCard(0,0,c);
         int newColLeft = player.expandAfterEdgeBuild(0); // triggers left expansion
         int newColRight = player.expandAfterEdgeBuild(player.principality.principality.get(0).size()-1); // triggers right expansion
@@ -123,8 +111,7 @@ public class PlayerApprovalTest {
 
     @Test
     void hasInPrincipalityCheck() {
-        Card c = new Card();
-        c.name = "Mine";
+        Card c = new Card("Mine", null, null);
         player.placeCard(2,2,c);
         String report = "Has Mine: " + player.hasInPrincipality("Mine") +
                         ", Has Forest: " + player.hasInPrincipality("Forest");
@@ -133,17 +120,15 @@ public class PlayerApprovalTest {
 
     @Test
     void removeFromHandByNameTest() {
-        Card c1 = new Card();
-        c1.name = "Card1";
-        Card c2 = new Card();
-        c2.name = "Card2";
+        Card c1 = new Card("Card1", null, null);
+        Card c2 = new Card("Card2", null, null);
         player.addToHand(c1);
         player.addToHand(c2);
 
         Card removed = player.removeFromHandByName("Card1");
         Card notFound = player.removeFromHandByName("Unknown");
 
-        Approvals.verify("Removed: " + removed.name + ", NotFound: " + notFound);
+        Approvals.verify("Removed: " + removed.toString()+ ", NotFound: " + notFound);
     }
 
     @Test
@@ -155,9 +140,7 @@ public class PlayerApprovalTest {
             }
         };
 
-        Card hill = new Card();
-        hill.name = "Hill";
-        hill.type = "Region";
+        Card hill = new Card("Hill", "Region", null);
         hill.regionProduction = 0;
         promptPlayer.placeCard(0,0,hill);
 

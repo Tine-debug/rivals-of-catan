@@ -11,7 +11,7 @@ public class CityLogic implements Logic {
     @Override
     public boolean applyEffect(Player active, Player other, int row, int col, Card card) {
         Card under = active.getCard(row, col);
-        if (under == null || !(under.name.equals("Settlement"))) {
+        if (under == null || !(under.getName().equals("Settlement"))) {
             active.sendMessage("City must be placed on top of an existing Settlement (same slot).");
             return false;
         }

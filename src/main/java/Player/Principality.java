@@ -72,7 +72,7 @@ public Card getCard(int r, int c) {
     public boolean hasInPrincipality(String name) {
         for (List<Card> row : principality)
             for (Card c : row)
-                if (c != null && c.name != null && c.name.equalsIgnoreCase(name))
+                if (c != null && c.getName() != null && c.getName().equalsIgnoreCase(name))
                     return true;
         return false;
     }
@@ -140,7 +140,7 @@ public Card getCard(int r, int c) {
     private String cellTitle(Card c) {
         if (c == null)
             return "";
-        String title = c.name;
+        String title = c.getName();
         switch (title) {
             case "Forest":
                 title += " (L):Lumber";
@@ -169,14 +169,14 @@ public Card getCard(int r, int c) {
     private String cellInfo(Card c) {
         if (c == null)
             return "";
-        if ("Region".equalsIgnoreCase(c.type)) {
+        if ("Region".equalsIgnoreCase(c.getType())) {
             String die = (c.diceRoll <= 0 ? "-" : String.valueOf(c.diceRoll));
             int stored = Math.max(0, Math.min(3, c.regionProduction));
             return "d" + die + "  " + stored + "/3";
         }
 
-        String nm = c.name == null ? "" : c.name;
-        if (c.type != null && c.type.toLowerCase().contains("trade ship")) {
+        String nm = c.toString();
+        if (c.getType() != null && c.getType().toLowerCase().contains("trade ship")) {
             if (!nm.equalsIgnoreCase("Large Trade Ship") && nm.endsWith("Ship")) {
                 String res = firstWord(nm); // Brick / Grain / etc.
                 return "2:1 " + res;
@@ -185,8 +185,8 @@ public Card getCard(int r, int c) {
             }
         }
 
-        if ("Building".equalsIgnoreCase(c.type) &&
-                "Settlement/City Expansions".equalsIgnoreCase(c.placement)) {
+        if ("Building".equalsIgnoreCase(c.getType()) &&
+                "Settlement/City Expansions".equalsIgnoreCase(c.getPlacement())) {
             if (nm.endsWith("Foundry"))
                 return "Boosts Ore x2 on match";
             if (nm.endsWith("Mill"))
@@ -210,8 +210,8 @@ public Card getCard(int r, int c) {
         if (!pts.isEmpty())
             return pts;
 
-        String pl = c.placement == null ? "" : c.placement;
-        String tp = c.type == null ? "" : c.type;
+        String pl = c.getPlacement() == null ? "" : c.getPlacement();
+        String tp = c.getType() == null ? "" : c.getType();
         if (!pl.isEmpty() || !tp.isEmpty())
             return (pl + " " + tp).trim();
         return "";
@@ -256,9 +256,9 @@ public Card getCard(int r, int c) {
             for (int c = 0; c < row.size(); c++) {
                 Card x = row.get(c);
                 if (x != null &&
-                        "Region".equalsIgnoreCase(x.type) &&
-                        x.name != null &&
-                        x.name.equalsIgnoreCase(regionName)) {
+                        "Region".equalsIgnoreCase(x.getType()) &&
+                        x.getName() != null &&
+                        x.getName().equalsIgnoreCase(regionName)) {
                     list.add(x);
                 }
             }
@@ -275,7 +275,7 @@ public Card getCard(int r, int c) {
                 continue;
             for (int c = 0; c < row.size(); c++) {
                 Card x = row.get(c);
-                if (x != null && "Region".equalsIgnoreCase(x.type)) {
+                if (x != null && "Region".equalsIgnoreCase(x.getType())) {
                     sum += Math.max(0, Math.min(3, x.regionProduction));
                 }
             }

@@ -95,9 +95,9 @@ public class DiceEvents {
                     broadcast.broadcast("Event deck empty.");
                     break;
                 }
-                broadcast.broadcast("EVENT: " + (top.cardText != null ? top.cardText : top.name));
+                broadcast.broadcast("EVENT: " + (top.getCardText() != null ? top.getCardText() : top.toString()));
 
-                String nm = (top.name == null ? "" : top.name).toLowerCase();
+                String nm = (top.toString() == null ? "" : top.toString()).toLowerCase();
 
                 CardEvent event = CardEventFactory.createCardEvent(nm);
                 event.resolve(active, other);
@@ -126,7 +126,7 @@ public class DiceEvents {
                 if (excluded.contains(key)) {
                     continue;
                 }
-                if ("Gold Field".equalsIgnoreCase(card.name) || "Pasture".equalsIgnoreCase(card.name)) {
+                if ("Gold Field".equalsIgnoreCase(card.toString()) || "Pasture".equalsIgnoreCase(card.toString())) {
                     total += Math.max(0, Math.min(3, card.regionProduction));
                 }
             }
@@ -141,7 +141,7 @@ public class DiceEvents {
             List<Card> row = p.principality.principality.get(r);
             for (int c = 0; c < row.size(); c++) {
                 Card x = row.get(c);
-                if (x != null && x.name != null && x.name.equalsIgnoreCase("Storehouse")) {
+                if (x != null && x.toString() != null && x.toString().equalsIgnoreCase("Storehouse")) {
                     // Decide side: if there’s a settlement/city below we’re on upper side, else
                     // lower
                     boolean belowCenter = nmAt(p.getCard(r + 1, c), "Settlement", "City")
@@ -168,7 +168,7 @@ public class DiceEvents {
 
                 }
                 Card card = row.get(c);
-                if (card != null && "Gold Field".equalsIgnoreCase(card.name)) {
+                if (card != null && "Gold Field".equalsIgnoreCase(card.toString())) {
                     int can = Math.max(0, 3 - card.regionProduction);
                     int add = Math.min(can, want - given);
                     if (add > 0) {
@@ -182,10 +182,10 @@ public class DiceEvents {
     }
 
     private static boolean nmAt(Card c, String a, String b) {
-        if (c == null || c.name == null) {
+        if (c == null || c.toString() == null) {
             return false;
         }
-        return c.name.equalsIgnoreCase(a) || c.name.equalsIgnoreCase(b);
+        return c.toString().equalsIgnoreCase(a) || c.toString().equalsIgnoreCase(b);
     }
 
     private static void zeroGoldAndWool(Player p, boolean excludeStorehouseAdj) {
@@ -198,7 +198,7 @@ public class DiceEvents {
             if (excluded.contains(key)) {
                 return;
             }
-            if ("Gold Field".equalsIgnoreCase(card.name) || "Pasture".equalsIgnoreCase(card.name)) {
+            if ("Gold Field".equalsIgnoreCase(card.toString()) || "Pasture".equalsIgnoreCase(card.toString())) {
                 card.regionProduction = 0;
             }
         });
@@ -214,7 +214,7 @@ public class DiceEvents {
             List<Card> row = p.principality.principality.get(r);
             for (int c = 0; c < row.size(); c++) {
                 Card card = row.get(c);
-                if (card != null && "Region".equalsIgnoreCase(card.type)) {
+                if (card != null && "Region".equalsIgnoreCase(card.getType())) {
                     v.visit(r, c, card);
                 }
             }

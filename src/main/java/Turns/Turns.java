@@ -103,7 +103,7 @@ public class Turns {
                 List<Card> row = p.principality.principality.get(r);
                 for (int c = 0; c < row.size(); c++) {
                     Card card = row.get(c);
-                    if (card == null || !"Region".equalsIgnoreCase(card.type)) {
+                    if (card == null || !"Region".equalsIgnoreCase(card.getType())) {
                         continue;
                     }
                     if (card.diceRoll != face) {
@@ -154,7 +154,7 @@ public class Turns {
         int n = 0;
         for (List<Card> row : p.principality.principality) {
             for (Card c : row) {
-                if (c != null && "Region".equalsIgnoreCase(c.type) && c.diceRoll == face) {
+                if (c != null && "Region".equalsIgnoreCase(c.getType()) && c.diceRoll == face) {
                     n++;
                 }
             }
@@ -188,10 +188,10 @@ public class Turns {
         if (maybeBuilding == null) {
             return false;
         }
-        if (!"Building".equalsIgnoreCase(maybeBuilding.type)) {
+        if (!"Building".equalsIgnoreCase(maybeBuilding.getType())) {
             return false;
         }
-        return buildingBoostsRegion(maybeBuilding.name, region.name);
+        return buildingBoostsRegion(maybeBuilding.toString(), region.toString());
     }
 
     public static boolean buildingBoostsRegion(String buildingName, String regionName) {

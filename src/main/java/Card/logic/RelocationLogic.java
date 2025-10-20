@@ -79,14 +79,14 @@ public class RelocationLogic implements Logic {
     }
 
     private boolean isRegionCard(Card c) {
-        return c != null && c.type != null && c.type.equalsIgnoreCase("Region");
+        return c != null && c.getType() != null && c.getType().equalsIgnoreCase("Region");
     }
 
     private boolean isExpansionCard(Card c) {
         if (c == null) {
             return false;
         }
-        String pl = (c.placement == null ? "" : c.placement.toLowerCase());
+        String pl = (c.getPlacement() == null ? "" : c.getPlacement().toLowerCase());
         return pl.contains("settlement/city");
     }
 
@@ -110,10 +110,10 @@ public class RelocationLogic implements Logic {
     }
 
     private boolean nmAt(Card c, String a, String b) {
-        if (c == null || c.name == null) {
+        if (c == null || c.getName() == null) {
             return false;
         }
-        String n = c.name;
+        String n = c.getName();
         return n.equalsIgnoreCase(a) || n.equalsIgnoreCase(b);
     }
 

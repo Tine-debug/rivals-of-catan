@@ -23,8 +23,8 @@ public class SettlementLogic implements Logic {
 
         Card L1 = active.getCard(row, col - 1);
         Card R1 = active.getCard(row, col + 1);
-        boolean hasRoad = (L1 != null && L1.name.equals("Road"))
-                || (R1 != null && R1.name.equals("Road"));
+        boolean hasRoad = (L1 != null && L1.getName().equals("Road"))
+                || (R1 != null && R1.getName().equals("Road"));
         if (!hasRoad) {
             active.sendMessage("Settlement must be placed next to a Road.");
             return false;
@@ -88,7 +88,7 @@ public class SettlementLogic implements Logic {
 
         // Tell the player which two we drew/selected
         active.sendMessage("New settlement regions drawn/selected:");
-        active.sendMessage("  1) " + first.name + "   2) " + second.name);
+        active.sendMessage("  1) " + first.toString() + "   2) " + second.toString());
 
         // Ask where to put the first one (top/bottom), second goes to the other
         active.sendMessage("PROMPT: Place FIRST region on " + (colMod == -1 ? "LEFT" : "RIGHT")

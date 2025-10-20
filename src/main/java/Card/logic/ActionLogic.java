@@ -11,17 +11,17 @@ public class ActionLogic implements Logic {
     @Override
     public boolean applyEffect(Player active, Player other, int row, int col, Card card) {
 
-        if (card.name.equals("Scout")) {
+        if (card.getName().equals("Scout")) {
             active.flags.add("SCOUT_NEXT_SETTLEMENT");
             return true;
         }
 
-        if (card.name.equals("Brigitta, the Wise Woman")) {
+        if (card.getName().equals("Brigitta, the Wise Woman")) {
             active.flags.add("BRIGITTA");
             return true;
         }
 
-        if (card.name.equals("Goldsmith")) {
+        if (card.getName().equals("Goldsmith")) {
             if (!active.removeResource("Gold", 3)) {
                 active.sendMessage("Goldsmith: you need 3 Gold to play card.");
                 return false;

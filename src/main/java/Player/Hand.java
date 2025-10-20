@@ -16,13 +16,13 @@ public class Hand {
             if (c == null) {
                 continue;
             }
-            String cost = (c.cost == null || c.cost.isBlank()) ? "-" : c.cost;
+            String cost = (c.getCost() == null || c.getCost().isBlank()) ? "-" : c.getCost();
             String pts = c.summarizePoints();
             sb.append("  [").append(i).append("] ")
-                    .append(c.name == null ? "Unknown" : c.name)
+                    .append(c.toString())
                     .append("   {cost: ").append(cost).append("} ")
                     .append(pts.isEmpty() ? "" : pts)
-                    .append("\n").append(c.cardText == null ? "" : "\t" + c.cardText + "\n");
+                    .append("\n").append(c.getCardText() == null ? "" : "\t" + c.getCardText() + "\n");
         }
         return sb.toString();
     }
@@ -30,7 +30,7 @@ public class Hand {
     public Card removeFromHandByName(String nm) {
         for (int i = 0; i < hand.size(); i++) {
             Card c = hand.get(i);
-            if (c != null && c.name != null && c.name.equalsIgnoreCase(nm)) {
+            if (c != null && c.getName() != null && c.getName().equalsIgnoreCase(nm)) {
                 return hand.remove(i);
             }
         }
@@ -52,14 +52,14 @@ public class Hand {
         }
 
         for (Card c : hand) {
-            if (c != null && c.name != null && c.name.equalsIgnoreCase(spec)) {
+            if (c != null && c.getName() != null && c.getName().equalsIgnoreCase(spec)) {
                 return c;
             }
         }
 
         String lower = spec.toLowerCase();
         for (Card c : hand) {
-            if (c != null && c.name != null && c.name.toLowerCase().startsWith(lower)) {
+            if (c != null && c.getName() != null && c.getName().toLowerCase().startsWith(lower)) {
                 return c;
             }
         }

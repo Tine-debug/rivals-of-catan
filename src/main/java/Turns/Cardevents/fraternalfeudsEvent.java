@@ -58,7 +58,7 @@ public class fraternalfeudsEvent implements CardEvent {
         for (int i : order) {
             Card rem = opp.hand.hand.remove(i);
             stacks.placeCardBottomStack(rem, 1);
-            broadcast.broadcast("Fraternal Feuds: returned '" + rem.name + "' to bottom of a draw stack.");
+            broadcast.broadcast("Fraternal Feuds: returned '" + rem.toString() + "' to bottom of a draw stack.");
         }
 
         markSkipReplenishOnce(opp);

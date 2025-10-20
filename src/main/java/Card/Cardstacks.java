@@ -85,7 +85,7 @@ public class Cardstacks {
         String target = name.trim();
         for (int i = 0; i < cards.size(); i++) {
             Card c = cards.get(i);
-            if (c != null && c.name != null && c.name.trim().equalsIgnoreCase(target)) {
+            if (c != null && c.getName() != null && c.getName().trim().equalsIgnoreCase(target)) {
                 // Remove-by-index guarantees we return a unique instance and it’s gone from the
                 // deck
                 return cards.remove(i);
@@ -97,17 +97,32 @@ public class Cardstacks {
     // Extract all cards whose public String field `attribute` equals `value`
     public Vector<Card> extractCardsByAttribute(Vector<Card> cards, String attribute, String value) {
         Vector<Card> out = new Vector<>();
-        try {
-            java.lang.reflect.Field f = Card.class.getField(attribute);
-            for (int i = cards.size() - 1; i >= 0; i--) {
-                Card c = cards.get(i);
-                Object v = f.get(c);
-                if (v != null && String.valueOf(v).equalsIgnoreCase(value)) {
-                    out.add(0, cards.remove(i));
-                }
+        for (int i = cards.size() - 1; i >= 0; i--) {
+            Card c = cards.get(i);
+            switch (attribute) {
+                case "type":
+                    if (c.getType().equals(value)) {
+                        out.add(0, cards.remove(i));
+                    }
+                case "name":
+                    if (c.getName().equals(value)) {
+                        out.add(0, cards.remove(i));
+                    }
+                    break;
+                case "theme":
+                    if (c.getTheme().equals(value)){
+                        out.add(0, cards.remove(i));
+                    }
+                    break;
+                case "placement":
+                    if (c.getPlacement().equals(value)){
+                        out.add(0, cards.remove(i));
+                    }
+                default:
+                    return out;
             }
-        } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException ignored) {
         }
+
         return out;
     }
 
@@ -150,7 +165,7 @@ public class Cardstacks {
     public Card findUndicedRegionByName(String name) {
         for (int i = 0; i < regions.size(); i++) {
             Card c = regions.get(i);
-            if (c != null && name.equalsIgnoreCase(c.name) && c.diceRoll == 0) {
+            if (c != null && name.equalsIgnoreCase(c.getName()) && c.diceRoll == 0) {
                 return c;
             }
         }
@@ -173,7 +188,7 @@ public class Cardstacks {
         // try by name (first match)
         for (int i = 0; i < regions.size(); i++) {
             Card c = regions.get(i);
-            if (c != null && c.name != null && c.name.equalsIgnoreCase(spec)) {
+            if (c != null && c.getName() != null && c.getName().equalsIgnoreCase(spec)) {
                 return regions.remove(i);
             }
         }
@@ -191,15 +206,15 @@ public class Cardstacks {
     public ArrayList<String> getCenterbuildingCost() {
         ArrayList<String> buildBits = new ArrayList<>();
         if (!roads.isEmpty()) {
-            String cost = roads.get(0).cost == null ? "-" : roads.get(0).cost;
+            String cost = roads.get(0).getCost() == null ? "-" : roads.get(0).getCost();
             buildBits.add("ROAD(" + cost + ")");
         }
         if (!settlements.isEmpty()) {
-            String cost = settlements.get(0).cost == null ? "-" : settlements.get(0).cost;
+            String cost = settlements.get(0).getCost() == null ? "-" : settlements.get(0).getCost();
             buildBits.add("SETTLEMENT(" + cost + ")");
         }
         if (!cities.isEmpty()) {
-            String cost = cities.get(0).cost == null ? "-" : cities.get(0).cost;
+            String cost = cities.get(0).getCost() == null ? "-" : cities.get(0).getCost();
             buildBits.add("CITY(" + cost + ")");
         }
 
@@ -225,28 +240,28 @@ public class Cardstacks {
         Card proto = pile.firstElement();
 
         // Check & pay cost first (do NOT mutate piles yet)
-        if (!active.payCost(proto.cost)) {
-            active.sendMessage("Can't afford cost: " + (proto.cost == null ? "-" : proto.cost));
+        if (!active.payCost(proto.getCost())) {
+            active.sendMessage("Can't afford cost: " + (proto.getCost() == null ? "-" : proto.getCost()));
             return new int[]{-1, -1};
         }
 
         // Ask coordinates and attempt placement
         active.sendMessage("PROMPT: Enter placement coordinates as: ROW COL");
-        int row = -1, col = -1;
+        int row, col;
         try {
             String[] rc = active.receiveMessage().trim().split("\\s+");
             row = Integer.parseInt(rc[0]);
             col = Integer.parseInt(rc[1]);
         } catch (Exception e) {
             active.sendMessage("Invalid coordinates. Use: ROW COL (e.g., 2 3)");
-            active.refundCost(proto.cost);
+            active.refundCost(proto.getCost());
             return new int[]{-1, -1};
         }
 
         boolean ok = proto.applyEffect(active, other, row, col);
         if (!ok) {
             active.sendMessage("Illegal placement/effect; refunding cost.");
-            active.refundCost(proto.cost);
+            active.refundCost(proto.getCost());
             return new int[]{-1, -1};
         }
 
@@ -329,12 +344,12 @@ public class Cardstacks {
         }
         p.sendMessage("Stack contains (top..bottom):");
         for (Card c : stack) {
-            p.sendMessage(" - " + c.name);
+            p.sendMessage(" - " + c.toString());
         }
         p.sendMessage("PROMPT: Type exact name to take:");
         String take = p.receiveMessage();
         for (int i = 0; i < stack.size(); i++) {
-            if (stack.get(i).name.equalsIgnoreCase(take)) {
+            if (stack.get(i).getName().equalsIgnoreCase(take)) {
                 p.addToHand(stack.remove(i));
                 return;
             }
@@ -349,6 +364,15 @@ public class Cardstacks {
             return;
         }
         p.addToHand(stack.remove(0));
+    }
+
+    public String printRegionStack() {
+        String regionsnames = "";
+        for (Card card : regions) {
+            regionsnames += card.toString() + "\n";
+        }
+        return regionsnames;
+
     }
 
 }
