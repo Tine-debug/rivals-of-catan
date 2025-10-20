@@ -18,6 +18,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class PrincipialityinionePlayerApprovalTest{
     Player player;
+    private static Cardstacks stacks = Cardstacks.getInstance();
 
     int center = 2;
     int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
@@ -25,7 +26,7 @@ public class PrincipialityinionePlayerApprovalTest{
     @BeforeAll
     public static void setupall(){
         try {
-            Cardstacks.loadBasicCards("cards.json");
+            stacks.loadBasicCards("cards.json");
             }    catch (Exception e) {
             System.err.println("Failed to load");
             }

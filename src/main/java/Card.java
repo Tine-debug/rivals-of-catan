@@ -15,6 +15,7 @@ public class Card implements Comparable<Card> {
 
     private Logic logic;
 
+
     // Regions track “stored” resources by rotating; here we model it as an int
     // (0..3)
     public int regionProduction = 0;
@@ -22,7 +23,7 @@ public class Card implements Comparable<Card> {
     public int diceRoll = 0;
 
     // ---------- Global piles for the Basic set ----------
-    public static Cardstacks stacks = Cardstacks.getInstance();
+    private static Cardstacks stacks = Cardstacks.getInstance();
 
     // ---------- Construction ----------
     public Card() {
@@ -57,7 +58,7 @@ public class Card implements Comparable<Card> {
     }
 
     public static void loadBasicCards(String jsonPath) throws IOException {
-        Cardstacks.loadBasicCards(jsonPath);
+        stacks.loadBasicCards(jsonPath);
     }
 
     public boolean applyEffect(Player active, Player other, int row, int col) {

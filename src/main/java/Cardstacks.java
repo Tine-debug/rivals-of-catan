@@ -34,7 +34,7 @@ public class Cardstacks {
         return instance;
     }
 
-    public static void loadBasicCardsoptionalshuffle(boolean shuffle, String jsonPath) throws IOException {
+    public void loadBasicCardsoptionalshuffle(boolean shuffle, String jsonPath) throws IOException {
         Vector<Card> allBasic = loadThemeCards(jsonPath, "basic", true);
 
         // Split into piles we care about
@@ -71,11 +71,11 @@ public class Cardstacks {
                 Math.min(4 * stackSize, allBasic.size())));
     }
 
-    public static void loadBasicCards(String jsonPath) throws IOException {
+    public void loadBasicCards(String jsonPath) throws IOException {
         loadBasicCardsoptionalshuffle(false, jsonPath);
     }
 
-    public static Vector<Card> loadThemeCards(String jsonPath, String desiredTheme, boolean loadmuliple) throws IOException {
+    public Vector<Card> loadThemeCards(String jsonPath, String desiredTheme, boolean loadmuliple) throws IOException {
         Vector<Card> allBasic = new Vector<>();
 
         try (FileReader fr = new FileReader(jsonPath)) {
@@ -115,7 +115,7 @@ public class Cardstacks {
         return allBasic;
     }
 
-    public static Card popCardByName(Vector<Card> cards, String name) {
+    public Card popCardByName(Vector<Card> cards, String name) {
         if (cards == null || name == null) {
             return null;
         }
@@ -132,7 +132,7 @@ public class Cardstacks {
     }
 
     // Extract all cards whose public String field `attribute` equals `value`
-    public static Vector<Card> extractCardsByAttribute(Vector<Card> cards, String attribute, String value) {
+    public Vector<Card> extractCardsByAttribute(Vector<Card> cards, String attribute, String value) {
         Vector<Card> out = new Vector<>();
         try {
             java.lang.reflect.Field f = Card.class.getField(attribute);
@@ -168,22 +168,22 @@ public class Cardstacks {
     }
 
     public void inizilizeRegion(Player p, int[][] regionDice, int center, int i) {
-        Card forest = Cardstacks.popCardByName(Cardstacks.regions, "Forest");
+        Card forest = popCardByName(Cardstacks.regions, "Forest");
         forest.diceRoll = regionDice[i][0];
         forest.regionProduction = 1;
-        Card gold = Cardstacks.popCardByName(Cardstacks.regions, "Gold Field");
+        Card gold = popCardByName(Cardstacks.regions, "Gold Field");
         gold.diceRoll = regionDice[i][1];
         gold.regionProduction = 0;
-        Card field = Cardstacks.popCardByName(Cardstacks.regions, "Field");
+        Card field = popCardByName(Cardstacks.regions, "Field");
         field.diceRoll = regionDice[i][2];
         field.regionProduction = 1;
-        Card hill = Cardstacks.popCardByName(Cardstacks.regions, "Hill");
+        Card hill = popCardByName(Cardstacks.regions, "Hill");
         hill.diceRoll = regionDice[i][3];
         hill.regionProduction = 1;
-        Card past = Cardstacks.popCardByName(Cardstacks.regions, "Pasture");
+        Card past = popCardByName(Cardstacks.regions, "Pasture");
         past.diceRoll = regionDice[i][4];
         past.regionProduction = 1;
-        Card mount = Cardstacks.popCardByName(Cardstacks.regions, "Mountain");
+        Card mount = popCardByName(Cardstacks.regions, "Mountain");
         mount.diceRoll = regionDice[i][5];
         mount.regionProduction = 1;
 

@@ -9,11 +9,12 @@ public class PlayerApprovalTest {
 
 
     Player player;
+    private static Cardstacks stacks = Cardstacks.getInstance();
 
     @BeforeAll
     static void setupall() {
         try {
-            Vector<Card> BasicCards = Cardstacks.loadThemeCards("cards.json", "basic", false);
+            Vector<Card> BasicCards = stacks.loadThemeCards("cards.json", "basic", false);
         } catch (Exception e) {
         }
             System.err.println("Failed to load: ");

@@ -155,9 +155,9 @@ public class Server {
     }
 
     public static void pricipalityinitoneplayer(Player p, int[][] regionDice, int center, int i) {
-        p.placeCard(center, 1, Cardstacks.popCardByName(Cardstacks.settlements, "Settlement"));
-        p.placeCard(center, 2, Cardstacks.popCardByName(Cardstacks.roads, "Road"));
-        p.placeCard(center, 3, Cardstacks.popCardByName(Cardstacks.settlements, "Settlement"));
+        p.placeCard(center, 1, stacks.popCardByName(Cardstacks.settlements, "Settlement"));
+        p.placeCard(center, 2, stacks.popCardByName(Cardstacks.roads, "Road"));
+        p.placeCard(center, 3, stacks.popCardByName(Cardstacks.settlements, "Settlement"));
 
         stacks.inizilizeRegion(p, regionDice, center, i);
 
@@ -1257,15 +1257,15 @@ public class Server {
     private Vector<Card> stackBy(int n) {
         switch (n) {
             case 1:
-                return Card.stacks.drawStack1;
+                return stacks.drawStack1;
             case 2:
-                return Card.stacks.drawStack2;
+                return stacks.drawStack2;
             case 3:
-                return Card.stacks.drawStack3;
+                return stacks.drawStack3;
             case 4:
-                return Card.stacks.drawStack4;
+                return stacks.drawStack4;
         }
-        return Card.stacks.drawStack1;
+        return stacks.drawStack1;
     }
 
     private int readInt(String s, int def) {

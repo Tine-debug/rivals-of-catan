@@ -20,6 +20,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 public class CardApplyEffectApprovalTest {
 
 
+    private static Cardstacks stacks = Cardstacks.getInstance();
 
     static Vector<Card> basicCards;
     MockPlayer player1;
@@ -29,7 +30,7 @@ public class CardApplyEffectApprovalTest {
 
     static void resetStack(){
         try {
-            Cardstacks.loadBasicCards("cards.json");
+            stacks.loadBasicCards("cards.json");
             }    catch (Exception e) {
             System.err.println("Failed to load");
             }
@@ -37,7 +38,7 @@ public class CardApplyEffectApprovalTest {
 
     static void resetBasicCards(){
         try {
-            basicCards = Cardstacks.loadThemeCards("cards.json", "basic", false);
+            basicCards = stacks.loadThemeCards("cards.json", "basic", false);
         } catch (Exception e) {
             System.err.println("Failed to load");
         }
@@ -82,7 +83,7 @@ public class CardApplyEffectApprovalTest {
     
     Card getCard(String name){
         resetBasicCards();
-                Card res = Cardstacks.popCardByName(basicCards, name);
+                Card res = stacks.popCardByName(basicCards, name);
         resetBasicCards();
         return res;
 
