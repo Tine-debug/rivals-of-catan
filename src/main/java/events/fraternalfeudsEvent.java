@@ -49,7 +49,7 @@ public class fraternalfeudsEvent implements Event {
         java.util.Collections.sort(order, java.util.Collections.reverseOrder());
         for (int i : order) {
             Card rem = opp.hand.hand.remove(i);
-            stacks.returnBuildingToBottom(rem, 1);
+            stacks.placeCardBottomStack(rem, 1);
             broadcast("Fraternal Feuds: returned '" + rem.name + "' to bottom of a draw stack.", active, other);
         }
 

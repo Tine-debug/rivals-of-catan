@@ -97,7 +97,7 @@ public class feudEvent implements Event {
         Card removed = opp.principality.principality.get(rr).set(cc, null);
         broadcast("Feud: removed " + (removed == null ? "unknown" : removed.name) + " from opponent at (" + rr + ","
                 + cc + ").", active, other);
-        stacks.returnBuildingToBottom(removed, 1);
+        stacks.placeCardBottomStack(removed, 1);
     }
 
     private void broadcast(String s, Player active, Player other) {

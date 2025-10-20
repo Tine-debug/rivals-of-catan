@@ -807,44 +807,16 @@ public class Server {
     public void replenish(Player p) {
         if (p.flags != null && p.flags.remove("NO_REPLENISH_ONCE")) {
             p.sendMessage("You cannot replenish your hand this turn (Fraternal Feuds).");
-            return;
         } else {
             int handTarget = 3 + p.points.progressPoints;
             while (p.handSize() < handTarget) {
                 p.sendMessage("PROMPT: Replenish - choose draw stack [1-4]:");
                 int which = readInt(p.receiveMessage(), 1);
-                Vector<Card> stack = stackBy(which);
-                if (stack.isEmpty()) {
-                    // advance circularly until any non-empty
-                    int tries = 0;
-                    do {
-                        which = 1 + (which % 4);
-                        stack = stackBy(which);
-                        tries++;
-                    } while (stack.isEmpty() && tries <= 4);
-                    if (stack.isEmpty()) {
-                        p.sendMessage("All stacks empty.");
-                        break;
-                    }
-                }
-                p.addToHand(stack.remove(0));
+                stacks.drawCardfromStack(which, p);
             }
         }
     }
 
-    private Vector<Card> stackBy(int n) {
-        switch (n) {
-            case 1:
-                return stacks.drawStack1;
-            case 2:
-                return stacks.drawStack2;
-            case 3:
-                return stacks.drawStack3;
-            case 4:
-                return stacks.drawStack4;
-        }
-        return stacks.drawStack1;
-    }
 
     private int readInt(String s, int def) {
         try {
@@ -878,8 +850,7 @@ public class Server {
 
         p.sendMessage("PROMPT: Choose stack [1-4] to put it under:");
         int st = readInt(p.receiveMessage(), 1);
-        Vector<Card> stack = stackBy(st);
-        stack.add(chosen);
+        stacks.placeCardBottomStack(chosen, st);
 
         boolean hasParish = p.flags.contains("PARISH");
         int searchCost = hasParish ? 1 : 2;
@@ -896,31 +867,11 @@ public class Server {
                 p.sendMessage("PROMPT: Discard resource #" + (i + 1) + " [Brick|Grain|Lumber|Wool|Ore|Gold]:");
                 p.removeResource(p.receiveMessage(), 1);
             }
-
-            if (stack.isEmpty()) {
-                p.sendMessage("That stack is empty.");
-                return;
-            }
-            p.sendMessage("Stack contains (top..bottom):");
-            for (Card c : stack) {
-                p.sendMessage(" - " + c.name);
-            }
-            p.sendMessage("PROMPT: Type exact name to take:");
-            String take = p.receiveMessage();
-            for (int i = 0; i < stack.size(); i++) {
-                if (stack.get(i).name.equalsIgnoreCase(take)) {
-                    p.addToHand(stack.remove(i));
-                    return;
-                }
-            }
-            p.sendMessage("Not found; no card taken.");
+            stacks.chooseCardFromStack(st, p);
+           
         } else {
             // Random draw (top of chosen stack)
-            if (stack.isEmpty()) {
-                p.sendMessage("That stack is empty.");
-                return;
-            }
-            p.addToHand(stack.remove(0));
+            stacks.drawCard(st, p);
         }
     }
 

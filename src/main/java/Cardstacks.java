@@ -18,10 +18,10 @@ public class Cardstacks {
     private static Vector<Card> cities = new Vector<>();
     private static Vector<Card> events = new Vector<>();
     private static Vector<Card> resolvedevents = new Vector<>();
-    public static Vector<Card> drawStack1 = new Vector<>();
-    public static Vector<Card> drawStack2 = new Vector<>();
-    public static Vector<Card> drawStack3 = new Vector<>();
-    public static Vector<Card> drawStack4 = new Vector<>();
+    private static Vector<Card> drawStack1 = new Vector<>();
+    private static Vector<Card> drawStack2 = new Vector<>();
+    private static Vector<Card> drawStack3 = new Vector<>();
+    private static Vector<Card> drawStack4 = new Vector<>();
 
     private static Cardstacks instance;
 
@@ -276,7 +276,7 @@ public class Cardstacks {
 
         if (pile == null || pile.isEmpty()) {
             active.sendMessage("No " + spec + " cards left in the pile.");
-            return new int[] {-1,-1};
+            return new int[]{-1, -1};
         }
 
         // Peek (do not remove yet)
@@ -285,7 +285,7 @@ public class Cardstacks {
         // Check & pay cost first (do NOT mutate piles yet)
         if (!active.payCost(proto.cost)) {
             active.sendMessage("Can't afford cost: " + (proto.cost == null ? "-" : proto.cost));
-            return new int[] {-1,-1};
+            return new int[]{-1, -1};
         }
 
         // Ask coordinates and attempt placement
@@ -298,25 +298,25 @@ public class Cardstacks {
         } catch (Exception e) {
             active.sendMessage("Invalid coordinates. Use: ROW COL (e.g., 2 3)");
             active.refundCost(proto.cost);
-            return new int[] {-1,-1};
+            return new int[]{-1, -1};
         }
 
         boolean ok = proto.applyEffect(active, other, row, col);
         if (!ok) {
             active.sendMessage("Illegal placement/effect; refunding cost.");
             active.refundCost(proto.cost);
-            return new int[] {-1,-1};
+            return new int[]{-1, -1};
         }
 
         // Success → remove from pile now
         pile.remove(0);
-        return new int[] {row, col};
+        return new int[]{row, col};
 
     }
 
-    public void resetEventstack(){
+    public void resetEventstack() {
         int numresolvedevents = resolvedevents.size();
-        for (int i = 0; i < numresolvedevents; i++){
+        for (int i = 0; i < numresolvedevents; i++) {
             events.add(resolvedevents.get(0));
             resolvedevents.remove(0);
         }
@@ -329,25 +329,84 @@ public class Cardstacks {
 
     }
 
-    public Card drawEventCard(){
-        if (events.isEmpty()) return null;
+    public Card drawEventCard() {
+        if (events.isEmpty()) {
+            return null;
+        }
         resolvedevents.add(events.get(0));
         return events.remove(0);
     }
 
-    public void returnBuildingToBottom(Card bld, int numberStack) {
+    public void placeCardBottomStack(Card bld, int numberStack) {
         if (bld == null) {
             return;
         }
-        switch (numberStack){
-            case 1: drawStack1.add(bld); break;
-            case 2: drawStack2.add(bld); break;
-            case 3: drawStack3.add(bld); break;
-            case 4: drawStack4.add(bld); break;
-            default: drawStack1.add(bld); break;
 
+        Vector<Card> chosen = stackBy(numberStack);
+        chosen.add(bld);
+
+    }
+
+    public void drawCardfromStack(int which, Player p) {
+        Vector<Card> stack = stackBy(which);
+        if (stack.isEmpty()) {
+            // advance circularly until any non-empty
+            int tries = 0;
+            do {
+                which = 1 + (which % 4);
+                stack = stackBy(which);
+                tries++;
+            } while (stack.isEmpty() && tries <= 4);
+            if (stack.isEmpty()) {
+                p.sendMessage("All stacks empty.");
+                return;
+            }
         }
+        p.addToHand(stack.remove(0));
+    }
 
+    private Vector<Card> stackBy(int n) {
+        switch (n) {
+            case 1:
+                return drawStack1;
+            case 2:
+                return drawStack2;
+            case 3:
+                return drawStack3;
+            case 4:
+                return drawStack4;
+        }
+        return drawStack1;
+    }
+
+    public void chooseCardFromStack(int chosen, Player p) {
+        Vector<Card> stack = stackBy(chosen);
+        if (stack.isEmpty()) {
+            p.sendMessage("That stack is empty.");
+            return;
+        }
+        p.sendMessage("Stack contains (top..bottom):");
+        for (Card c : stack) {
+            p.sendMessage(" - " + c.name);
+        }
+        p.sendMessage("PROMPT: Type exact name to take:");
+        String take = p.receiveMessage();
+        for (int i = 0; i < stack.size(); i++) {
+            if (stack.get(i).name.equalsIgnoreCase(take)) {
+                p.addToHand(stack.remove(i));
+                return;
+            }
+        }
+        p.sendMessage("Not found; no card taken.");
+    }
+
+    public void drawCard(int chosen, Player p) {
+        Vector<Card> stack = stackBy(chosen);
+        if (stack.isEmpty()) {
+            p.sendMessage("That stack is empty.");
+            return;
+        }
+        p.addToHand(stack.remove(0));
     }
 
 }
