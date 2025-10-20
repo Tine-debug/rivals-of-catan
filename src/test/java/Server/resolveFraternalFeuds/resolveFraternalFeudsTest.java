@@ -22,7 +22,7 @@ public class resolveFraternalFeudsTest{
     Cardstacks stacks = Cardstacks.getInstance();
     static private PrintStream originalOut;
     static private PrintStream originalErr;
-    static Event event = new fraternalfeudsEvent();
+    static CardEvent event = new fraternalfeudsEvent();
 
     @BeforeAll
     static void suppressOutput() {

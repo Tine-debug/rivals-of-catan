@@ -1,5 +1,5 @@
 
-public class inventionEvent implements Event {
+public class inventionEvent implements CardEvent {
 
     @Override
     public void resolve(Player active, Player other) {

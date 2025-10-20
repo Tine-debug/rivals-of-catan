@@ -1,4 +1,4 @@
-public class yearOfThePlentyEvent implements Event{
+public class yearOfThePlentyEvent implements CardEvent{
 
     @Override
     public void resolve (Player active, Player other){

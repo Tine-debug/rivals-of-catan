@@ -1,6 +1,6 @@
 public class MockServer extends Server{
 
-    int eventdie = 0;
+    /*int eventdie = 0;
     int productiondie = 0;
 
     @Override
@@ -25,5 +25,5 @@ public class MockServer extends Server{
         }
         return face;
     }
-
+*/
 }

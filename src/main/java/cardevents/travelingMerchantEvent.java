@@ -1,5 +1,5 @@
 
-public class travelingMerchantEvent implements Event {
+public class travelingMerchantEvent implements CardEvent {
 
     @Override
     public void resolve(Player active, Player other) {

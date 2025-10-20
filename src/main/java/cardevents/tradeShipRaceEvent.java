@@ -1,5 +1,5 @@
 
-public class tradeShipRaceEvent implements Event {
+public class tradeShipRaceEvent implements CardEvent {
 
     @Override
     public void resolve(Player active, Player other) {

@@ -1,5 +1,5 @@
 
-public class yuleEvent implements Event {
+public class yuleEvent implements CardEvent {
 
     private Cardstacks stacks = Cardstacks.getInstance();
 
@@ -15,7 +15,7 @@ public class yuleEvent implements Event {
 
                 String nm = (top.name == null ? "" : top.name).toLowerCase();
 
-                Event event = EventFactory.createEvent(nm);
+                CardEvent event = CardEventFactory.createCardEvent(nm);
                 event.resolve(active, other);
                 
     }

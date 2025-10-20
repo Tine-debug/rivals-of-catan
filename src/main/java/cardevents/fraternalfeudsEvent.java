@@ -1,5 +1,5 @@
 
-public class fraternalfeudsEvent implements Event {
+public class fraternalfeudsEvent implements CardEvent {
 
     private Cardstacks stacks = Cardstacks.getInstance();
 

@@ -1,7 +1,7 @@
 
-public class EventFactory {
+public class CardEventFactory {
 
-    public static Event createEvent(String eventName) {
+    public static CardEvent createCardEvent(String eventName) {
         switch (eventName) {
             case "feud":
                 return new feudEvent();
