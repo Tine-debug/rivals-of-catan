@@ -168,7 +168,7 @@ public class Cardstacks {
             if (idx >= 0 && idx < regions.size()) {
                 return regions.remove(idx);
             }
-        } catch (Exception ignored) {
+        } catch (NumberFormatException ignored) {
         }
         // try by name (first match)
         for (int i = 0; i < regions.size(); i++) {

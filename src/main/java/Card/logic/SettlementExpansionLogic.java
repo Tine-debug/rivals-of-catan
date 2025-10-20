@@ -98,7 +98,7 @@ public class SettlementExpansionLogic implements Logic {
         return n.equalsIgnoreCase(a) || n.equalsIgnoreCase(b);
     }
 
-    public void place_building(int row, int col, Card card, Player player) {
+    private void place_building(int row, int col, Card card, Player player) {
         player.placeCard(row, col, card);
         System.out.println("Contained Building");
         switch (card.name) {
