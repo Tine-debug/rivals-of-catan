@@ -49,13 +49,13 @@ public class SettlementExpansionLogic implements Logic{
 
     }
     
-    private boolean is_Valid_placement_extentions(Player active, int row, int col, String nm, String oneOf) {
+    private boolean is_Valid_placement_extentions(Player active, int row, int col, String nm, boolean  oneOf) {
         if (!isAboveOrBelowSettlementOrCity(active, row, col)) {
             active.sendMessage("Expansion must be above/below a Settlement or City (fill inner ring first).");
             return true;
         }
         // one-of check (simple)
-        if (oneOf != null && oneOf.trim().equalsIgnoreCase("1x")) {
+        if (oneOf) {
             if (active.hasInPrincipality(nm)) {
                 active.sendMessage("You may only have one '" + nm + "' in your principality.");
                 return true;

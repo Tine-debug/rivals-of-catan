@@ -150,7 +150,7 @@ public class Cardstacks {
         return out;
     }
 
- String gs(JsonObject o, String k) {
+    String gs(JsonObject o, String k) {
         if (!o.has(k)) {
             return null;
         }
@@ -158,7 +158,7 @@ public class Cardstacks {
         return (e == null || e.isJsonNull()) ? null : e.getAsString();
     }
 
- int gi(JsonObject o, String k, int def) {
+    int gi(JsonObject o, String k, int def) {
         if (!o.has(k)) {
             return def;
         }

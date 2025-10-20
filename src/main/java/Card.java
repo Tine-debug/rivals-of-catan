@@ -6,7 +6,8 @@ import java.io.IOException;
 public class Card implements Comparable<Card> {
 
     // ---------- Public fields (keep simple for the take-home) ----------
-    public String name, theme, type, cost, oneOf;
+    public String name, theme, type, cost;
+    public boolean oneOf;
     public String cardText;
 
     public Points points;
@@ -39,7 +40,8 @@ public class Card implements Comparable<Card> {
         this.theme = theme;
         this.type = type;
         this.placement = placement;
-        this.oneOf = oneOf;
+         
+        this.oneOf = (oneOf == null)? false : (oneOf.equalsIgnoreCase("1x"));
         this.cost = cost;
         this.points = new Points(victoryPoints, CP, SP, FP, PP, LP, KP);
         this.cardText = cardText;

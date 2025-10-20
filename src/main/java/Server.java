@@ -146,7 +146,7 @@ public class Server {
 
         for (int i = 0; i < players.size(); i++) {
             Player p = players.get(i);
-            pricipalityinitoneplayer(p, regionDice, center, i);
+             stacks.inizializePrincipiality(p, regionDice, center, i);
 
         }
 
@@ -156,7 +156,6 @@ public class Server {
 
     public static void pricipalityinitoneplayer(Player p, int[][] regionDice, int center, int i) {
         stacks.inizializePrincipiality(p, regionDice, center, i);
-
     }
 
     private void addBackExtraFixedRegions() {
