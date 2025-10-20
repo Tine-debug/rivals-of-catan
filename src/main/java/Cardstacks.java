@@ -14,7 +14,7 @@ public class Cardstacks {
 
     private static Vector<Card> regions = new Vector<>();
     private static Vector<Card> roads = new Vector<>();
-    public static Vector<Card> settlements = new Vector<>();
+    private static Vector<Card> settlements = new Vector<>();
     public static Vector<Card> cities = new Vector<>();
     public static Vector<Card> events = new Vector<>();
     public static Vector<Card> drawStack1 = new Vector<>();
