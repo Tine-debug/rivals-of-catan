@@ -36,7 +36,7 @@ public class Cardstacks {
         return instance;
     }
 
-    public void loadBasicCardsoptionalshuffle(boolean shuffle, String jsonPath) throws IOException {
+    public void sortIntoPiles(boolean shuffle, String jsonPath) throws IOException {
         Vector<Card> allBasic = loadThemeCards(jsonPath, "basic", true);
 
         // Split into piles we care about
@@ -74,47 +74,11 @@ public class Cardstacks {
     }
 
     public void loadBasicCards(String jsonPath) throws IOException {
-        loadBasicCardsoptionalshuffle(false, jsonPath);
+        sortIntoPiles(false, jsonPath);
     }
 
     public Vector<Card> loadThemeCards(String jsonPath, String desiredTheme, boolean loadmuliple) throws IOException {
-        Vector<Card> allBasic = new Vector<>();
-
-        try (FileReader fr = new FileReader(jsonPath)) {
-            JsonElement root = JsonParser.parseReader(fr);
-            if (!root.isJsonArray()) {
-                throw new IOException("cards.json: expected top-level array");
-            }
-            JsonArray arr = root.getAsJsonArray();
-
-            for (JsonElement el : arr) {
-                if (!el.isJsonObject()) {
-                    continue;
-                }
-                JsonObject o = el.getAsJsonObject();
-                String theme = gs(o, "theme");
-                if (theme == null || !theme.toLowerCase().contains(desiredTheme)) {
-                    continue;
-                }
-                int number;
-                if (loadmuliple) {
-                    number = gi(o, "number", 1);
-                } else {
-                    number = 1;
-                }
-                for (int i = 0; i < number; i++) {
-                    Card proto = new Card(
-                            gs(o, "name"), theme, gs(o, "type"),
-                            gs(o, "germanName"), gs(o, "placement"),
-                            gs(o, "oneOf"), gs(o, "cost"),
-                            gs(o, "victoryPoints"), gs(o, "CP"), gs(o, "SP"), gs(o, "FP"),
-                            gs(o, "PP"), gs(o, "LP"), gs(o, "KP"), gs(o, "Requires"),
-                            gs(o, "cardText"), gs(o, "protectionOrRemoval"));
-                    allBasic.add(proto);
-                }
-            }
-        }
-        return allBasic;
+        return LoadCards.loadCards(jsonPath, loadmuliple, desiredTheme);
     }
 
     public Card popCardByName(Vector<Card> cards, String name) {
@@ -150,24 +114,6 @@ public class Cardstacks {
         return out;
     }
 
-    String gs(JsonObject o, String k) {
-        if (!o.has(k)) {
-            return null;
-        }
-        JsonElement e = o.get(k);
-        return (e == null || e.isJsonNull()) ? null : e.getAsString();
-    }
-
-    int gi(JsonObject o, String k, int def) {
-        if (!o.has(k)) {
-            return def;
-        }
-        try {
-            return o.get(k).getAsInt();
-        } catch (Exception e) {
-            return def;
-        }
-    }
 
     public void inizializePrincipiality(Player p, int[][] regionDice, int center, int i) {
         p.placeCard(center, 1, popCardByName(settlements, "Settlement"));

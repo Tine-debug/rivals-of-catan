@@ -16,7 +16,6 @@ public class Card implements Comparable<Card> {
 
     private Logic logic;
 
-
     // Regions track “stored” resources by rotating; here we model it as an int
     // (0..3)
     public int regionProduction = 0;
@@ -40,8 +39,8 @@ public class Card implements Comparable<Card> {
         this.theme = theme;
         this.type = type;
         this.placement = placement;
-         
-        this.oneOf = (oneOf == null)? false : (oneOf.equalsIgnoreCase("1x"));
+
+        this.oneOf = (oneOf == null) ? false : (oneOf.equalsIgnoreCase("1x"));
         this.cost = cost;
         this.points = new Points(victoryPoints, CP, SP, FP, PP, LP, KP);
         this.cardText = cardText;
@@ -69,7 +68,7 @@ public class Card implements Comparable<Card> {
         return logic.applyEffect(active, other, row, col, this);
     }
 
-    public String summarizePoints(){
+    public String summarizePoints() {
         return points.summarizePoints();
     }
 

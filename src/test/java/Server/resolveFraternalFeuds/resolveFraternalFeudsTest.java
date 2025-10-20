@@ -47,7 +47,7 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
 
     public void setupPlayers(){
         try {
-                stacks.loadBasicCardsoptionalshuffle(false, "cards.json");
+                stacks.sortIntoPiles(false, "cards.json");
         } catch (Exception e) {
         }
         player1 = new MockPlayer();
