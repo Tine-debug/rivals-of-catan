@@ -1,46 +1,45 @@
-public class SettlementLogic implements Logic{
+
+public class SettlementLogic implements Logic {
 
     private Cardstacks stacks = Cardstacks.getInstance();
 
     @Override
-     public boolean applyEffect(Player active, Player other, int row, int col, Card card){
+    public boolean applyEffect(Player active, Player other, int row, int col, Card card) {
 
         if (active.getCard(row, col) != null) {
             active.sendMessage("That space is occupied.");
             return false;
         }
-        
+
         if (row != 2) {
-                active.sendMessage("Settlements must go in the center row(s).");
-                return false;
-            }
+            active.sendMessage("Settlements must go in the center row(s).");
+            return false;
+        }
 
         Card L1 = active.getCard(row, col - 1);
-                Card R1 = active.getCard(row, col + 1);
-                boolean hasRoad = (L1 != null && L1.name.equals("Road"))
-                        || (R1 != null && R1.name.equals("Road"));
-                if (!hasRoad) {
-                    active.sendMessage("Settlement must be placed next to a Road.");
-                    return false;
-                }
-                active.placeCard(row, col, card);
-                active.points.victoryPoints += 1;
+        Card R1 = active.getCard(row, col + 1);
+        boolean hasRoad = (L1 != null && L1.name.equals("Road"))
+                || (R1 != null && R1.name.equals("Road"));
+        if (!hasRoad) {
+            active.sendMessage("Settlement must be placed next to a Road.");
+            return false;
+        }
+        active.placeCard(row, col, card);
+        active.points.victoryPoints += 1;
 
-                // Expand and capture the updated column
-                col = active.expandAfterEdgeBuild(col);
+        // Expand and capture the updated column
+        col = active.expandAfterEdgeBuild(col);
 
-                // Now place diagonals using the correct, updated col
-                placeTwoDiagonalRegions(active, row, col);
+        // Now place diagonals using the correct, updated col
+        placeTwoDiagonalRegions(active, row, col);
 
-                active.lastSettlementRow = row;
-                active.lastSettlementCol = col;
-                return true;
-
+        active.lastSettlementRow = row;
+        active.lastSettlementCol = col;
+        return true;
 
     }
 
-
-     public void placeTwoDiagonalRegions(Player active, int row, int col) {
+    public void placeTwoDiagonalRegions(Player active, int row, int col) {
         // Decide which side is the “open side” (the side without a road)
         int colMod = (active.getCard(row, col - 1) == null) ? -1 : 1;
         int sideCol = col + colMod;
@@ -107,8 +106,5 @@ public class SettlementLogic implements Logic{
         active.flags.remove("SCOUT_NEXT_SETTLEMENT");
     }
 
-        // Helper: choose region by name or index from Cardstacks.regions
-
-
-
+    // Helper: choose region by name or index from Cardstacks.regions
 }

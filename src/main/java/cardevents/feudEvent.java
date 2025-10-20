@@ -1,7 +1,8 @@
 
 public class feudEvent implements CardEvent {
 
-    private Cardstacks stacks = Cardstacks.getInstance();
+    private final Cardstacks stacks = Cardstacks.getInstance();
+    private final Broadcast broadcast = Broadcast.getInstance();
 
     @Override
     public void resolve(Player active, Player other) {
@@ -10,7 +11,7 @@ public class feudEvent implements CardEvent {
                 : null;
 
         if (adv == null) {
-            broadcast("Feud: no strength advantage; nothing happens.", active, other);
+            broadcast.broadcast("Feud: no strength advantage; nothing happens.");
             return;
         }
 
@@ -27,7 +28,7 @@ public class feudEvent implements CardEvent {
             }
         }
         if (buildings.isEmpty()) {
-            broadcast("Feud: opponent has no buildings.", active, other);
+            broadcast.broadcast("Feud: opponent has no buildings.");
             return;
         }
         adv.sendMessage(
@@ -71,7 +72,7 @@ public class feudEvent implements CardEvent {
             }
         }
         if (picked.isEmpty()) {
-            broadcast("Feud: no valid targets selected/found.", active, other);
+            broadcast.broadcast("Feud: no valid targets selected/found.");
             return;
         }
 
@@ -95,14 +96,9 @@ public class feudEvent implements CardEvent {
         }
         int rr = picked.get(choice)[0], cc = picked.get(choice)[1];
         Card removed = opp.principality.principality.get(rr).set(cc, null);
-        broadcast("Feud: removed " + (removed == null ? "unknown" : removed.name) + " from opponent at (" + rr + ","
-                + cc + ").", active, other);
+        broadcast.broadcast("Feud: removed " + (removed == null ? "unknown" : removed.name) + " from opponent at (" + rr + ","
+                + cc + ").");
         stacks.placeCardBottomStack(removed, 1);
-    }
-
-    private void broadcast(String s, Player active, Player other) {
-        active.sendMessage(s);
-        other.sendMessage(s);
     }
 
 }

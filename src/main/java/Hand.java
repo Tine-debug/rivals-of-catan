@@ -7,18 +7,18 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+public class Hand {
 
+    public List<Card> hand = new ArrayList<>();
 
-public class Hand{
-       public List<Card> hand = new ArrayList<>();
-
-        public String printHand() {
+    public String printHand() {
         StringBuilder sb = new StringBuilder();
         sb.append("Hand (").append(hand.size()).append("):\n");
         for (int i = 0; i < hand.size(); i++) {
             Card c = hand.get(i);
-            if (c == null)
+            if (c == null) {
                 continue;
+            }
             String cost = (c.cost == null || c.cost.isBlank()) ? "-" : c.cost;
             String pts = c.summarizePoints();
             sb.append("  [").append(i).append("] ")
@@ -41,38 +41,40 @@ public class Hand{
     }
 
     public Card findCardInHand(Player p, String spec) {
-        if (spec == null)
+        if (spec == null) {
             return null;
+        }
         spec = spec.trim();
 
         try {
             int idx = Integer.parseInt(spec);
-            if (idx >= 0 && idx < hand.size())
+            if (idx >= 0 && idx < hand.size()) {
                 return hand.get(idx);
+            }
         } catch (NumberFormatException ignored) {
         }
 
         for (Card c : hand) {
-            if (c != null && c.name != null && c.name.equalsIgnoreCase(spec))
+            if (c != null && c.name != null && c.name.equalsIgnoreCase(spec)) {
                 return c;
+            }
         }
-        
+
         String lower = spec.toLowerCase();
         for (Card c : hand) {
-            if (c != null && c.name != null && c.name.toLowerCase().startsWith(lower))
+            if (c != null && c.name != null && c.name.toLowerCase().startsWith(lower)) {
                 return c;
+            }
         }
         return null;
     }
 
-
-        public void addToHand(Card c) {
+    public void addToHand(Card c) {
         hand.add(c);
     }
 
-        public int handSize() {
+    public int handSize() {
         return hand.size();
     }
-
 
 }

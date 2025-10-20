@@ -1,6 +1,7 @@
 
 public class tradeShipRaceEvent implements CardEvent {
 
+    private final Broadcast broadcast = Broadcast.getInstance();
     @Override
     public void resolve(Player active, Player other) {
         int c0 = countTradeShips(active);
@@ -8,7 +9,7 @@ public class tradeShipRaceEvent implements CardEvent {
         Player p;
 
         if (c0 == 0 && c1 == 0) {
-            broadcast("Trade Ships Race: no one owns trade ships.", active, other);
+            broadcast.broadcast("Trade Ships Race: no one owns trade ships.");
             return;
         }
         if (c0 > c1) {
@@ -24,13 +25,13 @@ public class tradeShipRaceEvent implements CardEvent {
         } else { // tie
             if (c0 >= 1 && c1 >= 1) {
                 for (int j = 0; j < 2; j++) {
-            p = j == 0 ? active : other;
+                    p = j == 0 ? active : other;
                     p.sendMessage(
                             "PROMPT: Trade Ships Race (tie) - choose 1 resource [Brick|Grain|Lumber|Wool|Ore|Gold]:");
                     p.gainResource(p.receiveMessage());
                 }
             } else {
-                broadcast("Trade Ships Race: tie without both having ≥1 ship; no one receives a resource.", active, other);
+                broadcast.broadcast("Trade Ships Race: tie without both having ≥1 ship; no one receives a resource.");
             }
         }
     }
@@ -54,12 +55,6 @@ public class tradeShipRaceEvent implements CardEvent {
             }
         }
         return count;
-    }
-
-
-    private void broadcast(String s, Player active, Player other) {
-        active.sendMessage(s);
-        other.sendMessage(s);
     }
 
 }

@@ -12,7 +12,7 @@ import com.google.gson.JsonParser;
 
 public class LoadCards {
 
-    public static Vector<Card> loadCards(String jsonPath, boolean  loadmultiple, String desiredTheme) throws IOException{
+    public static Vector<Card> loadCards(String jsonPath, boolean loadmultiple, String desiredTheme) throws IOException {
 
         Vector<Card> allBasic = new Vector<>();
 
@@ -54,7 +54,7 @@ public class LoadCards {
 
     }
 
-        private static String gs(JsonObject o, String k) {
+    private static String gs(JsonObject o, String k) {
         if (!o.has(k)) {
             return null;
         }

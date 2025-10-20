@@ -20,7 +20,7 @@ public class actionphase {
     private static Cardstacks stacks = Cardstacks.getInstance();
     private static Broadcast broadcast = Broadcast.getInstance();
 
-        private static final Map<String, String> REGION_TO_RESOURCE = Map.of(
+    private static final Map<String, String> REGION_TO_RESOURCE = Map.of(
             "Forest", "Lumber",
             "Field", "Grain",
             "Pasture", "Wool",
@@ -181,8 +181,7 @@ public class actionphase {
         }
     }
 
-
-     private static boolean applyLTS(Player p, String side, String twoFrom, String oneTo) {
+    private static boolean applyLTS(Player p, String side, String twoFrom, String oneTo) {
         // Find any LTS flag; for simplicity use the first one
         int ltsRow = -1, ltsCol = -1;
         for (String f : p.flags) {

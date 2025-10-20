@@ -1,12 +1,12 @@
 
-public class defaultLogic implements  Logic{
+public class defaultLogic implements Logic {
 
     @Override
-   public boolean applyEffect(Player active, Player other, int row, int col, Card card) {
+    public boolean applyEffect(Player active, Player other, int row, int col, Card card) {
 
-            active.sendMessage("No logic implemened");
-            return false;
-        
+        active.sendMessage("No logic implemened");
+        return false;
+
     }
 
 }

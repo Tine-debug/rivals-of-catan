@@ -1,13 +1,13 @@
 
 public class Points {
 
-    int skillPoints = 0;
-    int strengthPoints = 0;
-    int victoryPoints = 0;
-    int progressPoints = 0;
-    int commercePoints = 0;
-    int sailPoints = 0;
-    int canonPoints = 0;
+    public int skillPoints = 0;
+    public int strengthPoints = 0;
+    public int victoryPoints = 0;
+    public int progressPoints = 0;
+    public int commercePoints = 0;
+    public int sailPoints = 0;
+    public int canonPoints = 0;
 
     public Points() {
 

@@ -35,8 +35,9 @@ public class OnlinePlayer extends Player {
      */
     public void closeConnection() {
         try {
-            if (socket != null)
+            if (socket != null) {
                 socket.close();
+            }
         } catch (Exception ignored) {
         }
         socket = null;
@@ -66,8 +67,7 @@ public class OnlinePlayer extends Player {
 
     /**
      * Receive a line of input from this player. If connected, reads from the
-     * socket;
-     * otherwise reads from local console.
+     * socket; otherwise reads from local console.
      */
     @Override
     public String receiveMessage() {

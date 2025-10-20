@@ -1,7 +1,8 @@
 
 public class fraternalfeudsEvent implements CardEvent {
 
-    private Cardstacks stacks = Cardstacks.getInstance();
+    private final Cardstacks stacks = Cardstacks.getInstance();
+    private final Broadcast broadcast = Broadcast.getInstance();
 
     @Override
     public void resolve(Player other, Player active) {
@@ -10,13 +11,13 @@ public class fraternalfeudsEvent implements CardEvent {
                 : null;
 
         if (adv == null) {
-            broadcast("Fraternal Feuds: no strength advantage; nothing happens.", active, other);
+            broadcast.broadcast("Fraternal Feuds: no strength advantage; nothing happens.");
             return;
         }
         Player opp = (adv == active) ? other : active;
 
         if (opp.hand.hand.isEmpty()) {
-            broadcast("Fraternal Feuds: opponent hand empty.", active, other);
+            broadcast.broadcast("Fraternal Feuds: opponent hand empty.");
             return;
         }
 
@@ -50,16 +51,11 @@ public class fraternalfeudsEvent implements CardEvent {
         for (int i : order) {
             Card rem = opp.hand.hand.remove(i);
             stacks.placeCardBottomStack(rem, 1);
-            broadcast("Fraternal Feuds: returned '" + rem.name + "' to bottom of a draw stack.", active, other);
+            broadcast.broadcast("Fraternal Feuds: returned '" + rem.name + "' to bottom of a draw stack.");
         }
 
         markSkipReplenishOnce(opp);
-        broadcast("Fraternal Feuds: opponent cannot replenish hand at the end of the next turn.", active, other);
-    }
-
-    private void broadcast(String s, Player active, Player other) {
-        active.sendMessage(s);
-        other.sendMessage(s);
+        broadcast.broadcast("Fraternal Feuds: opponent cannot replenish hand at the end of the next turn.");
     }
 
     private void markSkipReplenishOnce(Player p) {

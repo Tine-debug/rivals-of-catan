@@ -114,7 +114,6 @@ public class Cardstacks {
         return out;
     }
 
-
     public void inizializePrincipiality(Player p, int[][] regionDice, int center, int i) {
         p.placeCard(center, 1, popCardByName(settlements, "Settlement"));
         p.placeCard(center, 2, popCardByName(roads, "Road"));

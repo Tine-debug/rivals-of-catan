@@ -1,10 +1,10 @@
 
 public class ExchangePhase {
 
-    private static Broadcast broadcast = Broadcast.getInstance();
-    private static Cardstacks stacks = Cardstacks.getInstance();
+    private final static Broadcast broadcast = Broadcast.getInstance();
+    private final static Cardstacks stacks = Cardstacks.getInstance();
 
-    public static  void resolvePhase(Player p) {
+    public static void resolvePhase(Player p) {
         int limit = 3 + p.points.progressPoints;
         if (p.handSize() < limit) {
             broadcast.broadcast("Exchange: hand below limit; skipping.");

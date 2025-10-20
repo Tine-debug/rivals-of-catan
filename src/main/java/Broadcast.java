@@ -1,3 +1,4 @@
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
@@ -13,7 +14,6 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Vector;
-
 
 public class Broadcast {
 
@@ -31,19 +31,16 @@ public class Broadcast {
         return instance;
     }
 
-    public void updatePlayers(List<Player> newplayers){
+    public void updatePlayers(List<Player> newplayers) {
         players = newplayers;
     }
 
-    public void broadcast(String s){
+    public void broadcast(String s) {
         for (Player p : players) {
             if (p != null) {
                 p.sendMessage(s);
             }
         }
     }
-
-
-  
 
 }

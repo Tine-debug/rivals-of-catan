@@ -1,28 +1,23 @@
 
 public class yuleEvent implements CardEvent {
 
-    private Cardstacks stacks = Cardstacks.getInstance();
+    private final Cardstacks stacks = Cardstacks.getInstance();
+    private final Broadcast broadcast = Broadcast.getInstance();
 
     @Override
     public void resolve(Player active, Player other) {
-                stacks.resetEventstack();
-                Card top = stacks.drawEventCard();
-                if (top == null) {
-                    broadcast("Event deck empty.", active, other);
-                    return;
-                }
-                broadcast("EVENT: " + (top.cardText != null ? top.cardText : top.name), active, other);
+        stacks.resetEventstack();
+        Card top = stacks.drawEventCard();
+        if (top == null) {
+            broadcast.broadcast("Event deck empty.");
+            return;
+        }
+        broadcast.broadcast("EVENT: " + (top.cardText != null ? top.cardText : top.name));
 
-                String nm = (top.name == null ? "" : top.name).toLowerCase();
+        String nm = (top.name == null ? "" : top.name).toLowerCase();
 
-                CardEvent event = CardEventFactory.createCardEvent(nm);
-                event.resolve(active, other);
-                
+        CardEvent event = CardEventFactory.createCardEvent(nm);
+        event.resolve(active, other);
+
     }
-
-    private void broadcast(String s, Player active, Player other) {
-        active.sendMessage(s);
-        other.sendMessage(s);
-    }
-
 }

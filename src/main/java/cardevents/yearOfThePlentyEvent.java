@@ -1,7 +1,8 @@
-public class yearOfThePlentyEvent implements CardEvent{
+
+public class yearOfThePlentyEvent implements CardEvent {
 
     @Override
-    public void resolve (Player active, Player other){
+    public void resolve(Player active, Player other) {
 
         for (int j = 0; j < 2; j++) {
             Player p = j == 0 ? active : other;
@@ -27,9 +28,9 @@ public class yearOfThePlentyEvent implements CardEvent{
         }
     }
 
-        private int countAdjStorehouseAbbey(Player p, int rr, int cc) {
+    private int countAdjStorehouseAbbey(Player p, int rr, int cc) {
         int cnt = 0;
-        Card up = p.getCard(rr - 1, cc); 
+        Card up = p.getCard(rr - 1, cc);
         Card down = p.getCard(rr + 1, cc);
         if (up != null && up.name != null) {
             String n = up.name.toLowerCase();
@@ -45,5 +46,5 @@ public class yearOfThePlentyEvent implements CardEvent{
         }
         return cnt;
     }
-    
+
 }

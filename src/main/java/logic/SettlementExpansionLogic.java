@@ -1,55 +1,55 @@
 
+public class SettlementExpansionLogic implements Logic {
 
-public class SettlementExpansionLogic implements Logic{
-    public SettlementExpansionLogic(){
+    public SettlementExpansionLogic() {
     }
 
     @Override
-    public boolean applyEffect(Player active, Player other, int row, int col, Card card){
-                String nm = (card.name == null ? "" : card.name);
-            
+    public boolean applyEffect(Player active, Player other, int row, int col, Card card) {
+        String nm = (card.name == null ? "" : card.name);
 
-            if (active.getCard(row, col) != null) {
+        if (active.getCard(row, col) != null) {
             active.sendMessage("That space is occupied.");
             return false;
-            }
+        }
 
+        if (is_Valid_placement_extentions(active, row, col, nm, card.oneOf)) {
+            return false;
+        }
+        System.out.println("Passed placement check");
 
-            if (is_Valid_placement_extentions(active, row, col, nm, card.oneOf)) return false;
-            System.out.println("Passed placement check");
+        if ("Building".equalsIgnoreCase(card.type)) {
+            place_building(row, col, card, active);
+            return true;
+        }
 
-            if ("Building".equalsIgnoreCase(card.type)) {
-                place_building(row, col, card, active);
-                return true;
-            }
-
-            // Units
-            if (card.type.contains("Unit")) {
-                System.out.println("Contained UNIT!!!!!");
-                // Large Trade Ship: adjacency 2-for-1 between L/R regions (handled in Server)
-                if (card.name.equals("Large Trade Ship")) {
-                    active.placeCard(row, col, card);
-                    active.flags.add("LTS@" + row + "," + col);
-                    return true;
-                }
-                // “Common” trade ships: 2:1 bank for specific resource (handled in Server)
-                if (nm.toLowerCase().endsWith(" ship")) {
-                    active.placeCard(row, col, card);
-                    String res = nm.split("\\s+")[0]; // Brick/Gold/Grain/Lumber/Ore/Wool
-                    active.flags.add("2FOR1_" + res.toUpperCase());
-                    return true;
-                }
-
-                // Heroes: just add SP/FP/CP/etc.
-                active.points = Points.addPoints(active.points, card.points);
+        // Units
+        if (card.type.contains("Unit")) {
+            System.out.println("Contained UNIT!!!!!");
+            // Large Trade Ship: adjacency 2-for-1 between L/R regions (handled in Server)
+            if (card.name.equals("Large Trade Ship")) {
                 active.placeCard(row, col, card);
+                active.flags.add("LTS@" + row + "," + col);
                 return true;
             }
-    return false;
+            // “Common” trade ships: 2:1 bank for specific resource (handled in Server)
+            if (nm.toLowerCase().endsWith(" ship")) {
+                active.placeCard(row, col, card);
+                String res = nm.split("\\s+")[0]; // Brick/Gold/Grain/Lumber/Ore/Wool
+                active.flags.add("2FOR1_" + res.toUpperCase());
+                return true;
+            }
+
+            // Heroes: just add SP/FP/CP/etc.
+            active.points = Points.addPoints(active.points, card.points);
+            active.placeCard(row, col, card);
+            return true;
+        }
+        return false;
 
     }
-    
-    private boolean is_Valid_placement_extentions(Player active, int row, int col, String nm, boolean  oneOf) {
+
+    private boolean is_Valid_placement_extentions(Player active, int row, int col, String nm, boolean oneOf) {
         if (!isAboveOrBelowSettlementOrCity(active, row, col)) {
             active.sendMessage("Expansion must be above/below a Settlement or City (fill inner ring first).");
             return true;
@@ -68,45 +68,46 @@ public class SettlementExpansionLogic implements Logic{
         // Inner ring: ±1 from center settlement/city
         Card up1 = p.getCard(row - 1, col);
         Card down1 = p.getCard(row + 1, col);
-        if (nmAt(up1, "Settlement", "City"))
+        if (nmAt(up1, "Settlement", "City")) {
             return true;
-        if (nmAt(down1, "Settlement", "City"))
+        }
+        if (nmAt(down1, "Settlement", "City")) {
             return true;
+        }
 
         // Outer ring allowed *only* if the inner slot is already filled (fill inner
         // first)
         Card up2 = p.getCard(row - 2, col);
         Card down2 = p.getCard(row + 2, col);
-        boolean outerOK = ((nmAt(up2, "City", "City") || nmAt(up2, "Settlement", "Settlement")) && up1 != null) ||
-                ((nmAt(down2, "City", "City") || nmAt(down2, "Settlement", "Settlement")) && down1 != null);
+        boolean outerOK = ((nmAt(up2, "City", "City") || nmAt(up2, "Settlement", "Settlement")) && up1 != null)
+                || ((nmAt(down2, "City", "City") || nmAt(down2, "Settlement", "Settlement")) && down1 != null);
 
         return outerOK;
     }
-    
+
     private boolean nmAt(Card c, String a, String b) {
-        if (c == null || c.name == null)
+        if (c == null || c.name == null) {
             return false;
+        }
         String n = c.name;
         return n.equalsIgnoreCase(a) || n.equalsIgnoreCase(b);
     }
 
-
-    public void place_building(int row,int col,Card card, Player player){
-                    player.placeCard(row, col, card);
-                System.out.println("Contained Building");
-                if (card.name.equals("Abbey")) {
-                    player.points.progressPoints += 1;
-                } else if (card.name.equals("Marketplace")) {
-                    player.flags.add("MARKETPLACE");
-                } else if (card.name.equals("Parish Hall")) {
-                    player.flags.add("PARISH");
-                } else if (card.name.equals("Storehouse")) {
-                    player.flags.add("STOREHOUSE@" + row + "," + col);
-                } else if (card.name.equals("Toll Bridge")) {
-                    player.flags.add("TOLLB");
-                }
+    public void place_building(int row, int col, Card card, Player player) {
+        player.placeCard(row, col, card);
+        System.out.println("Contained Building");
+        if (card.name.equals("Abbey")) {
+            player.points.progressPoints += 1;
+        } else if (card.name.equals("Marketplace")) {
+            player.flags.add("MARKETPLACE");
+        } else if (card.name.equals("Parish Hall")) {
+            player.flags.add("PARISH");
+        } else if (card.name.equals("Storehouse")) {
+            player.flags.add("STOREHOUSE@" + row + "," + col);
+        } else if (card.name.equals("Toll Bridge")) {
+            player.flags.add("TOLLB");
+        }
 
     }
-
 
 }
