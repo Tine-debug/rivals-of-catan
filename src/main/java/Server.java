@@ -198,7 +198,8 @@ public class Server {
             if (current == 3) {
                 break;
             }
-            current = resolveOneTurn(current);
+            Turns turns = new Turns(players);
+            turns.resolveOneTurn(current);
         }
     }
 
