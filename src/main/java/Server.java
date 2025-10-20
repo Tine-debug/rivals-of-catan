@@ -155,11 +155,7 @@ public class Server {
     }
 
     public static void pricipalityinitoneplayer(Player p, int[][] regionDice, int center, int i) {
-        p.placeCard(center, 1, stacks.popCardByName(Cardstacks.settlements, "Settlement"));
-        p.placeCard(center, 2, stacks.popCardByName(Cardstacks.roads, "Road"));
-        p.placeCard(center, 3, stacks.popCardByName(Cardstacks.settlements, "Settlement"));
-
-        stacks.inizilizeRegion(p, regionDice, center, i);
+        stacks.inizializePrincipiality(p, regionDice, center, i);
 
 
     }
@@ -890,19 +886,9 @@ public class Server {
                     "  LTS <L|R> <2from> <1to> — Large Trade Ship adjacent trade (left/right side) ([Brick|Grain|Lumber|Wool|Ore|Gold])");
             String play = "  PLAY <cardName> | <id>  — play a card from hand / play center card: ";
 
-            ArrayList<String> buildBits = new ArrayList<>();
-            if (!Cardstacks.roads.isEmpty()) {
-                String cost = Cardstacks.roads.get(0).cost == null ? "-" : Cardstacks.roads.get(0).cost;
-                buildBits.add("ROAD(" + cost + ")");
-            }
-            if (!Cardstacks.settlements.isEmpty()) {
-                String cost = Cardstacks.settlements.get(0).cost == null ? "-" : Cardstacks.settlements.get(0).cost;
-                buildBits.add("SETTLEMENT(" + cost + ")");
-            }
-            if (!Cardstacks.cities.isEmpty()) {
-                String cost = Cardstacks.cities.get(0).cost == null ? "-" : Cardstacks.cities.get(0).cost;
-                buildBits.add("CITY(" + cost + ")");
-            }
+            ArrayList<String> buildBits = stacks.getCenterbuildingCost();
+            
+
             play += String.join(", ", buildBits);
             active.sendMessage(play);
             active.sendMessage("  END                     — finish action phase");
@@ -973,52 +959,11 @@ public class Server {
                 // ---------- 1) Center cards from piles: Road / Settlement / City ----------
                 if (spec.equalsIgnoreCase("Road") || spec.equalsIgnoreCase("Settlement")
                         || spec.equalsIgnoreCase("City")) {
-                    Vector<Card> pile = null;
-                    if (spec.equalsIgnoreCase("Road")) {
-                        pile = Cardstacks.roads; 
-                    }else if (spec.equalsIgnoreCase("Settlement")) {
-                        pile = Cardstacks.settlements; 
-                    }else if (spec.equalsIgnoreCase("City")) {
-                        pile = Cardstacks.cities;
-                    }
-
-                    if (pile == null || pile.isEmpty()) {
-                        active.sendMessage("No " + spec + " cards left in the pile.");
+                    int[] coordinatesplaced = stacks.placeCenterCard(active, other, spec);
+                    if (coordinatesplaced[0] != -1 && coordinatesplaced[1] != -1){
+                        broadcast("Built " + spec + " at (" + coordinatesplaced[0] + "," + coordinatesplaced[1] + ")");
                         continue;
-                    }
-
-                    // Peek (do not remove yet)
-                    Card proto = pile.firstElement();
-
-                    // Check & pay cost first (do NOT mutate piles yet)
-                    if (!payCost(active, proto.cost)) {
-                        active.sendMessage("Can't afford cost: " + (proto.cost == null ? "-" : proto.cost));
-                        continue;
-                    }
-
-                    // Ask coordinates and attempt placement
-                    active.sendMessage("PROMPT: Enter placement coordinates as: ROW COL");
-                    int row = -1, col = -1;
-                    try {
-                        String[] rc = active.receiveMessage().trim().split("\\s+");
-                        row = Integer.parseInt(rc[0]);
-                        col = Integer.parseInt(rc[1]);
-                    } catch (Exception e) {
-                        active.sendMessage("Invalid coordinates. Use: ROW COL (e.g., 2 3)");
-                        refundCost(active, proto.cost);
-                        continue;
-                    }
-
-                    boolean ok = proto.applyEffect(active, other, row, col);
-                    if (!ok) {
-                        active.sendMessage("Illegal placement/effect; refunding cost.");
-                        refundCost(active, proto.cost);
-                        continue;
-                    }
-
-                    // Success → remove from pile now
-                    pile.remove(0);
-                    broadcast("Built " + spec + " at (" + row + "," + col + ")");
+                    } 
                     continue;
                 }
 
@@ -1079,30 +1024,11 @@ public class Server {
     }
 
     private boolean payCost(Player p, String cost) {
-        if (cost == null || cost.isBlank()) {
-            return true;
-        }
-        // Cost like "1 Brick, 1 Grain, 1 Wool, 1 Lumber" etc.
-        Map<String, Integer> need = parseCost(cost);
-        for (var e : need.entrySet()) {
-            if (p.getResourceCount(e.getKey()) < e.getValue()) {
-                return false;
-            }
-        }
-        for (var e : need.entrySet()) {
-            p.removeResource(e.getKey(), e.getValue());
-        }
-        return true;
+        return p.payCost(cost);
     }
 
     private void refundCost(Player p, String cost) {
-        if (cost == null || cost.isBlank()) {
-            return;
-        }
-        Map<String, Integer> need = parseCost(cost);
-        for (var e : need.entrySet()) {
-            p.setResourceCount(e.getKey(), p.getResourceCount(e.getKey()) + e.getValue());
-        }
+        p.refundCost(cost);
     }
 
     // Maps single-letter cost codes to canonical resource names used everywhere
@@ -1126,29 +1052,6 @@ public class Server {
                 return null; // unknown / ignore
         }
     }
-
-    private Map<String, Integer> parseCost(String cost) {
-        Map<String, Integer> m = new HashMap<>();
-        if (cost == null) {
-            return m;
-        }
-
-        // Accept strings like "LW", "AA", with optional spaces or separators ("L,W", "A
-        // A")
-        for (int i = 0; i < cost.length(); i++) {
-            char ch = cost.charAt(i);
-            if (Character.isWhitespace(ch) || ch == ',' || ch == ';' || ch == '+') {
-                continue;
-            }
-            String res = letterToResource(ch);
-            if (res != null) {
-                m.put(res, m.getOrDefault(res, 0) + 1);
-            }
-            // else: silently ignore unknown chars
-        }
-        return m;
-    }
-
     // Large Trade Ship trade: side L/R relative to a placed LTS@row,col
     private boolean applyLTS(Player p, String side, String twoFrom, String oneTo) {
         // Find any LTS flag; for simplicity use the first one

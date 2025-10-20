@@ -11,7 +11,7 @@ public class Player {
 
     public Points points = new Points("2", null, null, null, null, null, null);
 
-    public int tradeRate = 3; 
+    public int tradeRate = 3;
     public boolean isBot = false;
 
     public Set<String> flags = new HashSet<>();
@@ -27,11 +27,12 @@ public class Player {
     private final Scanner in = new Scanner(System.in);
 
     public Player() {
-        String[] all = { "Brick", "Grain", "Lumber", "Wool", "Ore", "Gold", "Any" };
+        String[] all = {"Brick", "Grain", "Lumber", "Wool", "Ore", "Gold", "Any"};
         principality = new Principality();
         resources = new java.util.HashMap<>();
-        for (String r : all)
+        for (String r : all) {
             resources.put(r, 0);
+        }
     }
 
     public void sendMessage(Object m) {
@@ -51,11 +52,9 @@ public class Player {
         principality.placeCard(r, c, card);
     }
 
-
     public int expandAfterEdgeBuild(int col) {
         return principality.expandAfterEdgeBuild(col);
     }
-
 
     public boolean hasInPrincipality(String name) {
         return principality.hasInPrincipality(name);
@@ -65,21 +64,27 @@ public class Player {
         return principality.printPrincipality(this);
     }
 
-
     public String printHand() {
         return hand.printHand();
     }
 
-  
     public boolean hasTradeTokenAgainst(Player opp) {
-        if (this.points.commercePoints < 3) return false;
-        if (opp == null) return true;
+        if (this.points.commercePoints < 3) {
+            return false;
+        }
+        if (opp == null) {
+            return true;
+        }
         return (this.points.commercePoints > opp.points.commercePoints);
     }
 
     public boolean hasStrengthTokenAgainst(Player opp) {
-        if (this.points.strengthPoints < 3) return false;
-        if (opp == null) return true;
+        if (this.points.strengthPoints < 3) {
+            return false;
+        }
+        if (opp == null) {
+            return true;
+        }
         return (this.points.strengthPoints > opp.points.strengthPoints);
     }
 
@@ -87,20 +92,21 @@ public class Player {
     // opponent
     public int currentScoreAgainst(Player opp) {
         int score = this.points.victoryPoints;
-        if (hasTradeTokenAgainst(opp))
+        if (hasTradeTokenAgainst(opp)) {
             score += 1;
-        if (hasStrengthTokenAgainst(opp))
+        }
+        if (hasStrengthTokenAgainst(opp)) {
             score += 1;
+        }
         return score;
     }
 
-
     // ------------- Resources (per-region, not pooled) -------------
-
     // Map a resource name to its Region card name
     private String resourceToRegion(String type) {
-        if (type == null)
+        if (type == null) {
             return null;
+        }
         String t = type.trim().toLowerCase();
         switch (t) {
             case "brick":
@@ -121,8 +127,6 @@ public class Player {
                 return null;
         }
     }
-
-
 
     public int totalAllResources() {
         return principality.totalAllResources();
@@ -170,11 +174,9 @@ public class Player {
         }
     }
 
- 
     public boolean removeResource(String type, int n) {
         return principality.removeResource(type, n);
     }
-
 
     public void setResourceCount(String type, int n) {
         principality.setResourceCount(type, n);
@@ -198,4 +200,73 @@ public class Player {
         sendMessage("PROMPT: Choose resource:");
         return receiveMessage();
     }
+
+    public void refundCost(String cost) {
+        if (cost == null || cost.isBlank()) {
+            return;
+        }
+        Map<String, Integer> need = parseCost(cost);
+        for (var e : need.entrySet()) {
+            setResourceCount(e.getKey(), getResourceCount(e.getKey()) + e.getValue());
+        }
+    }
+
+    public Map<String, Integer> parseCost(String cost) {
+        Map<String, Integer> m = new HashMap<>();
+        if (cost == null) {
+            return m;
+        }
+
+        // Accept strings like "LW", "AA", with optional spaces or separators ("L,W", "A
+        // A")
+        for (int i = 0; i < cost.length(); i++) {
+            char ch = cost.charAt(i);
+            if (Character.isWhitespace(ch) || ch == ',' || ch == ';' || ch == '+') {
+                continue;
+            }
+            String res = letterToResource(ch);
+            if (res != null) {
+                m.put(res, m.getOrDefault(res, 0) + 1);
+            }
+            // else: silently ignore unknown chars
+        }
+        return m;
+    }
+
+    public boolean payCost(String cost) {
+        if (cost == null || cost.isBlank()) {
+            return true;
+        }
+        // Cost like "1 Brick, 1 Grain, 1 Wool, 1 Lumber" etc.
+        Map<String, Integer> need = parseCost(cost);
+        for (var e : need.entrySet()) {
+            if (getResourceCount(e.getKey()) < e.getValue()) {
+                return false;
+            }
+        }
+        for (var e : need.entrySet()) {
+            removeResource(e.getKey(), e.getValue());
+        }
+        return true;
+    }
+
+    private String letterToResource(char ch) {
+        switch (Character.toUpperCase(ch)) {
+            case 'B':
+                return "Brick";
+            case 'G':
+                return "Grain";
+            case 'L':
+                return "Lumber";
+            case 'W':
+                return "Wool";
+            case 'O':
+                return "Ore";
+            case 'A':
+                return "Gold";
+            default:
+                return null; // unknown / ignore
+        }
+    }
+
 }

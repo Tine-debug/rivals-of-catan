@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Vector;
+import java.util.ArrayList;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -12,7 +13,7 @@ import com.google.gson.JsonParser;
 public class Cardstacks {
 
     private static Vector<Card> regions = new Vector<>();
-    public static Vector<Card> roads = new Vector<>();
+    private static Vector<Card> roads = new Vector<>();
     public static Vector<Card> settlements = new Vector<>();
     public static Vector<Card> cities = new Vector<>();
     public static Vector<Card> events = new Vector<>();
@@ -96,8 +97,8 @@ public class Cardstacks {
                 }
                 int number;
                 if (loadmuliple) {
-                    number = gi(o, "number", 1); 
-                }else {
+                    number = gi(o, "number", 1);
+                } else {
                     number = 1;
                 }
                 for (int i = 0; i < number; i++) {
@@ -167,7 +168,11 @@ public class Cardstacks {
         }
     }
 
-    public void inizilizeRegion(Player p, int[][] regionDice, int center, int i) {
+    public void inizializePrincipiality(Player p, int[][] regionDice, int center, int i) {
+        p.placeCard(center, 1, popCardByName(Cardstacks.settlements, "Settlement"));
+        p.placeCard(center, 2, popCardByName(Cardstacks.roads, "Road"));
+        p.placeCard(center, 3, popCardByName(Cardstacks.settlements, "Settlement"));
+
         Card forest = popCardByName(Cardstacks.regions, "Forest");
         forest.diceRoll = regionDice[i][0];
         forest.regionProduction = 1;
@@ -209,9 +214,10 @@ public class Cardstacks {
         return null;
     }
 
-        public Card pickRegionFromStackByNameOrIndex(String spec) {
-        if (spec == null || spec.isBlank())
+    public Card pickRegionFromStackByNameOrIndex(String spec) {
+        if (spec == null || spec.isBlank()) {
             return null;
+        }
         spec = spec.trim();
         // try index
         try {
@@ -231,12 +237,80 @@ public class Cardstacks {
         return null;
     }
 
-    public Card drawregionCard(){
+    public Card drawregionCard() {
         return regions.isEmpty() ? null : regions.remove(0);
     }
 
-    public int getRegionstackSize(){
+    public int getRegionstackSize() {
         return regions.size();
+    }
+
+    public ArrayList<String> getCenterbuildingCost() {
+        ArrayList<String> buildBits = new ArrayList<>();
+        if (!Cardstacks.roads.isEmpty()) {
+            String cost = Cardstacks.roads.get(0).cost == null ? "-" : Cardstacks.roads.get(0).cost;
+            buildBits.add("ROAD(" + cost + ")");
+        }
+        if (!Cardstacks.settlements.isEmpty()) {
+            String cost = Cardstacks.settlements.get(0).cost == null ? "-" : Cardstacks.settlements.get(0).cost;
+            buildBits.add("SETTLEMENT(" + cost + ")");
+        }
+        if (!Cardstacks.cities.isEmpty()) {
+            String cost = Cardstacks.cities.get(0).cost == null ? "-" : Cardstacks.cities.get(0).cost;
+            buildBits.add("CITY(" + cost + ")");
+        }
+
+        return buildBits;
+    }
+
+    public int[] placeCenterCard(Player active, Player other, String spec) {
+        Vector<Card> pile = null;
+        if (spec.equalsIgnoreCase("Road")) {
+            pile = Cardstacks.roads;
+        } else if (spec.equalsIgnoreCase("Settlement")) {
+            pile = Cardstacks.settlements;
+        } else if (spec.equalsIgnoreCase("City")) {
+            pile = Cardstacks.cities;
+        }
+
+        if (pile == null || pile.isEmpty()) {
+            active.sendMessage("No " + spec + " cards left in the pile.");
+            return new int[] {-1,-1};
+        }
+
+        // Peek (do not remove yet)
+        Card proto = pile.firstElement();
+
+        // Check & pay cost first (do NOT mutate piles yet)
+        if (!active.payCost(proto.cost)) {
+            active.sendMessage("Can't afford cost: " + (proto.cost == null ? "-" : proto.cost));
+            return new int[] {-1,-1};
+        }
+
+        // Ask coordinates and attempt placement
+        active.sendMessage("PROMPT: Enter placement coordinates as: ROW COL");
+        int row = -1, col = -1;
+        try {
+            String[] rc = active.receiveMessage().trim().split("\\s+");
+            row = Integer.parseInt(rc[0]);
+            col = Integer.parseInt(rc[1]);
+        } catch (Exception e) {
+            active.sendMessage("Invalid coordinates. Use: ROW COL (e.g., 2 3)");
+            active.refundCost(proto.cost);
+            return new int[] {-1,-1};
+        }
+
+        boolean ok = proto.applyEffect(active, other, row, col);
+        if (!ok) {
+            active.sendMessage("Illegal placement/effect; refunding cost.");
+            active.refundCost(proto.cost);
+            return new int[] {-1,-1};
+        }
+
+        // Success → remove from pile now
+        pile.remove(0);
+        return new int[] {row, col};
+
     }
 
 }
