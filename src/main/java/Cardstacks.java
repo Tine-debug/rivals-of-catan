@@ -12,16 +12,16 @@ import com.google.gson.JsonParser;
 
 public class Cardstacks {
 
-    private static Vector<Card> regions = new Vector<>();
-    private static Vector<Card> roads = new Vector<>();
-    private static Vector<Card> settlements = new Vector<>();
-    private static Vector<Card> cities = new Vector<>();
-    private static Vector<Card> events = new Vector<>();
-    private static Vector<Card> resolvedevents = new Vector<>();
-    private static Vector<Card> drawStack1 = new Vector<>();
-    private static Vector<Card> drawStack2 = new Vector<>();
-    private static Vector<Card> drawStack3 = new Vector<>();
-    private static Vector<Card> drawStack4 = new Vector<>();
+    private Vector<Card> regions = new Vector<>();
+    private Vector<Card> roads = new Vector<>();
+    private Vector<Card> settlements = new Vector<>();
+    private Vector<Card> cities = new Vector<>();
+    private Vector<Card> events = new Vector<>();
+    private Vector<Card> resolvedevents = new Vector<>();
+    private Vector<Card> drawStack1 = new Vector<>();
+    private Vector<Card> drawStack2 = new Vector<>();
+    private Vector<Card> drawStack3 = new Vector<>();
+    private Vector<Card> drawStack4 = new Vector<>();
 
     private static Cardstacks instance;
 
@@ -150,7 +150,7 @@ public class Cardstacks {
         return out;
     }
 
-    static String gs(JsonObject o, String k) {
+ String gs(JsonObject o, String k) {
         if (!o.has(k)) {
             return null;
         }
@@ -158,7 +158,7 @@ public class Cardstacks {
         return (e == null || e.isJsonNull()) ? null : e.getAsString();
     }
 
-    static int gi(JsonObject o, String k, int def) {
+ int gi(JsonObject o, String k, int def) {
         if (!o.has(k)) {
             return def;
         }
@@ -170,26 +170,26 @@ public class Cardstacks {
     }
 
     public void inizializePrincipiality(Player p, int[][] regionDice, int center, int i) {
-        p.placeCard(center, 1, popCardByName(Cardstacks.settlements, "Settlement"));
-        p.placeCard(center, 2, popCardByName(Cardstacks.roads, "Road"));
-        p.placeCard(center, 3, popCardByName(Cardstacks.settlements, "Settlement"));
+        p.placeCard(center, 1, popCardByName(settlements, "Settlement"));
+        p.placeCard(center, 2, popCardByName(roads, "Road"));
+        p.placeCard(center, 3, popCardByName(settlements, "Settlement"));
 
-        Card forest = popCardByName(Cardstacks.regions, "Forest");
+        Card forest = popCardByName(regions, "Forest");
         forest.diceRoll = regionDice[i][0];
         forest.regionProduction = 1;
-        Card gold = popCardByName(Cardstacks.regions, "Gold Field");
+        Card gold = popCardByName(regions, "Gold Field");
         gold.diceRoll = regionDice[i][1];
         gold.regionProduction = 0;
-        Card field = popCardByName(Cardstacks.regions, "Field");
+        Card field = popCardByName(regions, "Field");
         field.diceRoll = regionDice[i][2];
         field.regionProduction = 1;
-        Card hill = popCardByName(Cardstacks.regions, "Hill");
+        Card hill = popCardByName(regions, "Hill");
         hill.diceRoll = regionDice[i][3];
         hill.regionProduction = 1;
-        Card past = popCardByName(Cardstacks.regions, "Pasture");
+        Card past = popCardByName(regions, "Pasture");
         past.diceRoll = regionDice[i][4];
         past.regionProduction = 1;
-        Card mount = popCardByName(Cardstacks.regions, "Mountain");
+        Card mount = popCardByName(regions, "Mountain");
         mount.diceRoll = regionDice[i][5];
         mount.regionProduction = 1;
 
@@ -202,7 +202,7 @@ public class Cardstacks {
     }
 
     public void shuffleRegions() {
-        Collections.shuffle(Cardstacks.regions);
+        Collections.shuffle(regions);
     }
 
     public Card findUndicedRegionByName(String name) {
@@ -223,16 +223,16 @@ public class Cardstacks {
         // try index
         try {
             int idx = Integer.parseInt(spec);
-            if (idx >= 0 && idx < Cardstacks.regions.size()) {
-                return Cardstacks.regions.remove(idx);
+            if (idx >= 0 && idx < regions.size()) {
+                return regions.remove(idx);
             }
         } catch (Exception ignored) {
         }
         // try by name (first match)
-        for (int i = 0; i < Cardstacks.regions.size(); i++) {
-            Card c = Cardstacks.regions.get(i);
+        for (int i = 0; i < regions.size(); i++) {
+            Card c = regions.get(i);
             if (c != null && c.name != null && c.name.equalsIgnoreCase(spec)) {
-                return Cardstacks.regions.remove(i);
+                return regions.remove(i);
             }
         }
         return null;
@@ -248,16 +248,16 @@ public class Cardstacks {
 
     public ArrayList<String> getCenterbuildingCost() {
         ArrayList<String> buildBits = new ArrayList<>();
-        if (!Cardstacks.roads.isEmpty()) {
-            String cost = Cardstacks.roads.get(0).cost == null ? "-" : Cardstacks.roads.get(0).cost;
+        if (!roads.isEmpty()) {
+            String cost = roads.get(0).cost == null ? "-" : roads.get(0).cost;
             buildBits.add("ROAD(" + cost + ")");
         }
-        if (!Cardstacks.settlements.isEmpty()) {
-            String cost = Cardstacks.settlements.get(0).cost == null ? "-" : Cardstacks.settlements.get(0).cost;
+        if (!settlements.isEmpty()) {
+            String cost = settlements.get(0).cost == null ? "-" : settlements.get(0).cost;
             buildBits.add("SETTLEMENT(" + cost + ")");
         }
-        if (!Cardstacks.cities.isEmpty()) {
-            String cost = Cardstacks.cities.get(0).cost == null ? "-" : Cardstacks.cities.get(0).cost;
+        if (!cities.isEmpty()) {
+            String cost = cities.get(0).cost == null ? "-" : cities.get(0).cost;
             buildBits.add("CITY(" + cost + ")");
         }
 
@@ -267,11 +267,11 @@ public class Cardstacks {
     public int[] placeCenterCard(Player active, Player other, String spec) {
         Vector<Card> pile = null;
         if (spec.equalsIgnoreCase("Road")) {
-            pile = Cardstacks.roads;
+            pile = roads;
         } else if (spec.equalsIgnoreCase("Settlement")) {
-            pile = Cardstacks.settlements;
+            pile = settlements;
         } else if (spec.equalsIgnoreCase("City")) {
-            pile = Cardstacks.cities;
+            pile = cities;
         }
 
         if (pile == null || pile.isEmpty()) {

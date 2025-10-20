@@ -726,27 +726,6 @@ public class Server {
         p.refundCost(cost);
     }
 
-    // Maps single-letter cost codes to canonical resource names used everywhere
-    // else.
-    // B=Brick, G=Grain, L=Lumber, W=Wool, O=Ore, A=Gold
-    private String letterToResource(char ch) {
-        switch (Character.toUpperCase(ch)) {
-            case 'B':
-                return "Brick";
-            case 'G':
-                return "Grain";
-            case 'L':
-                return "Lumber";
-            case 'W':
-                return "Wool";
-            case 'O':
-                return "Ore";
-            case 'A':
-                return "Gold";
-            default:
-                return null; // unknown / ignore
-        }
-    }
 
     // Large Trade Ship trade: side L/R relative to a placed LTS@row,col
     private boolean applyLTS(Player p, String side, String twoFrom, String oneTo) {
