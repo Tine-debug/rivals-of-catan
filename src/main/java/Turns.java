@@ -9,13 +9,6 @@ public class Turns {
         this.players = players;
     }
 
-    private static final int EV_BRIGAND = 1;
-    private static final int EV_TRADE = 2;
-    private static final int EV_CELEB = 3;
-    private static final int EV_PLENTY = 4;
-    private static final int EV_EVENT_A = 5;
-    private static final int EV_EVENT_B = 6;
-
     private final Broadcast broadcast = Broadcast.getInstance();
     private final Cardstacks stacks = Cardstacks.getInstance();
 
@@ -36,7 +29,7 @@ public class Turns {
             prodFace = getNonRandomProductionDie(active);
         }
 
-        if (eventFace == EV_BRIGAND) {
+        if (eventFace == DiceEvents.getBrigandFace()) {
             DiceEvents.resolveEvent(eventFace, active, other);
             applyProduction(prodFace);
         } else {

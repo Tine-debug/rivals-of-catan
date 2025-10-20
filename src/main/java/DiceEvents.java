@@ -16,6 +16,10 @@ public class DiceEvents {
     private static final Broadcast broadcast = Broadcast.getInstance();
     private static final Cardstacks stacks = Cardstacks.getInstance();
 
+    public static int getBrigandFace(){
+        return EV_BRIGAND;
+    }
+
     public static void resolveEvent(int face, Player active, Player other) {
         List<Player> players = new ArrayList<>();
         players.add(active);
