@@ -12,15 +12,22 @@ import java.util.Random;
 
 public class Turns {
 
-    public Turns(List<Player> players) {
-        this.players = players;
-    }
+
 
     private final Broadcast broadcast = Broadcast.getInstance();
     private final Cardstacks stacks = Cardstacks.getInstance();
 
     private final Random rng = new Random();
-    List<Player> players;
+    private final List<Player> players;
+
+    private int nonrandeventdie = 0;
+    private int nonrandproductiondie = 0;
+
+    public Turns(List<Player> players) {
+        this.players = players;
+    }
+
+
 
     public int resolveOneTurn(int current, boolean random) {
         Player active = players.get(current);
@@ -29,7 +36,7 @@ public class Turns {
         int eventFace;
         int prodFace;
         if (random) {
-            eventFace = rollEventDie(active);
+            eventFace = rollEventDie();
             prodFace = rollProductionDie(active);
         } else {
             eventFace = getNonRandomEventDie();
@@ -70,13 +77,13 @@ public class Turns {
 
     }
 
-    protected int rollEventDie(Player active) {
+    private int rollEventDie() {
         int face = 1 + rng.nextInt(6);
         broadcast.broadcast("[EventDie] -> " + face);
         return face;
     }
 
-    protected int rollProductionDie(Player active) {
+    private int rollProductionDie(Player active) {
         int face = 1 + rng.nextInt(6);
         if (active.flags.contains("BRIGITTA")) {
             active.sendMessage("PROMPT: Brigitta active -  choose production die [1-6]:");
@@ -213,15 +220,12 @@ public class Turns {
         return false;
     }
 
-    int nonrandeventdie = 0;
-    int nonrandproductiondie = 0;
-
     private int getNonRandomEventDie() {
         nonrandeventdie = (nonrandeventdie + 1) % 6;
         return nonrandeventdie + 1;
     }
 
-    protected int getNonRandomProductionDie(Player active) {
+    private int getNonRandomProductionDie(Player active) {
         nonrandproductiondie = (nonrandproductiondie + 1) % 6;
         int face = 1 + nonrandproductiondie;
         if (active.flags.contains("BRIGITTA")) {
