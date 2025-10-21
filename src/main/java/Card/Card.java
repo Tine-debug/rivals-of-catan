@@ -84,42 +84,6 @@ public class Card implements Comparable<Card> {
         return diceRoll;
     }
 
-    //setters 
-
-    /*
-
-    public void setName(String newvalue) {
-        name = newvalue;
-    }
-
-    public void setTheme(String newvalue) {
-        theme = newvalue;
-    }
-
-    public void setType(String newvalue) {
-        type = newvalue;
-    }
-
-    public void setCost(String newvalue) {
-        cost = newvalue;
-    }
-
-    public void setOneof(boolean newvalue) {
-        oneOf = newvalue;
-    }
-
-    public void setCardText(String newvalue) {
-        cardText = newvalue;
-    }
-
-       public void setPlacement (String newvalue){
-        placement = newvalue;
-    }
-
-    public void setLogic(Logic newvalue){
-        logic = newvalue;
-    }
-     */
     public void setPoints(Points newPoints) {
         points = newPoints;
 

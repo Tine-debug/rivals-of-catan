@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
 import Points.PointsBuilder;
+import Card.logic.LogicFactory;
 
 
 import com.google.gson.JsonArray;
@@ -41,12 +42,20 @@ public class LoadCards {
                 }
                 for (int i = 0; i < number; i++) {
                     Cardbuilder cardbuilder = new Cardbuilder();
-                    cardbuilder.name(gs(o, "name"));
-                    cardbuilder.type(gs(o, "type"));
-                    cardbuilder.placement(gs(o, "placement"));
+                    String name = gs(o, "name");
+                    cardbuilder.name(name);
+                    String type = gs(o, "type");
+                    cardbuilder.type(type);
+                    String placement = gs(o, "placement");
+                    cardbuilder.placement(placement);
+                    cardbuilder.logic(LogicFactory.createLogic(placement, name, type));
+
                     cardbuilder.oneOf(gs(o, "oneOf"));
                     cardbuilder.cardText(gs(o, "cardText"));
                     cardbuilder.cost(gs(o,"cost"));
+
+                    
+
 
                     PointsBuilder pointsBuilder = new PointsBuilder();
                     pointsBuilder.victoryPoints(gs(o, "victoryPoints"));

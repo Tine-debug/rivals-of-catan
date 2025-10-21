@@ -1,7 +1,7 @@
 package Card;
 
 import Points.Points;
-import Card.logic.LogicFactory;
+import Card.logic.Logic;
 
 public class Cardbuilder {
 
@@ -10,6 +10,7 @@ public class Cardbuilder {
     private String cardText;
     private Points points;
     private String placement;
+    private Logic logic;
 
 
 
@@ -49,11 +50,15 @@ public class Cardbuilder {
         this.placement = placement;
     }
 
+    public void logic(Logic logic){
+        this.logic = logic;
+    }
+
 
     public Card build(){
         return new Card(this.name, this.theme, this.type, this.placement, 
         this.oneOf, this.cost, this.points, this.cardText, 
-        LogicFactory.createLogic(this.placement, this.name, this.type));
+        this.logic);
     }
 
 }
