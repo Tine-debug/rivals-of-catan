@@ -2,6 +2,7 @@ to compile, run all of your testfiles and get a report run
 
 mvn  verify
 
+TO PLAY THE GAME:
 first compile with:
 
 mvn compile
