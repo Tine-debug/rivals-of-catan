@@ -9,6 +9,8 @@ import org.approvaltests.Approvals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerApprovalTest {
 
@@ -19,7 +21,7 @@ public class PlayerApprovalTest {
     @BeforeAll
     static void setupall() {
         try {
-            Vector<Card> BasicCards = stacks.loadThemeCards("cards.json", "basic", false);
+            List<Card> BasicCards = stacks.loadThemeCards("cards.json", "basic", false);
         } catch (Exception e) {
         }
             System.err.println("Failed to load: ");

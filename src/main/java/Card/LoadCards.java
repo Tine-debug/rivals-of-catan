@@ -2,7 +2,7 @@ package Card;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
 import Points.PointsBuilder;
 import Card.logic.LogicFactory;
 
@@ -14,9 +14,9 @@ import com.google.gson.JsonParser;
 
 public class LoadCards {
 
-    public static Vector<Card> loadCards(String jsonPath, boolean loadmultiple, String desiredTheme) throws IOException {
+    public static ArrayList<Card> loadCards(String jsonPath, boolean loadmultiple, String desiredTheme) throws IOException {
 
-        Vector<Card> allBasic = new Vector<>();
+        ArrayList<Card> allBasic = new ArrayList<>();
 
         try (FileReader fr = new FileReader(jsonPath)) {
             JsonElement root = JsonParser.parseReader(fr);

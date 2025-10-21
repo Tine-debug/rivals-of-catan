@@ -28,7 +28,7 @@ public class CardApplyEffectApprovalTest {
 
     private final static Cardstacks stacks = Cardstacks.getInstance();
 
-    static Vector<Card> basicCards;
+    static List<Card> basicCards;
     MockPlayer player1;
     MockPlayer player2;
     MockPlayer player3;

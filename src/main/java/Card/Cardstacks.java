@@ -4,21 +4,21 @@ import Player.Player;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Vector;
+import java.util.List;
 import java.util.ArrayList;
 
 public class Cardstacks {
 
-    private Vector<Card> regions = new Vector<>();
-    private Vector<Card> roads = new Vector<>();
-    private Vector<Card> settlements = new Vector<>();
-    private Vector<Card> cities = new Vector<>();
-    private Vector<Card> events = new Vector<>();
-    private Vector<Card> resolvedevents = new Vector<>();
-    private Vector<Card> drawStack1 = new Vector<>();
-    private Vector<Card> drawStack2 = new Vector<>();
-    private Vector<Card> drawStack3 = new Vector<>();
-    private Vector<Card> drawStack4 = new Vector<>();
+    private List<Card> regions = new ArrayList<>();
+    private List<Card> roads = new ArrayList<>();
+    private List<Card> settlements = new ArrayList<>();
+    private List<Card> cities = new ArrayList<>();
+    private List<Card> events = new ArrayList<>();
+    private List<Card> resolvedevents = new ArrayList<>();
+    private List<Card> drawStack1 = new ArrayList<>();
+    private List<Card> drawStack2 = new ArrayList<>();
+    private List<Card> drawStack3 = new ArrayList<>();
+    private List<Card> drawStack4 = new ArrayList<>();
 
     private static Cardstacks instance;
 
@@ -34,7 +34,7 @@ public class Cardstacks {
     }
 
     public void sortIntoPiles(boolean shuffle, String jsonPath) throws IOException {
-        Vector<Card> allBasic = loadThemeCards(jsonPath, "basic", true);
+        List<Card> allBasic = LoadCards.loadCards(jsonPath, true, "basic");
 
         // Split into piles we care about
         // Center cards
@@ -61,12 +61,12 @@ public class Cardstacks {
             Collections.shuffle(allBasic);
         }
         int stackSize = 9;
-        drawStack1 = new Vector<>(allBasic.subList(0, Math.min(stackSize, allBasic.size())));
-        drawStack2 = new Vector<>(allBasic.subList(Math.min(stackSize, allBasic.size()),
+        drawStack1 = new ArrayList<>(allBasic.subList(0, Math.min(stackSize, allBasic.size())));
+        drawStack2 = new ArrayList<>(allBasic.subList(Math.min(stackSize, allBasic.size()),
                 Math.min(2 * stackSize, allBasic.size())));
-        drawStack3 = new Vector<>(allBasic.subList(Math.min(2 * stackSize, allBasic.size()),
+        drawStack3 = new ArrayList<>(allBasic.subList(Math.min(2 * stackSize, allBasic.size()),
                 Math.min(3 * stackSize, allBasic.size())));
-        drawStack4 = new Vector<>(allBasic.subList(Math.min(3 * stackSize, allBasic.size()),
+        drawStack4 = new ArrayList<>(allBasic.subList(Math.min(3 * stackSize, allBasic.size()),
                 Math.min(4 * stackSize, allBasic.size())));
     }
 
@@ -74,11 +74,11 @@ public class Cardstacks {
         sortIntoPiles(false, jsonPath);
     }
 
-    public Vector<Card> loadThemeCards(String jsonPath, String desiredTheme, boolean loadmuliple) throws IOException {
+    public List<Card> loadThemeCards(String jsonPath, String desiredTheme, boolean loadmuliple) throws IOException {
         return LoadCards.loadCards(jsonPath, loadmuliple, desiredTheme);
     }
 
-    public Card popCardByName(Vector<Card> cards, String name) {
+    public Card popCardByName(List<Card> cards, String name) {
         if (cards == null || name == null) {
             return null;
         }
@@ -95,8 +95,8 @@ public class Cardstacks {
     }
 
     // Extract all cards whose public String field `attribute` equals `value`
-    public Vector<Card> extractCardsByAttribute(Vector<Card> cards, String attribute, String value) {
-        Vector<Card> out = new Vector<>();
+    public List<Card> extractCardsByAttribute(List<Card> cards, String attribute, String value) {
+        List<Card> out = new ArrayList<>();
         for (int i = cards.size() - 1; i >= 0; i--) {
             Card c = cards.get(i);
             switch (attribute) {
@@ -222,7 +222,7 @@ public class Cardstacks {
     }
 
     public int[] placeCenterCard(Player active, Player other, String spec) {
-        Vector<Card> pile = null;
+        List<Card> pile = null;
         if (spec.equalsIgnoreCase("Road")) {
             pile = roads;
         } else if (spec.equalsIgnoreCase("Settlement")) {
@@ -237,7 +237,7 @@ public class Cardstacks {
         }
 
         // Peek (do not remove yet)
-        Card proto = pile.firstElement();
+        Card proto = pile.get(0);
 
         // Check & pay cost first (do NOT mutate piles yet)
         if (!active.payCost(proto.getCost())) {
@@ -252,7 +252,7 @@ public class Cardstacks {
             String[] rc = active.receiveMessage().trim().split("\\s+");
             row = Integer.parseInt(rc[0]);
             col = Integer.parseInt(rc[1]);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             active.sendMessage("Invalid coordinates. Use: ROW COL (e.g., 2 3)");
             active.refundCost(proto.getCost());
             return new int[]{-1, -1};
@@ -299,13 +299,13 @@ public class Cardstacks {
             return;
         }
 
-        Vector<Card> chosen = stackBy(numberStack);
+        List<Card> chosen = stackBy(numberStack);
         chosen.add(bld);
 
     }
 
     public void drawCardfromStack(int which, Player p) {
-        Vector<Card> stack = stackBy(which);
+        List<Card> stack = stackBy(which);
         if (stack.isEmpty()) {
             // advance circularly until any non-empty
             int tries = 0;
@@ -322,7 +322,7 @@ public class Cardstacks {
         p.addToHand(stack.remove(0));
     }
 
-    private Vector<Card> stackBy(int n) {
+    private List<Card> stackBy(int n) {
         switch (n) {
             case 1:
                 return drawStack1;
@@ -337,7 +337,7 @@ public class Cardstacks {
     }
 
     public void chooseCardFromStack(int chosen, Player p) {
-        Vector<Card> stack = stackBy(chosen);
+        List<Card> stack = stackBy(chosen);
         if (stack.isEmpty()) {
             p.sendMessage("That stack is empty.");
             return;
@@ -358,7 +358,7 @@ public class Cardstacks {
     }
 
     public void drawCard(int chosen, Player p) {
-        Vector<Card> stack = stackBy(chosen);
+        List<Card> stack = stackBy(chosen);
         if (stack.isEmpty()) {
             p.sendMessage("That stack is empty.");
             return;
