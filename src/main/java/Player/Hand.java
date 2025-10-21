@@ -6,7 +6,23 @@ import Card.Card;
 
 public class Hand {
 
-    public List<Card> hand = new ArrayList<>();
+    private List<Card> hand = new ArrayList<>();
+
+    public void removeCard(Card card){
+        hand.remove(card);
+    }
+
+    public Card removeCard(int i){
+        return hand.remove(i);
+    }
+
+    public boolean isEmpty(){
+        return hand.isEmpty();
+    }
+
+    public int size(){
+        return hand.size();
+    }
 
     public String printHand() {
         StringBuilder sb = new StringBuilder();

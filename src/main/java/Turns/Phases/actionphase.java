@@ -142,7 +142,7 @@ public class actionphase {
                         continue;
                     }
 
-                    active.hand.hand.remove(c);
+                    active.hand.removeCard(c);
                     broadcast.broadcast("Current player played action " + c.toString());
                 } else {
                     // Non-action: needs placement
@@ -165,7 +165,7 @@ public class actionphase {
                         continue;
                     }
 
-                    active.hand.hand.remove(c);
+                    active.hand.removeCard(c);
                     broadcast.broadcast("Current player played " + c.toString() + " at (" + row + "," + col + ")");
                 }
             } else if (up.startsWith("END")) {

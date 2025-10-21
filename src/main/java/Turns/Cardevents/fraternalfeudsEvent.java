@@ -23,7 +23,7 @@ public class fraternalfeudsEvent implements CardEvent {
         }
         Player opp = (adv == active) ? other : active;
 
-        if (opp.hand.hand.isEmpty()) {
+        if (opp.hand.isEmpty()) {
             broadcast.broadcast("Fraternal Feuds: opponent hand empty.");
             return;
         }
@@ -34,7 +34,7 @@ public class fraternalfeudsEvent implements CardEvent {
         try {
             for (String tok : sel.trim().split("\\s+")) {
                 int i = Integer.parseInt(tok);
-                if (i >= 0 && i < opp.hand.hand.size()) {
+                if (i >= 0 && i < opp.hand.size()) {
                     idxs.add(i);
                 }
                 if (idxs.size() == 2) {
@@ -56,7 +56,7 @@ public class fraternalfeudsEvent implements CardEvent {
         java.util.List<Integer> order = new java.util.ArrayList<>(idxs);
         java.util.Collections.sort(order, java.util.Collections.reverseOrder());
         for (int i : order) {
-            Card rem = opp.hand.hand.remove(i);
+            Card rem = opp.hand.removeCard(i);
             stacks.placeCardBottomStack(rem, 1);
             broadcast.broadcast("Fraternal Feuds: returned '" + rem.toString() + "' to bottom of a draw stack.");
         }
