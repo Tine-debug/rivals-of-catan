@@ -50,13 +50,13 @@ public class PlayerApprovalTest {
         forest.setRegionProduction(2);
         Card settlement = new Card("Settlement", "Road", null);
         //String victoryPoints, String CP, String SP, String FP, String PP, String LP, String KP
-        settlement.updatePoints(new Points("2", null, null, null, null, null, null));        
+        settlement.setPoints(new Points("2", null, null, null, null, null, null));        
 
         player.placeCard(0, 0, forest);
         player.placeCard(1, 1, settlement);
 
         Card cardInHand = new Card("Mill", "Building", "2 Grain");
-        cardInHand.updatePoints(new Points(null, null, "1", null, null, null, null));
+        cardInHand.setPoints(new Points(null, null, "1", null, null, null, null));
         player.addToHand(cardInHand);
 
         Approvals.verify(player.printPrincipality() + "\n" + player.printHand());

@@ -10,7 +10,7 @@ public class Card implements Comparable<Card> {
     // ---------- Public fields (keep simple for the take-home) ----------
     private String name, theme, type, cost;
     private boolean oneOf;
-    private  String cardText;
+    private String cardText;
 
     private Points points;
 
@@ -23,13 +23,6 @@ public class Card implements Comparable<Card> {
     private int regionProduction = 0;
     // Regions use production die faces (1..6). 0 means “not a region” / unassigned.
     private int diceRoll = 0;
-
-
-
-
-
-    // ---------- Global piles for the Basic set ----------
-    private static Cardstacks stacks = Cardstacks.getInstance();
 
     // ---------- Construction ----------
     public Card() {
@@ -54,72 +47,122 @@ public class Card implements Comparable<Card> {
         this.logic = LogicFactory.createLogic(placement, name, type);
     }
 
-    public Card(String name, String type, String cost){
+    public Card(String name, String type, String cost) {
         this.name = name;
         this.type = type;
         this.cost = cost;
     }
 
-    public String getTheme(){
+    //getters
+    public String getTheme() {
         return theme;
     }
 
-    public String getType(){
+    public String getType() {
         return type;
     }
 
-    public String getCost(){
+    public String getCost() {
         return cost;
     }
 
-    public boolean getOneOf(){
+    public boolean getOneOf() {
         return oneOf;
     }
 
-    public String getCardText(){
+    public String getCardText() {
         return cardText;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public String getPlacement(){
+    public String getPlacement() {
         return placement;
     }
 
-    public Points getPoints(){
+    public Points getPoints() {
         return points;
     }
 
-    public void updatePoints(Points newPoints){
-        points = newPoints;
-        
-    }
-
-    public int getRegionProduction(){
+    public int getRegionProduction() {
         return regionProduction;
     }
 
-    public int getdiceRoll(){
+    public int getdiceRoll() {
         return diceRoll;
     }
 
-    public void setRegionProduction(int newcount){
-        if (newcount >= 0 && newcount <= 3) regionProduction = newcount; 
+    //setters 
+
+    /*
+    private String name, theme, type, cost;
+    private boolean oneOf;
+    private  String cardText;
+
+    private Points points;
+
+    private String placement;
+
+    private Logic logic;
+     */
+    public void setName(String newvalue) {
+        name = newvalue;
+    }
+
+    public void setTheme(String newvalue) {
+        theme = newvalue;
+    }
+
+    public void setType(String newvalue) {
+        type = newvalue;
+    }
+
+    public void setCost(String newvalue) {
+        cost = newvalue;
+    }
+
+    public void setOneof(boolean newvalue) {
+        oneOf = newvalue;
+    }
+
+    public void setCardText(String newvalue) {
+        cardText = newvalue;
+    }
+
+    public void setPoints(Points newPoints) {
+        points = newPoints;
 
     }
 
-    public void setDiceRoll(int newdice){
-         if (newdice >= 0 && newdice <= 6) diceRoll = newdice; 
+    public void setRegionProduction(int newcount) {
+        if (newcount >= 0 && newcount <= 3) {
+            regionProduction = newcount;
+        }
 
     }
 
-   
+    public void setPlacement (String newvalue){
+        placement = newvalue;
+    }
+
+    public void setLogic(Logic newvalue){
+        logic = newvalue;
+    }
+
+    public void setDiceRoll(int newdice) {
+        if (newdice >= 0 && newdice <= 6) {
+            diceRoll = newdice;
+        }
+
+    }
 
     @Override
     public String toString() {
-        if (name != null) return name;
+        if (name != null) {
+            return name;
+        }
         return "?";
     }
 
@@ -127,7 +170,6 @@ public class Card implements Comparable<Card> {
     public int compareTo(Card o) {
         return this.name.compareToIgnoreCase(o.name);
     }
-
 
     public boolean applyEffect(Player active, Player other, int row, int col) {
         String nm = (this.name == null ? "" : this.name);
