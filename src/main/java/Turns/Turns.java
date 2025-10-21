@@ -85,7 +85,7 @@ public class Turns {
 
     private int rollProductionDie(Player active) {
         int face = 1 + rng.nextInt(6);
-        if (active.flags.contains("BRIGITTA")) {
+        if (active.getFlags().contains("BRIGITTA")) {
             active.sendMessage("PROMPT: Brigitta active -  choose production die [1-6]:");
             try {
                 int forced = Integer.parseInt(active.receiveMessage().trim());
@@ -94,7 +94,7 @@ public class Turns {
                 }
             } catch (NumberFormatException ignored) {
             }
-            active.flags.remove("BRIGITTA");
+            active.removeFlag("BRIGITTA");
         }
         broadcast.broadcast("[ProductionDie] -> " + face);
         return face;
@@ -102,12 +102,12 @@ public class Turns {
 
     private void applyProduction(int face) {
         for (Player p : players) {
-            boolean hasMarketplace = p.flags.contains("MARKETPLACE");
+            boolean hasMarketplace = p.getFlags().contains("MARKETPLACE");
             int pMatches = countFaceRegions(p, face);
             int oppMatches = countFaceRegions(opponentOf(p), face);
 
-            for (int r = 0; r < p.principality.principality.size(); r++) {
-                List<Card> row = p.principality.principality.get(r);
+            for (int r = 0; r < p.getPrincipality().principality.size(); r++) {
+                List<Card> row = p.getPrincipality().principality.get(r);
                 for (int c = 0; c < row.size(); c++) {
                     Card card = row.get(c);
                     if (card == null || !"Region".equalsIgnoreCase(card.getType())) {
@@ -135,7 +135,7 @@ public class Turns {
     }
 
     public void replenish(Player p) {
-        if (p.flags != null && p.flags.remove("NO_REPLENISH_ONCE")) {
+        if (p.getFlags() != null && p.getFlags().remove("NO_REPLENISH_ONCE")) {
             p.sendMessage("You cannot replenish your hand this turn (Fraternal Feuds).");
         } else {
             int handTarget = 3 + p.points.progressPoints;
@@ -159,7 +159,7 @@ public class Turns {
 
     private int countFaceRegions(Player p, int face) {
         int n = 0;
-        for (List<Card> row : p.principality.principality) {
+        for (List<Card> row : p.getPrincipality().principality) {
             for (Card c : row) {
                 if (c != null && "Region".equalsIgnoreCase(c.getType()) && c.getdiceRoll() == face) {
                     n++;
@@ -228,7 +228,7 @@ public class Turns {
     private int getNonRandomProductionDie(Player active) {
         nonrandproductiondie = (nonrandproductiondie + 1) % 6;
         int face = 1 + nonrandproductiondie;
-        if (active.flags.contains("BRIGITTA")) {
+        if (active.getFlags().contains("BRIGITTA")) {
             active.sendMessage("PROMPT: Brigitta active -  choose production die [1-6]:");
             try {
                 int forced = Integer.parseInt(active.receiveMessage().trim());
@@ -237,7 +237,7 @@ public class Turns {
                 }
             } catch (NumberFormatException ignored) {
             }
-            active.flags.remove("BRIGITTA");
+            active.removeFlag("BRIGITTA");
         }
         return face;
     }

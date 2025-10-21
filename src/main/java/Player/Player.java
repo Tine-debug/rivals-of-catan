@@ -17,18 +17,18 @@ public class Player {
     
     
 
-    public int tradeRate = 3;
-    public boolean isBot = false;
+    private int tradeRate = 3;
+    private boolean isBot = false;
 
-    public Set<String> flags = new HashSet<>();
+    private Set<String> flags = new HashSet<>();
 
-    public Map<String, Integer> resources = new HashMap<>();
+    private Map<String, Integer> resources = new HashMap<>();
 
-    public Hand hand = new Hand();
+    private Hand hand = new Hand();
 
-    public Principality principality;
+    private Principality principality;
 
-    public int lastSettlementRow = -1, lastSettlementCol = -1;
+    private int lastSettlementRow = -1, lastSettlementCol = -1;
 
     private final Scanner in = new Scanner(System.in);
 
@@ -52,6 +52,58 @@ public class Player {
         System.out.print("> ");
         return in.nextLine();
     }
+
+    //getters
+    public Set<String> getFlags(){
+        return this.flags;
+    }
+
+    public Principality getPrincipality(){
+        return principality;
+    }
+
+    public Hand getHand(){
+        return hand;
+    }
+
+    public boolean getIsBot(){
+        return isBot;
+    }
+
+    public int getLastSettlementRow(){
+        return lastSettlementRow;
+    }
+
+    public int getLastSettlementCol(){
+        return lastSettlementCol;
+    }
+
+    //setters
+    public void setFlags(Set<String> newFlags){
+        this.flags = newFlags;
+    }
+
+    public void setIsBot(boolean newvalue){
+        this.isBot = newvalue;
+    }
+
+    public void setLastSettlementRow(int newvalue){
+        this.lastSettlementRow = newvalue;
+    }
+    
+    public void setLastSettlementCol(int newvalue){
+        this.lastSettlementCol = newvalue;
+    }
+
+    
+
+    //
+
+    public void removeFlag(String toRemove){
+        flags.remove(toRemove);
+    }
+
+
 
     public Card getCard(int r, int c) {
         return principality.getCard(r, c);

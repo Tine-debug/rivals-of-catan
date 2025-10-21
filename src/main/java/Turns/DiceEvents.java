@@ -77,7 +77,7 @@ public class DiceEvents {
                 for (Player p : players) {
                     p.sendMessage("PROMPT: Plentiful Harvest - choose a resource [Brick|Grain|Lumber|Wool|Ore|Gold]:");
                     p.gainResource(p.receiveMessage());
-                    if (p.flags.contains("TOLLB")) {
+                    if (p.getFlags().contains("TOLLB")) {
                         int add = grantGoldIfSpace(p, 2);
                         if (add > 0) {
                             p.sendMessage("Toll Bridge: +" + add + " Gold");
@@ -112,8 +112,8 @@ public class DiceEvents {
     private static int countGoldAndWool(Player p, boolean excludeStorehouseAdj) {
         int total = 0;
         Set<String> excluded = excludeStorehouseAdj ? storehouseExcludedKeys(p) : Set.of();
-        for (int r = 0; r < p.principality.principality.size(); r++) {
-            java.util.List<Card> row = p.principality.principality.get(r);
+        for (int r = 0; r < p.getPrincipality().principality.size(); r++) {
+            java.util.List<Card> row = p.getPrincipality().principality.get(r);
             if (row == null) {
                 continue;
             }
@@ -137,8 +137,8 @@ public class DiceEvents {
 
     private static Set<String> storehouseExcludedKeys(Player p) {
         Set<String> out = new HashSet<>();
-        for (int r = 0; r < p.principality.principality.size(); r++) {
-            List<Card> row = p.principality.principality.get(r);
+        for (int r = 0; r < p.getPrincipality().principality.size(); r++) {
+            List<Card> row = p.getPrincipality().principality.get(r);
             for (int c = 0; c < row.size(); c++) {
                 Card x = row.get(c);
                 if (x != null && x.toString() != null && x.toString().equalsIgnoreCase("Storehouse")) {
@@ -157,8 +157,8 @@ public class DiceEvents {
 
     private static int grantGoldIfSpace(Player p, int want) {
         int given = 0;
-        for (int r = 0; r < p.principality.principality.size(); r++) {
-            java.util.List<Card> row = p.principality.principality.get(r);
+        for (int r = 0; r < p.getPrincipality().principality.size(); r++) {
+            java.util.List<Card> row = p.getPrincipality().principality.get(r);
             if (row == null) {
                 continue;
             }
@@ -210,8 +210,8 @@ public class DiceEvents {
     }
 
     private static void forEachRegion(Player p, RegionVisitor v) {
-        for (int r = 0; r < p.principality.principality.size(); r++) {
-            List<Card> row = p.principality.principality.get(r);
+        for (int r = 0; r < p.getPrincipality().principality.size(); r++) {
+            List<Card> row = p.getPrincipality().principality.get(r);
             for (int c = 0; c < row.size(); c++) {
                 Card card = row.get(c);
                 if (card != null && "Region".equalsIgnoreCase(card.getType())) {

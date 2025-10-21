@@ -38,8 +38,8 @@ public class SettlementLogic implements Logic {
         // Now place diagonals using the correct, updated col
         placeTwoDiagonalRegions(active, row, col);
 
-        active.lastSettlementRow = row;
-        active.lastSettlementCol = col;
+        active.setLastSettlementRow(row);
+        active.setLastSettlementCol(col);
         return true;
 
     }
@@ -52,7 +52,7 @@ public class SettlementLogic implements Logic {
         // Draw or choose 2 regions
         Card first, second;
 
-        if (active.flags.contains("SCOUT_NEXT_SETTLEMENT")) {
+        if (active.getFlags().contains("SCOUT_NEXT_SETTLEMENT")) {
             // SCOUT: let player pick two specific regions from the region stack by name or
             // index
             active.sendMessage("PROMPT: SCOUT - Choose first region (name or index):");
@@ -73,7 +73,7 @@ public class SettlementLogic implements Logic {
             if (first == null || second == null) {
                 active.sendMessage("SCOUT: Region stack exhausted.");
                 // still clear the flag to avoid leaking it
-                active.flags.remove("SCOUT_NEXT_SETTLEMENT");
+                active.getFlags().remove("SCOUT_NEXT_SETTLEMENT");
                 return;
             }
         } else {
@@ -108,7 +108,7 @@ public class SettlementLogic implements Logic {
         }
 
         // SCOUT benefit is consumed now; clear the flag
-        active.flags.remove("SCOUT_NEXT_SETTLEMENT");
+        active.getFlags().remove("SCOUT_NEXT_SETTLEMENT");
     }
 
     // Helper: choose region by name or index from Cardstacks.regions

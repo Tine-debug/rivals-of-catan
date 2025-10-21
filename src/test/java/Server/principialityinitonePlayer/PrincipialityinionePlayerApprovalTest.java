@@ -46,13 +46,13 @@ public class PrincipialityinionePlayerApprovalTest{
     @Test
     void principalityinitoineplayertest1(){
         Server.pricipalityinitoneplayer(player, regionDice, center, 1);
-        Approvals.verify(player.principality.printPrincipality(player));
+        Approvals.verify(player.getPrincipality().printPrincipality(player));
     }
 
     @Test
     void principalityinitoineplayertest0(){
         Server.pricipalityinitoneplayer(player, regionDice, center, 0);
-        Approvals.verify(player.principality.printPrincipality(player));
+        Approvals.verify(player.getPrincipality().printPrincipality(player));
     }
 
 

@@ -12,12 +12,12 @@ public class ActionLogic implements Logic {
     public boolean applyEffect(Player active, Player other, int row, int col, Card card) {
 
         if (card.getName().equals("Scout")) {
-            active.flags.add("SCOUT_NEXT_SETTLEMENT");
+            active.getFlags().add("SCOUT_NEXT_SETTLEMENT");
             return true;
         }
 
         if (card.getName().equals("Brigitta, the Wise Woman")) {
-            active.flags.add("BRIGITTA");
+            active.getFlags().add("BRIGITTA");
             return true;
         }
 

@@ -72,7 +72,7 @@ public class actionphase {
                 if (parts.length >= 3) {
                     String get = parts[1];
                     String from = parts[2].toUpperCase();
-                    if (active.flags.contains("2FOR1_" + from)) {
+                    if (active.getFlags().contains("2FOR1_" + from)) {
                         if (active.getResourceCount(from) >= 2) {
                             active.removeResource(from, 2);
                             active.gainResource(get);
@@ -120,7 +120,7 @@ public class actionphase {
                     continue;
                 }
 
-                Card c = active.hand.findCardInHand(active, spec);
+                Card c = active.getHand().findCardInHand(active, spec);
                 if (c == null) {
                     active.sendMessage("No such card in hand: " + spec);
                     continue;
@@ -142,7 +142,7 @@ public class actionphase {
                         continue;
                     }
 
-                    active.hand.removeCard(c);
+                    active.getHand().removeCard(c);
                     broadcast.broadcast("Current player played action " + c.toString());
                 } else {
                     // Non-action: needs placement
@@ -165,7 +165,7 @@ public class actionphase {
                         continue;
                     }
 
-                    active.hand.removeCard(c);
+                    active.getHand().removeCard(c);
                     broadcast.broadcast("Current player played " + c.toString() + " at (" + row + "," + col + ")");
                 }
             } else if (up.startsWith("END")) {
@@ -179,7 +179,7 @@ public class actionphase {
     private static boolean applyLTS(Player p, String side, String twoFrom, String oneTo) {
         // Find any LTS flag; for simplicity use the first one
         int ltsRow = -1, ltsCol = -1;
-        for (String f : p.flags) {
+        for (String f : p.getFlags()) {
             if (f.startsWith("LTS@")) {
                 String[] rc = f.substring(4).split(",");
                 try {

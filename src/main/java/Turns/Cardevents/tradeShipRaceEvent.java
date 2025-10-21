@@ -44,8 +44,8 @@ public class tradeShipRaceEvent implements CardEvent {
 
     private int countTradeShips(Player p) {
         int count = 0;
-        for (int r = 0; r < p.principality.principality.size(); r++) {
-            var row = p.principality.principality.get(r);
+        for (int r = 0; r < p.getPrincipality().principality.size(); r++) {
+            var row = p.getPrincipality().principality.get(r);
             for (int c = 0; c < row.size(); c++) {
                 Card x = row.get(c);
                 if (x == null) {

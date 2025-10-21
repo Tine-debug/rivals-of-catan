@@ -34,14 +34,14 @@ public class SettlementExpansionLogic implements Logic {
             // Large Trade Ship: adjacency 2-for-1 between L/R regions (handled in Server)
             if (card.getName().equals("Large Trade Ship")) {
                 active.placeCard(row, col, card);
-                active.flags.add("LTS@" + row + "," + col);
+                active.getFlags().add("LTS@" + row + "," + col);
                 return true;
             }
             // “Common” trade ships: 2:1 bank for specific resource (handled in Server)
             if (nm.toLowerCase().endsWith(" ship")) {
                 active.placeCard(row, col, card);
                 String res = nm.split("\\s+")[0]; // Brick/Gold/Grain/Lumber/Ore/Wool
-                active.flags.add("2FOR1_" + res.toUpperCase());
+                active.getFlags().add("2FOR1_" + res.toUpperCase());
                 return true;
             }
 
@@ -106,16 +106,16 @@ public class SettlementExpansionLogic implements Logic {
                 player.points.progressPoints += 1;
                 break;
             case "Marketplace":
-                player.flags.add("MARKETPLACE");
+                player.getFlags().add("MARKETPLACE");
                 break;
             case "Parish Hall":
-                player.flags.add("PARISH");
+                player.getFlags().add("PARISH");
                 break;
             case "Storehouse":
-                player.flags.add("STOREHOUSE@" + row + "," + col);
+                player.getFlags().add("STOREHOUSE@" + row + "," + col);
                 break;
             case "Toll Bridge":
-                player.flags.add("TOLLB");
+                player.getFlags().add("TOLLB");
                 break;
             default:
                 break;

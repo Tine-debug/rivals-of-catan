@@ -35,7 +35,7 @@ public class ExchangePhase {
         int st = readInt(p.receiveMessage(), 1);
         stacks.placeCardBottomStack(chosen, st);
 
-        boolean hasParish = p.flags.contains("PARISH");
+        boolean hasParish = p.getFlags().contains("PARISH");
         int searchCost = hasParish ? 1 : 2;
 
         p.sendMessage("PROMPT: Choose Random draw (R) or Search (S, costs " + searchCost + " any)?");

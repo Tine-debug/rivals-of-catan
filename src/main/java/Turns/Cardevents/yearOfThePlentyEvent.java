@@ -11,8 +11,8 @@ public class yearOfThePlentyEvent implements CardEvent {
         for (int j = 0; j < 2; j++) {
             Player p = j == 0 ? active : other;
             int added = 0;
-            for (int r = 0; r < p.principality.principality.size(); r++) {
-                var row = p.principality.principality.get(r);
+            for (int r = 0; r < p.getPrincipality().principality.size(); r++) {
+                var row = p.getPrincipality().principality.get(r);
                 for (int c = 0; c < row.size(); c++) {
                     Card reg = row.get(c);
                     if (reg == null || !"Region".equalsIgnoreCase(reg.getType())) {

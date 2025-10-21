@@ -83,11 +83,11 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         server.replenish(player1);
         server.replenish(player2);
         String result = "\n";
-        result += player1.hand.printHand() + "\n";
-        result += player2.hand.printHand() + "\n";
+        result += player1.getHand().printHand() + "\n";
+        result += player2.getHand().printHand() + "\n";
         event.resolve(player1, player2);
-        result += player1.hand.printHand() + "\n";
-        result += player2.hand.printHand() + "\n";
+        result += player1.getHand().printHand() + "\n";
+        result += player2.getHand().printHand() + "\n";
 
         Approvals.verify(result);
 
@@ -96,11 +96,11 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
     public void fraternalFreudsemptyhandTest(){
         setupPlayers();
         String result = "\n";
-        result += player1.hand.printHand() + "\n";
-        result += player2.hand.printHand() + "\n";
+        result += player1.getHand().printHand() + "\n";
+        result += player2.getHand().printHand() + "\n";
         event.resolve(player1, player2);
-        result += player1.hand.printHand() + "\n";
-        result += player2.hand.printHand() + "\n";
+        result += player1.getHand().printHand() + "\n";
+        result += player2.getHand().printHand() + "\n";
 
         Approvals.verify(result);
 
@@ -113,11 +113,11 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         server.replenish(player1);
         server.replenish(player2);
         player2.points = new Points();
-        result += player1.hand.printHand() + "\n";
-        result += player2.hand.printHand() + "\n";
+        result += player1.getHand().printHand() + "\n";
+        result += player2.getHand().printHand() + "\n";
         event.resolve(player1, player2);
-        result += player1.hand.printHand() + "\n";
-        result += player2.hand.printHand() + "\n";
+        result += player1.getHand().printHand() + "\n";
+        result += player2.getHand().printHand() + "\n";
 
         Approvals.verify(result);
 

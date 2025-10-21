@@ -24,8 +24,8 @@ public class feudEvent implements CardEvent {
         Player opp = (adv == active) ? other : active;
 
         java.util.List<int[]> buildings = new java.util.ArrayList<>();
-        for (int r = 0; r < opp.principality.principality.size(); r++) {
-            var row = opp.principality.principality.get(r);
+        for (int r = 0; r < opp.getPrincipality().principality.size(); r++) {
+            var row = opp.getPrincipality().principality.get(r);
             for (int c = 0; c < row.size(); c++) {
                 Card x = row.get(c);
                 if (x != null && x.getType() != null && x.getType().equalsIgnoreCase("Building")) {
@@ -101,7 +101,7 @@ public class feudEvent implements CardEvent {
             choice = 0;
         }
         int rr = picked.get(choice)[0], cc = picked.get(choice)[1];
-        Card removed = opp.principality.principality.get(rr).set(cc, null);
+        Card removed = opp.getPrincipality().principality.get(rr).set(cc, null);
         broadcast.broadcast("Feud: removed " + (removed == null ? "unknown" : removed.toString()) + " from opponent at (" + rr + ","
                 + cc + ").");
         stacks.placeCardBottomStack(removed, 1);

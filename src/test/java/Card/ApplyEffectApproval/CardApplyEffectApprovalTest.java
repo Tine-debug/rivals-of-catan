@@ -138,7 +138,7 @@ public class CardApplyEffectApprovalTest {
             boolean effectResult = card.applyEffect(player2, player2, interestingFields.get(j)[0], interestingFields.get(j)[1]);
             result = result + String.valueOf(effectResult);
             result = result + "\n" + player2.printPrincipality();
-            result = result + "\n" + player2.flags.toString();
+            result = result + "\n" + player2.getFlags().toString();
         }
         Approvals.verify(result, Approvals.NAMES.withParameters(i + cardname));
     }
@@ -154,7 +154,7 @@ public class CardApplyEffectApprovalTest {
             boolean effectResult = card.applyEffect(player2, player1, interestingFields.get(j)[0], interestingFields.get(j)[1]);
             result = result + String.valueOf(effectResult);
             result = result + "\n" + player1.printPrincipality() + "\n" + player2.printPrincipality();
-            result = result + "\n" + player1.flags.toString() + "\n" + player2.flags.toString();
+            result = result + "\n" + player1.getFlags().toString() + "\n" + player2.getFlags().toString();
         }
         Approvals.verify(result, Approvals.NAMES.withParameters(i + cardname));
     }
@@ -170,7 +170,7 @@ public class CardApplyEffectApprovalTest {
             boolean effectResult = card.applyEffect(player1, player2, interestingFields.get(j)[0], interestingFields.get(j)[1]);
             result = result + String.valueOf(effectResult);
             result = result + "\n" + player1.printPrincipality() + "\n" + player2.printPrincipality();
-            result = result + "\n" + player1.flags.toString() + "\n" + player2.flags.toString();
+            result = result + "\n" + player1.getFlags().toString() + "\n" + player2.getFlags().toString();
         }
         Approvals.verify(result, Approvals.NAMES.withParameters(i + cardname));
     }
@@ -185,7 +185,7 @@ public class CardApplyEffectApprovalTest {
             boolean effectResult = card.applyEffect(player1, player1, interestingFields.get(j)[0], interestingFields.get(j)[1]);
             result = result + String.valueOf(effectResult);
             result = result + "\n" + player1.printPrincipality();
-            result = result + "\n" + player1.flags.toString();
+            result = result + "\n" + player1.getFlags().toString();
         }
         Approvals.verify(result, Approvals.NAMES.withParameters(i + cardname));
     }
@@ -200,7 +200,7 @@ public class CardApplyEffectApprovalTest {
             result = result + "\n at: " + interestingFields.get(j)[0] + "," + interestingFields.get(j)[1] + "\n";
             result = result + "\n" + String.valueOf(road.applyEffect(player1, player1, interestingFields.get(j)[0], interestingFields.get(j)[1]));
             result = result + "\n" + player1.printPrincipality();
-            result = result + "\n" + player1.flags.toString();
+            result = result + "\n" + player1.getFlags().toString();
 
         }
         Card set = getCard("Settlement");
@@ -208,7 +208,7 @@ public class CardApplyEffectApprovalTest {
             result = result + "\n at: " + interestingFields.get(j)[0] + "," + interestingFields.get(j)[1] + "\n";
             result = result + "\n" + String.valueOf(set.applyEffect(player1, player1, interestingFields.get(j)[0], interestingFields.get(j)[1]));
             result = result + "\n" + player1.printPrincipality();
-            result = result + "\n" + player1.flags.toString();
+            result = result + "\n" + player1.getFlags().toString();
 
         }
 
@@ -230,7 +230,7 @@ public class CardApplyEffectApprovalTest {
         Card merchand = getCard("Merchant Caravan");
         result = result + String.valueOf(merchand.applyEffect(player2, player2, 0, 0));
         result = result + "\n" + player2.printPrincipality();
-        result = result + "\n" + player2.flags.toString();
+        result = result + "\n" + player2.getFlags().toString();
         Approvals.verify(result);
 
     }
@@ -267,9 +267,9 @@ public class CardApplyEffectApprovalTest {
             result = result + "\n" + List.of(player3.messages.get(i));
             result = result + "\n" + String.valueOf(reloc.applyEffect(player3, player3, 0, 0));
             result = result + "\n" + player3.printPrincipality();
-            result = result + "\n" + player3.flags.toString();
+            result = result + "\n" + player3.getFlags().toString();
             result = result + "\n ====================================";
-            player3.flags.clear();
+            player3.getFlags().clear();
         }
 
         Approvals.verify(result, Approvals.NAMES.withParameters(nameChanged));
@@ -306,9 +306,9 @@ public class CardApplyEffectApprovalTest {
             road.applyEffect(player3, player3, 2, 0);
             result = result + "\n" + player3.printPrincipality();
             scout.applyEffect(player3, player3, 0, 0);
-            result = result + "\n" + player3.flags.toString();
+            result = result + "\n" + player3.getFlags().toString();
             result = result + "\n" + String.valueOf(settlement.applyEffect(player3, player3, 2, 0));
-            result = result + "\n" + player3.flags.toString();
+            result = result + "\n" + player3.getFlags().toString();
             result = result + "\n" + player3.printPrincipality();
             result = result + "\n" + "===============================================";
         }

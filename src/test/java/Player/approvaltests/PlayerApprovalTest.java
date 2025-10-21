@@ -152,7 +152,7 @@ public class PlayerApprovalTest {
         Card c = cardbuilder.build();
         player.placeCard(0,0,c);
         int newColLeft = player.expandAfterEdgeBuild(0); // triggers left expansion
-        int newColRight = player.expandAfterEdgeBuild(player.principality.principality.get(0).size()-1); // triggers right expansion
+        int newColRight = player.expandAfterEdgeBuild(player.getPrincipality().principality.get(0).size()-1); // triggers right expansion
         Approvals.verify("Left col now: " + newColLeft + ", Right col now: " + newColRight);
     }
 

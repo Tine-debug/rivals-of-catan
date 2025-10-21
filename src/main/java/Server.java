@@ -47,7 +47,7 @@ public class Server {
         // 2) bot player
         if (withBot) {
             Player bot = new Player();
-            bot.isBot = true;
+            bot.setIsBot(true);
             players.add(bot);
         } // 3) networked players
         else {
@@ -185,7 +185,7 @@ public class Server {
 
 
     public void replenish(Player p) {
-        if (p.flags != null && p.flags.remove("NO_REPLENISH_ONCE")) {
+        if (p.getFlags() != null && p.getFlags().remove("NO_REPLENISH_ONCE")) {
             p.sendMessage("You cannot replenish your hand this turn (Fraternal Feuds).");
         } else {
             int handTarget = 3 + p.points.progressPoints;

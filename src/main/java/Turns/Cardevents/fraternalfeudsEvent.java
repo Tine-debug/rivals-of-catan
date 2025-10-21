@@ -23,7 +23,7 @@ public class fraternalfeudsEvent implements CardEvent {
         }
         Player opp = (adv == active) ? other : active;
 
-        if (opp.hand.isEmpty()) {
+        if (opp.getHand().isEmpty()) {
             broadcast.broadcast("Fraternal Feuds: opponent hand empty.");
             return;
         }
@@ -34,7 +34,7 @@ public class fraternalfeudsEvent implements CardEvent {
         try {
             for (String tok : sel.trim().split("\\s+")) {
                 int i = Integer.parseInt(tok);
-                if (i >= 0 && i < opp.hand.size()) {
+                if (i >= 0 && i < opp.getHand().size()) {
                     idxs.add(i);
                 }
                 if (idxs.size() == 2) {
@@ -47,7 +47,7 @@ public class fraternalfeudsEvent implements CardEvent {
         // If insufficient/invalid, take first one or two
         if (idxs.isEmpty()) {
             idxs.add(0);
-            if (opp.hand.handSize() > 1) {
+            if (opp.getHand().handSize() > 1) {
                 idxs.add(1);
             }
         }
@@ -56,7 +56,7 @@ public class fraternalfeudsEvent implements CardEvent {
         java.util.List<Integer> order = new java.util.ArrayList<>(idxs);
         java.util.Collections.sort(order, java.util.Collections.reverseOrder());
         for (int i : order) {
-            Card rem = opp.hand.removeCard(i);
+            Card rem = opp.getHand().removeCard(i);
             stacks.placeCardBottomStack(rem, 1);
             broadcast.broadcast("Fraternal Feuds: returned '" + rem.toString() + "' to bottom of a draw stack.");
         }
@@ -66,9 +66,9 @@ public class fraternalfeudsEvent implements CardEvent {
     }
 
     private void markSkipReplenishOnce(Player p) {
-        if (p.flags == null) {
-            p.flags = new java.util.HashSet<>();
+        if (p.getFlags() == null) {
+            p.setFlags(new java.util.HashSet<>());
         }
-        p.flags.add("NO_REPLENISH_ONCE");
+        p.getFlags().add("NO_REPLENISH_ONCE");
     }
 }
