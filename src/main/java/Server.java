@@ -8,27 +8,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import Card.Cardstacks;
 import Player.Player;
 import Player.OnlinePlayer;
 import Player.Broadcast;
 import Card.Card;
 import Turns.Turns;
+import Card.Cardstack.CardstackFacade;
 
 
 public class Server {
 
     public final List<Player> players = new ArrayList<>();
     public ServerSocket serverSocket;
-    static final private Cardstacks stacks = Cardstacks.getInstance();
+    static final private CardstackFacade stacks = CardstackFacade.getInstance();
 
-
+    //ask for gamemode, variable game mode
 
     public static void main(String[] args) {
         Server s = new Server();
         try {
             if ((args.length == 0 || (args.length > 0 && args[0].equalsIgnoreCase("bot")))) {
-                stacks.loadBasicCards("cards.json");
+                stacks.loadCards("cards.json", "Basic");
                 s.start((args.length != 0));
                 s.run();
             } else if (args.length > 0 && args[0].equalsIgnoreCase("online")) {
@@ -125,16 +125,12 @@ public class Server {
 
         for (int i = 0; i < players.size(); i++) {
             Player p = players.get(i);
-             stacks.inizializePrincipiality(p, regionDice, center, i);
+             stacks.initializePlayerPrincipality(p, regionDice, center, i);
 
         }
 
         addBackExtraFixedRegions();
         stacks.shuffleRegions();
-    }
-
-    public static void pricipalityinitoneplayer(Player p, int[][] regionDice, int center, int i) {
-        stacks.inizializePrincipiality(p, regionDice, center, i);
     }
 
     private void addBackExtraFixedRegions() {
@@ -173,12 +169,12 @@ public class Server {
             players.get(i).sendMessage("Your starting hand:");
             players.get(i).sendMessage(players.get(i).printHand());
         }
+        Turns turns = new Turns(players);
         while (true) {
             if (current == 3) {
                 break;
             }
-           Turns turns = new Turns(players);
-           turns.resolveOneTurn(current, true);
+           current = turns.resolveOneTurn(current, true);
         }
     }
     
@@ -188,11 +184,11 @@ public class Server {
         if (p.getFlags() != null && p.getFlags().remove("NO_REPLENISH_ONCE")) {
             p.sendMessage("You cannot replenish your hand this turn (Fraternal Feuds).");
         } else {
-            int handTarget = 3 + p.points.progressPoints;
+            int handTarget = 3 + p.getPoints().progressPoints;
             while (p.handSize() < handTarget) {
                 p.sendMessage("PROMPT: Replenish - choose draw stack [1-4]:");
                 int which = readInt(p.receiveMessage(), 1);
-                stacks.drawCardfromStack(which, p);
+                stacks.drawCardFromStack(which, p);
             }
         }
     }

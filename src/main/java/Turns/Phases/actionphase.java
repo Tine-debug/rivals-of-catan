@@ -1,18 +1,18 @@
 package Turns.Phases;
 
-import Card.Cardstacks;
+import Card.Cardstack.CardstackFacade;
 import Player.Player;
 import Player.Broadcast;
 import Card.Card;
 
-
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 public class actionphase {
 
-    private final static Cardstacks stacks = Cardstacks.getInstance();
+    private final static CardstackFacade stacks = CardstackFacade.getInstance();
     private final static Broadcast broadcast = Broadcast.getInstance();
 
     private static final Map<String, String> REGION_TO_RESOURCE = Map.of(
@@ -40,7 +40,7 @@ public class actionphase {
                     "  LTS <L|R> <2from> <1to> — Large Trade Ship adjacent trade (left/right side) ([Brick|Grain|Lumber|Wool|Ore|Gold])");
             String play = "  PLAY <cardName> | <id>  — play a card from hand / play center card: ";
 
-            ArrayList<String> buildBits = stacks.getCenterbuildingCost();
+            List<String> buildBits = stacks.getCenterBuildingCosts();
 
             play += String.join(", ", buildBits);
             active.sendMessage(play);

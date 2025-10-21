@@ -46,7 +46,7 @@ public class SettlementExpansionLogic implements Logic {
             }
 
             // Heroes: just add SP/FP/CP/etc.
-            active.points = Points.addPoints(active.points, card.getPoints());
+            active.setPoints(Points.addPoints(active.getPoints(), card.getPoints()));
             active.placeCard(row, col, card);
             return true;
         }
@@ -103,7 +103,7 @@ public class SettlementExpansionLogic implements Logic {
         System.out.println("Contained Building");
         switch (card.getName()) {
             case "Abbey":
-                player.points.progressPoints += 1;
+                player.getPoints().progressPoints += 1;
                 break;
             case "Marketplace":
                 player.getFlags().add("MARKETPLACE");

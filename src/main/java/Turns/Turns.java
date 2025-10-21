@@ -2,7 +2,7 @@ package Turns;
 
 import Player.Player;
 import Player.Broadcast;
-import Card.Cardstacks;
+import Card.Cardstack.CardstackFacade;
 import Card.Card;
 
 import Turns.Phases.*;
@@ -15,7 +15,7 @@ public class Turns {
 
 
     private final Broadcast broadcast = Broadcast.getInstance();
-    private final Cardstacks stacks = Cardstacks.getInstance();
+    private final CardstackFacade stacks = CardstackFacade.getInstance();
 
     private final Random rng = new Random();
     private final List<Player> players;
@@ -138,11 +138,11 @@ public class Turns {
         if (p.getFlags() != null && p.getFlags().remove("NO_REPLENISH_ONCE")) {
             p.sendMessage("You cannot replenish your hand this turn (Fraternal Feuds).");
         } else {
-            int handTarget = 3 + p.points.progressPoints;
+            int handTarget = 3 + p.getPoints().progressPoints;
             while (p.handSize() < handTarget) {
                 p.sendMessage("PROMPT: Replenish - choose draw stack [1-4]:");
                 int which = readInt(p.receiveMessage(), 1);
-                stacks.drawCardfromStack(which, p);
+                stacks.drawCardFromStack(which, p);
             }
         }
     }

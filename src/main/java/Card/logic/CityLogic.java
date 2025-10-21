@@ -16,7 +16,7 @@ public class CityLogic implements Logic {
             return false;
         }
         active.placeCard(row, col, card);
-        active.points.victoryPoints += 1;
+        active.getPoints().victoryPoints += 1;
         return true;
     }
 

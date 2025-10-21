@@ -3,6 +3,7 @@ package Player;
 import Card.Card;
 import java.util.ArrayList;
 import java.util.List;
+import Points.Points;
 
 public class Principality{
 
@@ -125,12 +126,14 @@ public Card getCard(int r, int c) {
             sb.append("    ").append(buildSep(w)).append("\n");
         }
 
+        Points points = player.getPoints();
+
         sb.append("\nPoints: ")
-                .append("VP=").append(player.points.victoryPoints)
-                .append("  CP=").append(player.points.commercePoints)
-                .append("  SP=").append(player.points.skillPoints)
-                .append("  FP=").append(player.points.strengthPoints)
-                .append("  PP=").append(player.points.progressPoints)
+                .append("VP=").append(points.victoryPoints)
+                .append("  CP=").append(points.commercePoints)
+                .append("  SP=").append(points.skillPoints)
+                .append("  FP=").append(points.strengthPoints)
+                .append("  PP=").append(points.progressPoints)
                 .append("\n");
 
         return sb.toString();

@@ -2,12 +2,12 @@ package Turns.Cardevents;
 
 import Player.Player;
 import Player.Broadcast;
-import Card.Cardstacks;
+import Card.Cardstack.CardstackFacade;
 import Card.Card;
 
 public class feudEvent implements CardEvent {
 
-    private final Cardstacks stacks = Cardstacks.getInstance();
+    private final CardstackFacade stacks = CardstackFacade.getInstance();
     private final Broadcast broadcast = Broadcast.getInstance();
 
     @Override
@@ -60,7 +60,7 @@ public class feudEvent implements CardEvent {
                     }
                 }
             }
-        } catch (NumberFormatException ignored) {
+        } catch (Exception ignored) {
         }
 
         int k = 0;

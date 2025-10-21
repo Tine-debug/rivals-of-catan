@@ -1,19 +1,19 @@
 package Turns.Cardevents;
 
 import Player.Player;
-import Card.Cardstacks;
+import Card.Cardstack.CardstackFacade;
 import Card.Card;
 import Player.Broadcast;
 
 
 public class yuleEvent implements CardEvent {
 
-    private final Cardstacks stacks = Cardstacks.getInstance();
+    private final CardstackFacade stacks = CardstackFacade.getInstance();
     private final Broadcast broadcast = Broadcast.getInstance();
 
     @Override
     public void resolve(Player active, Player other) {
-        stacks.resetEventstack();
+        stacks.resetEventStack();
         Card top = stacks.drawEventCard();
         if (top == null) {
             broadcast.broadcast("Event deck empty.");

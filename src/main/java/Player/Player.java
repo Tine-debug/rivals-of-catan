@@ -13,20 +13,20 @@ public class Player {
 
 
 
-    public Points points;
+    private Points points;
     
     
 
-    private int tradeRate = 3;
+    //private int tradeRate = 3;
     private boolean isBot = false;
 
     private Set<String> flags = new HashSet<>();
 
     private Map<String, Integer> resources = new HashMap<>();
 
-    private Hand hand = new Hand();
+    private final Hand hand = new Hand();
 
-    private Principality principality;
+    private final Principality principality;
 
     private int lastSettlementRow = -1, lastSettlementCol = -1;
 
@@ -99,8 +99,17 @@ public class Player {
 
     //
 
+
     public void removeFlag(String toRemove){
         flags.remove(toRemove);
+    }
+
+    public Points getPoints(){
+        return this.points;
+    }
+
+    public void setPoints(Points newValue){
+        this.points = newValue;
     }
 
 

@@ -11,7 +11,7 @@ public class inventionEvent implements CardEvent {
         for (int j = 0; j < 2; j++) {
             p = j == 0 ? active : other;
 
-            int times = Math.min(2, Math.max(0, p.points.progressPoints));
+            int times = Math.min(2, Math.max(0, p.getPoints().progressPoints));
             if (times == 0) {
                 p.sendMessage("Invention: you have no progress point buildings (max 2).");
                 continue;

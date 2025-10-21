@@ -2,11 +2,11 @@ package Card.logic;
 
 import Player.Player;
 import Card.Card;
-import Card.Cardstacks;
+import Card.Cardstack.CardstackFacade;
 
 public class SettlementLogic implements Logic {
 
-    private final Cardstacks stacks = Cardstacks.getInstance();
+    private final CardstackFacade stacks = CardstackFacade.getInstance();
 
     @Override
     public boolean applyEffect(Player active, Player other, int row, int col, Card card) {
@@ -30,7 +30,7 @@ public class SettlementLogic implements Logic {
             return false;
         }
         active.placeCard(row, col, card);
-        active.points.victoryPoints += 1;
+        active.getPoints().victoryPoints += 1;
 
         // Expand and capture the updated column
         col = active.expandAfterEdgeBuild(col);
@@ -57,17 +57,17 @@ public class SettlementLogic implements Logic {
             // index
             active.sendMessage("PROMPT: SCOUT - Choose first region (name or index):");
             String s1 = active.receiveMessage();
-            first = stacks.pickRegionFromStackByNameOrIndex(s1);
+            first = stacks.pickRegionByNameOrIndex(s1);
             if (first == null) {
                 // fallback to top
-                first = stacks.drawregionCard();
+                first = stacks.drawRegionCard();
             }
 
             active.sendMessage("PROMPT: SCOUT - Choose second region (name or index):");
             String s2 = active.receiveMessage();
-            second = stacks.pickRegionFromStackByNameOrIndex(s2);
+            second = stacks.pickRegionByNameOrIndex(s2);
             if (second == null) {
-                second = stacks.drawregionCard();
+                second = stacks.drawRegionCard();
             }
 
             if (first == null || second == null) {
@@ -78,12 +78,12 @@ public class SettlementLogic implements Logic {
             }
         } else {
             // normal: take top two
-            if (stacks.getRegionstackSize() < 2) {
+            if (stacks.getRegionStackSize() < 2) {
                 active.sendMessage("Region stack does not have two cards.");
                 return;
             }
-            first = stacks.drawregionCard();
-            second = stacks.drawregionCard();
+            first = stacks.drawRegionCard();
+            second = stacks.drawRegionCard();
         }
 
         // Tell the player which two we drew/selected

@@ -1,6 +1,6 @@
 package Turns.Phases;
 
-import Card.Cardstacks;
+import Card.Cardstack.CardstackFacade;
 import Player.Player;
 import Player.Broadcast;
 import Card.Card;
@@ -8,10 +8,10 @@ import Card.Card;
 public class ExchangePhase {
 
     private final static Broadcast broadcast = Broadcast.getInstance();
-    private final static Cardstacks stacks = Cardstacks.getInstance();
+    private final static CardstackFacade stacks = CardstackFacade.getInstance();
 
     public static void resolvePhase(Player p) {
-        int limit = 3 + p.points.progressPoints;
+        int limit = 3 + p.getPoints().progressPoints;
         if (p.handSize() < limit) {
             broadcast.broadcast("Exchange: hand below limit; skipping.");
             return;

@@ -2,7 +2,7 @@ package Turns;
 
 import Player.Player;
 import Player.Broadcast;
-import Card.Cardstacks;
+import Card.Cardstack.CardstackFacade;
 import Card.Card;
 import Turns.Cardevents.*;
 
@@ -21,7 +21,7 @@ public class DiceEvents {
     private static final int EV_EVENT_B = 6;
 
     private static final Broadcast broadcast = Broadcast.getInstance();
-    private static final Cardstacks stacks = Cardstacks.getInstance();
+    private static final CardstackFacade stacks = CardstackFacade.getInstance();
 
     public static int getBrigandFace(){
         return EV_BRIGAND;
@@ -46,7 +46,7 @@ public class DiceEvents {
             case EV_TRADE:
                 broadcast.broadcast("[Event] Trade");
                 for (Player p : players) {
-                    if (p.points.commercePoints >= 3) {
+                    if (p.getPoints().commercePoints >= 3) {
                         p.sendMessage(
                                 "PROMPT: Trade Advantage - gain 1 resource of your choice [Brick|Grain|Lumber|Wool|Ore|Gold]:");
                         p.gainResource(p.receiveMessage());
@@ -56,8 +56,8 @@ public class DiceEvents {
 
             case EV_CELEB:
                 broadcast.broadcast("[Event] Celebration");
-                int aSP = players.get(0).points.skillPoints;
-                int bSP = players.get(1).points.skillPoints;
+                int aSP = players.get(0).getPoints().skillPoints;
+                int bSP = players.get(1).getPoints().skillPoints;
                 if (aSP == bSP) {
                     for (Player p : players) {
                         p.sendMessage(
