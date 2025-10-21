@@ -60,7 +60,15 @@ int[][] regionDice = { { 2, 1, 6, 3, 4, 5 }, { 3, 4, 5, 2, 1, 6 } };
         }
         player1 = new MockPlayer();
         player2 = new MockPlayer();
-        player2.points = new Points("4","4","4","4","4","4","4");
+        PointsBuilder pointsBuilder = new PointsBuilder();
+        pointsBuilder.victoryPoints(4);
+        pointsBuilder.canonPoints(4);
+        pointsBuilder.commercePoints(4);
+        pointsBuilder.progressPoints(4);
+        pointsBuilder.strengthPoints(4);
+        pointsBuilder.skillPoints(4);
+        pointsBuilder.sailPoints(4);
+        player2.points = pointsBuilder.build();
         server.players.add(player1);
         server.players.add(player2);
 

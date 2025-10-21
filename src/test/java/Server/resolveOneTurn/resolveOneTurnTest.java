@@ -61,7 +61,15 @@ public class resolveOneTurnTest {
         }
         player1 = new MockPlayer();
         player2 = new MockPlayer();
-        player2.points = new Points("4", "4", "4", "4", "4", "4", "4");
+        PointsBuilder pointsBuilder = new PointsBuilder();
+        pointsBuilder.victoryPoints(4);
+        pointsBuilder.canonPoints(4);
+        pointsBuilder.commercePoints(4);
+        pointsBuilder.progressPoints(4);
+        pointsBuilder.strengthPoints(4);
+        pointsBuilder.skillPoints(4);
+        pointsBuilder.sailPoints(4);
+        player2.points = pointsBuilder.build();
         List<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);

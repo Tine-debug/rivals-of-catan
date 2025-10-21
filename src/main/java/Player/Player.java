@@ -6,12 +6,16 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-import Points.Points;
+import Points.*;
 import Card.Card;
 
 public class Player {
 
-    public Points points = new Points("2", null, null, null, null, null, null);
+
+
+    public Points points;
+    
+    
 
     public int tradeRate = 3;
     public boolean isBot = false;
@@ -35,6 +39,9 @@ public class Player {
         for (String r : all) {
             resources.put(r, 0);
         }
+        PointsBuilder pointsBuilder = new PointsBuilder();
+        pointsBuilder.victoryPoints(2);
+        this.points = pointsBuilder.build();
     }
 
     public void sendMessage(Object m) {

@@ -3,6 +3,7 @@ package Card;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
+import Points.PointsBuilder;
 
 
 import com.google.gson.JsonArray;
@@ -39,14 +40,26 @@ public class LoadCards {
                     number = 1;
                 }
                 for (int i = 0; i < number; i++) {
-                    Card proto = new Card(
-                            gs(o, "name"), theme, gs(o, "type"),
-                            gs(o, "germanName"), gs(o, "placement"),
-                            gs(o, "oneOf"), gs(o, "cost"),
-                            gs(o, "victoryPoints"), gs(o, "CP"), gs(o, "SP"), gs(o, "FP"),
-                            gs(o, "PP"), gs(o, "LP"), gs(o, "KP"), gs(o, "Requires"),
-                            gs(o, "cardText"), gs(o, "protectionOrRemoval"));
-                    allBasic.add(proto);
+                    Cardbuilder cardbuilder = new Cardbuilder();
+                    cardbuilder.name(gs(o, "name"));
+                    cardbuilder.type(gs(o, "type"));
+                    cardbuilder.placement(gs(o, "placement"));
+                    cardbuilder.oneOf(gs(o, "oneOf"));
+                    cardbuilder.cardText(gs(o, "cardText"));
+                    cardbuilder.cost(gs(o,"cost"));
+
+                    PointsBuilder pointsBuilder = new PointsBuilder();
+                    pointsBuilder.victoryPoints(gs(o, "victoryPoints"));
+                    pointsBuilder.commercePoints(gs(o, "CP"));
+                    pointsBuilder.strengthPoints(gs(o, "SP"));
+                    pointsBuilder.skillPoints(gs(o, "FP"));
+                    pointsBuilder.progressPoints(gs(o, "PP"));
+                    pointsBuilder.sailPoints(gs(o, "LP"));
+                    pointsBuilder.canonPoints(gs(o, "KP"));
+
+                    cardbuilder.points(pointsBuilder.build());
+
+                    allBasic.add(cardbuilder.build());
                 }
             }
         }

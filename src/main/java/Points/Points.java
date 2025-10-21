@@ -16,13 +16,14 @@ public class Points {
     }
 
 //String victoryPoints, String CP, String SP, String FP, String PP, String LP, String KP
-    public Points(String victoryPoints, String CP, String SP, String FP, String PP, String LP, String KP) {
-        this.victoryPoints = asInt(victoryPoints, 0);
-        this.commercePoints = asInt(CP, 0);
-        this.strengthPoints = asInt(SP, 0);
-        this.skillPoints = asInt(FP, 0);
-        this.sailPoints = asInt(LP, 0);
-        this.canonPoints = asInt(KP, 0);
+    protected Points(int victoryPoints, int commercePoints, int strengthPoints,
+     int skillPoints, int progressPoints, int sailPoints, int canonPoints) {
+        this.victoryPoints = victoryPoints;
+        this.commercePoints = commercePoints;
+        this.strengthPoints = strengthPoints;
+        this.skillPoints = skillPoints;
+        this.sailPoints = sailPoints;
+        this.canonPoints = canonPoints;
 
     }
 
@@ -40,16 +41,6 @@ public class Points {
 
     }
 
-    private int asInt(String s, int def) {
-        try {
-            if (s == null) {
-                return def;
-            }
-            return Integer.parseInt(s.trim());
-        } catch (NumberFormatException e) {
-            return def;
-        }
-    }
 
     public String summarizePoints() {
         StringBuilder t = new StringBuilder();

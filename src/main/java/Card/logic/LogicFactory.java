@@ -1,10 +1,14 @@
 package Card.logic;
 
+import Turns.Cardevents.defaultEvent;
 
 public class LogicFactory {
 
     public static Logic createLogic(String placement, String name, String type) {
 
+        if (name == null) {
+            return new defaultLogic();
+        }
         if (name.equals("City")) {
             return new CityLogic();
         }
@@ -21,10 +25,15 @@ public class LogicFactory {
             return new RelocationLogic();
         }
 
+        if (type == null) {
+            return new defaultLogic();
+        }
         if (type.equals("Region")) {
             return new RegionLogic();
         }
-
+        if (placement == null) {
+            return new defaultLogic();
+        }
         if (placement.equals("Settlement/city")) {
             return new SettlementExpansionLogic();
         }

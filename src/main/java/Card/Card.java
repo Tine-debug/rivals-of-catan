@@ -28,30 +28,20 @@ public class Card implements Comparable<Card> {
     public Card() {
     }
 
-    public Card(String name, String theme, String type,
-            String germanName, String placement,
-            String oneOf, String cost,
-            String victoryPoints, String CP, String SP, String FP,
-            String PP, String LP, String KP, String Requires,
-            String cardText, String protectionOrRemoval) {
+    protected Card(String name, String theme, String type,
+        String placement, boolean oneOf, String cost,
+        Points points, String cardText, Logic logic) {
         this.name = name;
         this.theme = theme;
         this.type = type;
         this.placement = placement;
-
-        this.oneOf = (oneOf == null) ? false : (oneOf.equalsIgnoreCase("1x"));
+        this.oneOf = oneOf;
         this.cost = cost;
-        this.points = new Points(victoryPoints, CP, SP, FP, PP, LP, KP);
+        this.points = points;
         this.cardText = cardText;
-
-        this.logic = LogicFactory.createLogic(placement, name, type);
+        this.logic = logic;
     }
 
-    public Card(String name, String type, String cost) {
-        this.name = name;
-        this.type = type;
-        this.cost = cost;
-    }
 
     //getters
     public String getTheme() {
@@ -97,16 +87,7 @@ public class Card implements Comparable<Card> {
     //setters 
 
     /*
-    private String name, theme, type, cost;
-    private boolean oneOf;
-    private  String cardText;
 
-    private Points points;
-
-    private String placement;
-
-    private Logic logic;
-     */
     public void setName(String newvalue) {
         name = newvalue;
     }
@@ -131,6 +112,14 @@ public class Card implements Comparable<Card> {
         cardText = newvalue;
     }
 
+       public void setPlacement (String newvalue){
+        placement = newvalue;
+    }
+
+    public void setLogic(Logic newvalue){
+        logic = newvalue;
+    }
+     */
     public void setPoints(Points newPoints) {
         points = newPoints;
 
@@ -141,14 +130,6 @@ public class Card implements Comparable<Card> {
             regionProduction = newcount;
         }
 
-    }
-
-    public void setPlacement (String newvalue){
-        placement = newvalue;
-    }
-
-    public void setLogic(Logic newvalue){
-        logic = newvalue;
     }
 
     public void setDiceRoll(int newdice) {

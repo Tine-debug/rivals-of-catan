@@ -37,8 +37,11 @@ public class PlayerApprovalTest {
 
     @Test
     void addCardToPrincipality() {
-        Card hill = new Card("Hill", null, "Region", null, "Center Card", null, null, 
-        null, null, null, null, null, null, null, "Settlement built" , null, null);
+        Cardbuilder cardbuilder = new Cardbuilder();
+        cardbuilder.name("Hill");
+        cardbuilder.type("Region");
+        cardbuilder.placement("Center Card");
+        Card hill = cardbuilder.build();
         hill.setRegionProduction(1);
         player.placeCard(0, 0, hill);
         Approvals.verify(player.printPrincipality());
@@ -46,17 +49,34 @@ public class PlayerApprovalTest {
 
     @Test
     void addMultipleCardsAndHand() {
-        Card forest = new Card("Forest", "Region", null);
-        forest.setRegionProduction(2);
-        Card settlement = new Card("Settlement", "Road", null);
-        //String victoryPoints, String CP, String SP, String FP, String PP, String LP, String KP
-        settlement.setPoints(new Points("2", null, null, null, null, null, null));        
+        Cardbuilder cardbuilder = new Cardbuilder();
 
+
+        cardbuilder.name("Forest");
+        cardbuilder.type("Region");
+        Card forest = cardbuilder.build();
+        forest.setRegionProduction(2);
+
+        cardbuilder = new Cardbuilder();
+        cardbuilder.name("Settlement");
+        cardbuilder.type("Road");
+        PointsBuilder pointsBuilder = new PointsBuilder();
+        pointsBuilder.victoryPoints(2);
+        cardbuilder.points(pointsBuilder.build());
+        Card settlement = cardbuilder.build();
         player.placeCard(0, 0, forest);
         player.placeCard(1, 1, settlement);
 
-        Card cardInHand = new Card("Mill", "Building", "2 Grain");
-        cardInHand.setPoints(new Points(null, null, "1", null, null, null, null));
+
+        cardbuilder = new Cardbuilder();
+        pointsBuilder = new PointsBuilder();
+        cardbuilder.name("Mill");
+        cardbuilder.type("Building");
+        cardbuilder.cost("2 Grain");
+        
+        pointsBuilder.strengthPoints(1);
+        cardbuilder.points(pointsBuilder.build());
+        Card cardInHand = cardbuilder.build();
         player.addToHand(cardInHand);
 
         Approvals.verify(player.printPrincipality() + "\n" + player.printHand());
@@ -64,9 +84,12 @@ public class PlayerApprovalTest {
 
     @Test
     void resourceManipulation() {
-        Card forest1 = new Card("Forest", "Region", null);
+        Cardbuilder cardbuilder = new Cardbuilder();
+        cardbuilder.name("Forest");
+        cardbuilder.type("Region");
+        Card forest1 = cardbuilder.build();
         forest1.setRegionProduction(0);
-        Card forest2 = new Card("Forest", "Region", null);
+        Card forest2 = cardbuilder.build();
         forest2.setRegionProduction(1);
 
         player.placeCard(0,0,forest1);
@@ -101,7 +124,9 @@ public class PlayerApprovalTest {
 
     @Test
     void expandAfterEdgeBuild() {
-        Card c = new Card("Forest", null, null);
+        Cardbuilder cardbuilder = new Cardbuilder();
+        cardbuilder.name("Forest");
+        Card c = cardbuilder.build();
         player.placeCard(0,0,c);
         int newColLeft = player.expandAfterEdgeBuild(0); // triggers left expansion
         int newColRight = player.expandAfterEdgeBuild(player.principality.principality.get(0).size()-1); // triggers right expansion
@@ -110,7 +135,9 @@ public class PlayerApprovalTest {
 
     @Test
     void hasInPrincipalityCheck() {
-        Card c = new Card("Mine", null, null);
+        Cardbuilder cardbuilder = new Cardbuilder();
+        cardbuilder.name("Mine");
+        Card c = cardbuilder.build();
         player.placeCard(2,2,c);
         String report = "Has Mine: " + player.hasInPrincipality("Mine") +
                         ", Has Forest: " + player.hasInPrincipality("Forest");
@@ -119,8 +146,11 @@ public class PlayerApprovalTest {
 
     @Test
     void removeFromHandByNameTest() {
-        Card c1 = new Card("Card1", null, null);
-        Card c2 = new Card("Card2", null, null);
+        Cardbuilder cardbuilder = new Cardbuilder();
+        cardbuilder.name("Card1");
+        Card c1 = cardbuilder.build();
+        cardbuilder.name("Card2");
+        Card c2 = cardbuilder.build();
         player.addToHand(c1);
         player.addToHand(c2);
 
@@ -138,8 +168,10 @@ public class PlayerApprovalTest {
                 return "Brick"; // simulate choosing a resource
             }
         };
-
-        Card hill = new Card("Hill", "Region", null);
+        Cardbuilder cardbuilder = new Cardbuilder();
+        cardbuilder.name("Hill");
+        cardbuilder.type("Region");
+        Card hill = cardbuilder.build();
         hill.setRegionProduction(0);
         promptPlayer.placeCard(0,0,hill);
 
