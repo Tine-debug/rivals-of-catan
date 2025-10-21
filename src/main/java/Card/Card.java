@@ -128,9 +128,6 @@ public class Card implements Comparable<Card> {
         return this.name.compareToIgnoreCase(o.name);
     }
 
-    public static void loadBasicCards(String jsonPath) throws IOException {
-        stacks.loadBasicCards(jsonPath);
-    }
 
     public boolean applyEffect(Player active, Player other, int row, int col) {
         String nm = (this.name == null ? "" : this.name);

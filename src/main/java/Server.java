@@ -28,7 +28,7 @@ public class Server {
         Server s = new Server();
         try {
             if ((args.length == 0 || (args.length > 0 && args[0].equalsIgnoreCase("bot")))) {
-                Card.loadBasicCards("cards.json");
+                stacks.loadBasicCards("cards.json");
                 s.start((args.length != 0));
                 s.run();
             } else if (args.length > 0 && args[0].equalsIgnoreCase("online")) {
