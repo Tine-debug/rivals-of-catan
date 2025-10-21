@@ -39,7 +39,7 @@ public class PlayerApprovalTest {
     void addCardToPrincipality() {
         Card hill = new Card("Hill", null, "Region", null, "Center Card", null, null, 
         null, null, null, null, null, null, null, "Settlement built" , null, null);
-        hill.regionProduction = 1;
+        hill.setRegionProduction(1);
         player.placeCard(0, 0, hill);
         Approvals.verify(player.printPrincipality());
     }
@@ -47,7 +47,7 @@ public class PlayerApprovalTest {
     @Test
     void addMultipleCardsAndHand() {
         Card forest = new Card("Forest", "Region", null);
-        forest.regionProduction = 2;
+        forest.setRegionProduction(2);
         Card settlement = new Card("Settlement", "Road", null);
         //String victoryPoints, String CP, String SP, String FP, String PP, String LP, String KP
         settlement.updatePoints(new Points("2", null, null, null, null, null, null));        
@@ -65,9 +65,9 @@ public class PlayerApprovalTest {
     @Test
     void resourceManipulation() {
         Card forest1 = new Card("Forest", "Region", null);
-        forest1.regionProduction = 0;
+        forest1.setRegionProduction(0);
         Card forest2 = new Card("Forest", "Region", null);
-        forest2.regionProduction = 1;
+        forest2.setRegionProduction(1);
 
         player.placeCard(0,0,forest1);
         player.placeCard(0,1,forest2);
@@ -140,7 +140,7 @@ public class PlayerApprovalTest {
         };
 
         Card hill = new Card("Hill", "Region", null);
-        hill.regionProduction = 0;
+        hill.setRegionProduction(0);
         promptPlayer.placeCard(0,0,hill);
 
         promptPlayer.gainResource("Any");

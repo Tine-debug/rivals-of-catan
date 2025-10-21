@@ -163,14 +163,14 @@ public class Player {
         Card best = null;
         int bestVal = Integer.MAX_VALUE;
         for (Card r : regs) {
-            int v = Math.max(0, Math.min(3, r.regionProduction));
+            int v = Math.max(0, Math.min(3, r.getRegionProduction()));
             if (v < bestVal) {
                 bestVal = v;
                 best = r;
             }
         }
-        if (best != null && best.regionProduction < 3) {
-            best.regionProduction += 1;
+        if (best != null && best.getRegionProduction() < 3) {
+            best.setRegionProduction(best.getRegionProduction() + 1);
         } else {
             sendMessage("No storage space on any " + regionName + " (already 3/3).");
         }

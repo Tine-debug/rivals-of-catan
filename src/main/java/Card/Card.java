@@ -20,9 +20,13 @@ public class Card implements Comparable<Card> {
 
     // Regions track “stored” resources by rotating; here we model it as an int
     // (0..3)
-    public int regionProduction = 0;
+    private int regionProduction = 0;
     // Regions use production die faces (1..6). 0 means “not a region” / unassigned.
-    public int diceRoll = 0;
+    private int diceRoll = 0;
+
+
+
+
 
     // ---------- Global piles for the Basic set ----------
     private static Cardstacks stacks = Cardstacks.getInstance();
@@ -92,6 +96,26 @@ public class Card implements Comparable<Card> {
         points = newPoints;
         
     }
+
+    public int getRegionProduction(){
+        return regionProduction;
+    }
+
+    public int getdiceRoll(){
+        return diceRoll;
+    }
+
+    public void setRegionProduction(int newcount){
+        if (newcount >= 0 && newcount <= 3) regionProduction = newcount; 
+
+    }
+
+    public void setDiceRoll(int newdice){
+         if (newdice >= 0 && newdice <= 6) diceRoll = newdice; 
+
+    }
+
+   
 
     @Override
     public String toString() {

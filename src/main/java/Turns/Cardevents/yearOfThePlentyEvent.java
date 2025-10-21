@@ -21,8 +21,8 @@ public class yearOfThePlentyEvent implements CardEvent {
 
                     int adj = countAdjStorehouseAbbey(p, r, c);
                     while (adj-- > 0) {
-                        if (reg.regionProduction < 3) {
-                            reg.regionProduction++;
+                        if (reg.getRegionProduction() < 3) {
+                            reg.setRegionProduction(reg.getRegionProduction()+1);
                             added++;
                         }
                     }

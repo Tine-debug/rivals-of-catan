@@ -153,11 +153,11 @@ public class Server {
     private void setTwoUndiced(String name, int d1, int d2) {
         Card c1 = stacks.findUndicedRegionByName(name);
         if (c1 != null) {
-            c1.diceRoll = d1;
+            c1.setDiceRoll(d1);
         }
         Card c2 = stacks.findUndicedRegionByName(name);
         if (c2 != null) {
-            c2.diceRoll = d2;
+            c2.setDiceRoll(d2);
         }
     }
 

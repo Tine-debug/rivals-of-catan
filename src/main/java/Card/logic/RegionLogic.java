@@ -23,8 +23,8 @@ public class RegionLogic implements Logic {
             return false;
         }
 
-        if (card.regionProduction < 0) {
-            card.regionProduction = 0;
+        if (card.getRegionProduction() < 0) {
+            card.setRegionProduction(0);
         }
         active.placeCard(row, col, card);
         return true;

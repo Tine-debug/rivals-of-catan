@@ -132,23 +132,23 @@ public class Cardstacks {
         p.placeCard(center, 3, popCardByName(settlements, "Settlement"));
 
         Card forest = popCardByName(regions, "Forest");
-        forest.diceRoll = regionDice[i][0];
-        forest.regionProduction = 1;
+        forest.setDiceRoll(regionDice[i][0]);
+        forest.setRegionProduction(1);
         Card gold = popCardByName(regions, "Gold Field");
-        gold.diceRoll = regionDice[i][1];
-        gold.regionProduction = 0;
+        gold.setDiceRoll(regionDice[i][1]);
+        gold.setRegionProduction(0);
         Card field = popCardByName(regions, "Field");
-        field.diceRoll = regionDice[i][2];
-        field.regionProduction = 1;
+        field.setDiceRoll(regionDice[i][2]);
+        field.setRegionProduction(1);
         Card hill = popCardByName(regions, "Hill");
-        hill.diceRoll = regionDice[i][3];
-        hill.regionProduction = 1;
+        hill.setDiceRoll(regionDice[i][3]);
+        hill.setRegionProduction(1);
         Card past = popCardByName(regions, "Pasture");
-        past.diceRoll = regionDice[i][4];
-        past.regionProduction = 1;
+        past.setDiceRoll(regionDice[i][4]);
+        past.setRegionProduction(1);
         Card mount = popCardByName(regions, "Mountain");
-        mount.diceRoll = regionDice[i][5];
-        mount.regionProduction = 1;
+        mount.setDiceRoll(regionDice[i][5]);
+        mount.setRegionProduction(1);
 
         p.placeCard(center - 1, 0, forest);
         p.placeCard(center - 1, 2, gold);
@@ -165,7 +165,7 @@ public class Cardstacks {
     public Card findUndicedRegionByName(String name) {
         for (int i = 0; i < regions.size(); i++) {
             Card c = regions.get(i);
-            if (c != null && name.equalsIgnoreCase(c.getName()) && c.diceRoll == 0) {
+            if (c != null && name.equalsIgnoreCase(c.getName()) && c.getdiceRoll() == 0) {
                 return c;
             }
         }

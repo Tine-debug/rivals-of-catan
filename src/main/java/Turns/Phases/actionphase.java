@@ -211,15 +211,15 @@ public class actionphase {
         if (!fromType.equalsIgnoreCase(twoFrom)) {
             return false;
         }
-        if (fromRegion.regionProduction < 2) {
+        if (fromRegion.getRegionProduction() < 2) {
             return false;
         }
 
-        fromRegion.regionProduction -= 2;
+        fromRegion.setRegionProduction(fromRegion.getRegionProduction() -2);
         // Grant the “oneTo”: if it matches toRegion’s type, store there; else bank
         String toType = REGION_TO_RESOURCE.getOrDefault(toRegion.toString(), "");
         if (toType.equalsIgnoreCase(oneTo)) {
-            toRegion.regionProduction = Math.min(3, toRegion.regionProduction + 1);
+            toRegion.setRegionProduction(Math.min(3, toRegion.getRegionProduction() + 1));
         } else {
             p.gainResource(oneTo);
         }

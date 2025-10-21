@@ -127,7 +127,7 @@ public class DiceEvents {
                     continue;
                 }
                 if ("Gold Field".equalsIgnoreCase(card.toString()) || "Pasture".equalsIgnoreCase(card.toString())) {
-                    total += Math.max(0, Math.min(3, card.regionProduction));
+                    total += Math.max(0, Math.min(3, card.getRegionProduction()));
                 }
             }
 
@@ -169,10 +169,10 @@ public class DiceEvents {
                 }
                 Card card = row.get(c);
                 if (card != null && "Gold Field".equalsIgnoreCase(card.toString())) {
-                    int can = Math.max(0, 3 - card.regionProduction);
+                    int can = Math.max(0, 3 - card.getRegionProduction());
                     int add = Math.min(can, want - given);
                     if (add > 0) {
-                        card.regionProduction += add;
+                        card.setRegionProduction(card.getRegionProduction()+add);
                         given += add;
                     }
                 }
@@ -199,7 +199,7 @@ public class DiceEvents {
                 return;
             }
             if ("Gold Field".equalsIgnoreCase(card.toString()) || "Pasture".equalsIgnoreCase(card.toString())) {
-                card.regionProduction = 0;
+                card.setRegionProduction(0);
             }
         });
     }

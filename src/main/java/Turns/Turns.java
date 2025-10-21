@@ -106,7 +106,7 @@ public class Turns {
                     if (card == null || !"Region".equalsIgnoreCase(card.getType())) {
                         continue;
                     }
-                    if (card.diceRoll != face) {
+                    if (card.getdiceRoll() != face) {
                         continue;
                     }
                     int inc = 1;
@@ -114,7 +114,7 @@ public class Turns {
                         inc += 1;
                     }
 
-                    card.regionProduction = Math.min(3, card.regionProduction + inc);
+                    card.setRegionProduction(Math.min(3, card.getRegionProduction() + inc));
                 }
             }
 
@@ -154,7 +154,7 @@ public class Turns {
         int n = 0;
         for (List<Card> row : p.principality.principality) {
             for (Card c : row) {
-                if (c != null && "Region".equalsIgnoreCase(c.getType()) && c.diceRoll == face) {
+                if (c != null && "Region".equalsIgnoreCase(c.getType()) && c.getdiceRoll() == face) {
                     n++;
                 }
             }

@@ -170,8 +170,8 @@ public Card getCard(int r, int c) {
         if (c == null)
             return "";
         if ("Region".equalsIgnoreCase(c.getType())) {
-            String die = (c.diceRoll <= 0 ? "-" : String.valueOf(c.diceRoll));
-            int stored = Math.max(0, Math.min(3, c.regionProduction));
+            String die = (c.getdiceRoll() <= 0 ? "-" : String.valueOf(c.getdiceRoll()));
+            int stored = Math.max(0, Math.min(3, c.getRegionProduction()));
             return "d" + die + "  " + stored + "/3";
         }
 
@@ -276,7 +276,7 @@ public Card getCard(int r, int c) {
             for (int c = 0; c < row.size(); c++) {
                 Card x = row.get(c);
                 if (x != null && "Region".equalsIgnoreCase(x.getType())) {
-                    sum += Math.max(0, Math.min(3, x.regionProduction));
+                    sum += Math.max(0, Math.min(3, x.getRegionProduction()));
                 }
             }
         }
@@ -301,7 +301,7 @@ public Card getCard(int r, int c) {
             Card best = null;
             int bestVal = -1;
             for (Card r : regs) {
-                int v = Math.max(0, Math.min(3, r.regionProduction));
+                int v = Math.max(0, Math.min(3, r.getRegionProduction()));
                 if (v > bestVal) {
                     bestVal = v;
                     best = r;
@@ -309,7 +309,7 @@ public Card getCard(int r, int c) {
             }
             if (best == null || bestVal <= 0)
                 break; // no more to remove
-            best.regionProduction -= 1;
+            best.setRegionProduction(best.getRegionProduction()-1);
             removed++;
         }
         return removed == n;
@@ -347,7 +347,7 @@ public Card getCard(int r, int c) {
             return totalAllResources();
         int sum = 0;
         for (Card r : findRegions(regionName)) {
-            sum += Math.max(0, Math.min(3, r.regionProduction));
+            sum += Math.max(0, Math.min(3, r.getRegionProduction()));
         }
         return sum;
     }
@@ -366,8 +366,8 @@ public void setResourceCount(String type, int n) {
 
         int cur = 0;
         for (Card r : regs) {
-            r.regionProduction = Math.max(0, Math.min(3, r.regionProduction)); 
-            cur += r.regionProduction;
+            r.setRegionProduction(Math.max(0, Math.min(3, r.getRegionProduction())));
+            cur += r.getRegionProduction();
         }
         if (cur == want)
             return;
@@ -378,15 +378,15 @@ public void setResourceCount(String type, int n) {
                 Card best = null;
                 int bestVal = Integer.MAX_VALUE;
                 for (Card r : regs) {
-                    int v = r.regionProduction;
+                    int v = r.getRegionProduction();
                     if (v < 3 && v < bestVal) {
                         bestVal = v;
                         best = r;
                     }
                 }
-                if (best == null || best.regionProduction >= 3)
+                if (best == null || best.getRegionProduction() >= 3)
                     break;
-                best.regionProduction += 1;
+                best.setRegionProduction(best.getRegionProduction() + 1);
                 need--;
             }
         } else {
@@ -395,15 +395,15 @@ public void setResourceCount(String type, int n) {
                 Card best = null;
                 int bestVal = -1;
                 for (Card r : regs) {
-                    int v = r.regionProduction;
+                    int v = r.getRegionProduction();
                     if (v > bestVal) {
                         bestVal = v;
                         best = r;
                     }
                 }
-                if (best == null || best.regionProduction <= 0)
+                if (best == null || best.getRegionProduction() <= 0)
                     break;
-                best.regionProduction -= 1;
+                best.setRegionProduction(best.getRegionProduction() -1 );
                 drop--;
             }
         }
